@@ -10,6 +10,13 @@ public class MainController {
 	@GetMapping("/")
 	public String home(Model model) {
 		model.addAttribute("title", "Home Page");
-		return "homePage";
+		return "home";
 	}
+
+	@GetMapping("/about")
+	public String about(Model model) {
+		model.addAttribute("title", "About Page");
+		return "about";
+	}
+
 }
