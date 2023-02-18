@@ -19,4 +19,10 @@ public class MainController {
 		return "about";
 	}
 
+	@GetMapping("/news")
+	public String news(Model model) {
+		model.addAttribute("title", "News Page");
+		return "news";
+	}
+
 }
