@@ -10,6 +10,13 @@
 <main>
     <div class="py-5 text-center container">
         <h1 th:text="${title}"></h1>
+        <h1>Add Post</h1>
+        <form action="/posts/add" method="post">
+            <input type="text" name="title" placeholder="Title" class="form-control">
+            <textarea name="fullText" placeholder="Post content" class="form-control"></textarea>
+            <button type="submit" class="btn btn-success">Add post</button>
+        </form>
+
     </div>
 </main>
 
