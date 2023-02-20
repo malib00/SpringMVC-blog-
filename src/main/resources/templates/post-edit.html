@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{blocks/head :: head}" class="p-3 text-bg-dark">/
+    <head>
+
+<body>
+
+<header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
+
+<main>
+    <div class="py-5 text-center container mb-5">
+        <h1 th:text="${title}"></h1>
+        <form method="post">
+            <input type="text" th:value="${post.title}" name="title" placeholder="Title" class="form-control"><br>
+            <textarea th:text="${post.fullText}" name="fullText" placeholder="Post content" class="form-control"/><br>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+
+    </div>
+</main>
+
+<footer th:insert="~{blocks/footer :: footer}"></footer>
+
+</body>
+</html>

@@ -28,7 +28,7 @@ public class PostsController {
 	public String addPost(@RequestParam String title, @RequestParam String fullText, Model model) {
 		Post post = new Post(title, fullText);
 		postRepository.save(post);
-		return "home";
+		return "redirect:/";
 	}
 
 	@GetMapping("/posts/{id}")
@@ -46,11 +46,27 @@ public class PostsController {
 	public String editPost(@PathVariable(value = "id") long postId, Model model) {
 		Optional<Post> post = postRepository.findById(postId);
 		if (post.isPresent()) {
+			model.addAttribute("title","Post Edit");
 			model.addAttribute("post",post.get());
 			return "post-edit";
 		} else {
 			return "404";
 		}
 	}
+
+	@PostMapping("/posts/{id}/edit")
+	public String postUpdate(@PathVariable(value = "id") long postId, @RequestParam String title, @RequestParam String fullText, Model model) {
+		Optional<Post> post = postRepository.findById(postId);
+		if (post.isPresent()) {
+			Post editedPost = post.get();
+			editedPost.setTitle(title);
+			editedPost.setFullText(fullText);
+			postRepository.save(editedPost);
+			return "redirect:/";
+		} else {
+			return "404";
+		}
+	}
+
 
 }
