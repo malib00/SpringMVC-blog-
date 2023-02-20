@@ -68,5 +68,16 @@ public class PostsController {
 		}
 	}
 
+	@PostMapping("/posts/{id}/remove")
+	public String postDelete(@PathVariable(value = "id") long postId, Model model) {
+		Optional<Post> post = postRepository.findById(postId);
+		if (post.isPresent()) {
+			postRepository.deleteById(postId);
+			return "redirect:/";
+		} else {
+			return "404";
+		}
+	}
+
 
 }

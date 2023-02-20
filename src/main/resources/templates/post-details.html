@@ -13,7 +13,10 @@
         <h1 th:text="${post.title}"></h1>
         <p th:text="${post.fullText}"></p>
         <a th:href="'/posts/' + ${post.id} + '/edit'" class="nav-link px-2 text-grey">Edit</a>
-        <a th:href="'/posts/' + ${post.id} + '/remove'" class="nav-link px-2 text-grey">Remove</a>
+        <form th:action="'/posts/' + ${post.id} + '/remove'" method="post">
+            <button class="btn btn-warning" type="submit">Remove</button>
+        </form>
+
     </div>
 </main>
 
