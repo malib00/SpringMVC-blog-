@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.Instant;
 
 @Entity
 public class Post {
@@ -14,7 +15,7 @@ public class Post {
 
 	private String title, fullText;
 
-	private int views;
+	private Instant timestamp;
 
 	public Post() {
 	}
@@ -22,6 +23,7 @@ public class Post {
 	public Post(String title, String fullText) {
 		this.title = title;
 		this.fullText = fullText;
+		this.timestamp = Instant.now();
 	}
 
 	public Long getId() {
@@ -48,11 +50,11 @@ public class Post {
 		this.fullText = fullText;
 	}
 
-	public int getViews() {
-		return views;
+	public Instant getTimestamp() {
+		return timestamp;
 	}
 
-	public void setViews(int views) {
-		this.views = views;
+	public void setTimestamp(Instant timestamp) {
+		this.timestamp = timestamp;
 	}
 }
