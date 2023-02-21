@@ -1,9 +1,12 @@
 package com.karpov.blog.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
+
 import java.time.Instant;
 
 @Entity
@@ -13,7 +16,10 @@ public class Post {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	private String title, fullText;
+	private String title;
+
+	@Column(length = 10000)
+	private String fullText;
 
 	private Instant timestamp;
 
