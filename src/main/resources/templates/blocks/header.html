@@ -20,8 +20,9 @@
             </form>
 
             <div class="text-end">
-                <button type="button" class="btn btn-outline-light me-2">Login</button>
-                <button type="button" class="btn btn-warning">Sign-up</button>
+                <a href="/login" class="btn btn-outline-light me-2">Login</a>
+                <a href="/register" class="btn btn-warning">Register</a>
+                <button th:action="@{/logout}" method="post" class="btn btn-info">Log Out</button>
             </div>
         </div>
     </div>

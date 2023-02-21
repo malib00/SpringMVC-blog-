@@ -2,6 +2,8 @@
 
 ###TODO:
 
+storing css locally
+
 post id -> UUID
 
 profile table and secure password storing
@@ -19,3 +21,5 @@ news page and DB
 storing photos
 
 secure DB connection
+
+polish all pages to good-looking
