@@ -22,8 +22,10 @@
             <div class="text-end">
                 <a href="/login" class="btn btn-outline-light me-2">Login</a>
                 <a href="/register" class="btn btn-warning">Register</a>
-                <button th:action="@{/logout}" method="post" class="btn btn-info">Log Out</button>
             </div>
+            <form th:action="@{/logout}" method="post">
+                <input class="ms-1 btn btn-info" type="submit" value="Log Out"/>
+            </form>
         </div>
     </div>
 </div>
