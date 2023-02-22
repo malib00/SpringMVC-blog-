@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-
 import java.time.Instant;
 
 @Entity
@@ -17,6 +15,7 @@ public class Post {
 	private Long id;
 
 	private String title;
+	private String author;
 
 	@Column(length = 10000)
 	private String fullText;
@@ -26,10 +25,20 @@ public class Post {
 	public Post() {
 	}
 
-	public Post(String title, String fullText) {
+	public Post(String title, String fullText, String author) {
 		this.title = title;
 		this.fullText = fullText;
+		this.author = author;
 		this.timestamp = Instant.now();
+
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 
 	public Long getId() {

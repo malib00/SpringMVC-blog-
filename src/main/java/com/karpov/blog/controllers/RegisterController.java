@@ -7,22 +7,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequestMapping("/register")
 public class RegisterController {
 
 	@Autowired
 	private UserRepository userRepository;
 
-	@GetMapping("/register")
-	public String loginPage(Model model) {
+	@GetMapping
+	public String registrationPage(Model model) {
 		model.addAttribute("title", "Registration");
 		return "register";
 	}
 
-	@PostMapping("/register")
-	public String addPost(@RequestParam String username, @RequestParam String fullName, @RequestParam String password, Model model) {
+	@PostMapping
+	public String addUser(@RequestParam String username, @RequestParam String fullName, @RequestParam String password, Model model) {
 		User user = new User(username,fullName,password);
 		user.setActive(true);
 		userRepository.save(user);

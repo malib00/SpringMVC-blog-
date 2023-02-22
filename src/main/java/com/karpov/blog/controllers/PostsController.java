@@ -8,30 +8,33 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/posts")
 public class PostsController {
 
 	@Autowired
 	private PostRepository postRepository;
 
-	@GetMapping("/posts/add")
+	@GetMapping("/add")
 	public String addPostPage(Model model) {
 		model.addAttribute("title", "Add Post Page");
 		return "post-add";
 	}
 
-	@PostMapping("/posts/add")
+	//@PreAuthorize("hasRole('ADMIN')") //TODO possible restrictions to pages
+	@PostMapping("/add")
 	public String addPost(@RequestParam String title, @RequestParam String fullText, Model model) {
-		Post post = new Post(title, fullText);
+		Post post = new Post(title, fullText, "Some Test Author");
 		postRepository.save(post);
 		return "redirect:/";
 	}
 
-	@GetMapping("/posts/{id}")
+	@GetMapping("/{id}")
 	public String getPost(@PathVariable(value = "id") long postId, Model model) {
 		Optional<Post> post = postRepository.findById(postId);
 		if (post.isPresent()) {
@@ -42,7 +45,7 @@ public class PostsController {
 		}
 	}
 
-	@GetMapping("/posts/{id}/edit")
+	@GetMapping("/{id}/edit")
 	public String editPost(@PathVariable(value = "id") long postId, Model model) {
 		Optional<Post> post = postRepository.findById(postId);
 		if (post.isPresent()) {
@@ -54,7 +57,7 @@ public class PostsController {
 		}
 	}
 
-	@PostMapping("/posts/{id}/edit")
+	@PostMapping("/{id}/edit")
 	public String postUpdate(@PathVariable(value = "id") long postId, @RequestParam String title, @RequestParam String fullText, Model model) {
 		Optional<Post> post = postRepository.findById(postId);
 		if (post.isPresent()) {
@@ -68,7 +71,7 @@ public class PostsController {
 		}
 	}
 
-	@PostMapping("/posts/{id}/remove")
+	@PostMapping("/{id}/remove")
 	public String postDelete(@PathVariable(value = "id") long postId, Model model) {
 		Optional<Post> post = postRepository.findById(postId);
 		if (post.isPresent()) {
