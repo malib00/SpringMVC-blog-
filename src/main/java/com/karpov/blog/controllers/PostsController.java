@@ -1,8 +1,10 @@
 package com.karpov.blog.controllers;
 
 import com.karpov.blog.models.Post;
+import com.karpov.blog.models.User;
 import com.karpov.blog.repo.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,10 +28,14 @@ public class PostsController {
 		return "post-add";
 	}
 
-	//@PreAuthorize("hasRole('ADMIN')") //TODO possible restrictions to pages
+	//@PreAuthorize("hasRole('USER')") //TODO possible restrictions to pages
+	//@PreAuthorize("hasAuthority('USER')")
 	@PostMapping("/add")
-	public String addPost(@RequestParam String title, @RequestParam String fullText, Model model) {
-		Post post = new Post(title, fullText, "Some Test Author");
+	public String addPost(
+			@AuthenticationPrincipal User user,
+			@RequestParam String title,
+			@RequestParam String fullText, Model model) {
+		Post post = new Post(title, fullText, user);
 		postRepository.save(post);
 		return "redirect:/";
 	}
@@ -81,6 +87,4 @@ public class PostsController {
 			return "404";
 		}
 	}
-
-
 }

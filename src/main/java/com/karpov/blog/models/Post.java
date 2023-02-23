@@ -2,9 +2,13 @@ package com.karpov.blog.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
 import java.time.Instant;
 
 @Entity
@@ -15,7 +19,10 @@ public class Post {
 	private Long id;
 
 	private String title;
-	private String author;
+
+	@ManyToOne (fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_id")
+	private User author;
 
 	@Column(length = 10000)
 	private String fullText;
@@ -25,7 +32,7 @@ public class Post {
 	public Post() {
 	}
 
-	public Post(String title, String fullText, String author) {
+	public Post(String title, String fullText, User author) {
 		this.title = title;
 		this.fullText = fullText;
 		this.author = author;
@@ -33,11 +40,11 @@ public class Post {
 
 	}
 
-	public String getAuthor() {
+	public User getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(String author) {
+	public void setAuthor(User author) {
 		this.author = author;
 	}
 

@@ -51,14 +51,14 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-			<version>2.0.0.RELEASE</version>
+
 		</dependency>
-<!--		<dependency>
+		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
-			&lt;!&ndash; Temporary explicit version to fix Thymeleaf bug &ndash;&gt;
+			<!-- Temporary explicit version to fix Thymeleaf bug -->
 			<version>3.1.1.RELEASE</version>
-		</dependency>-->
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>

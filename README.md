@@ -2,15 +2,13 @@
 
 ###TODO:
 
+csrf was disabled to allow POST (fix?)
+
 storing css locally
 
 post id -> UUID
 
 profile table and secure password storing
-
-sign-up page
-
-log in field in header
 
 search field in header
 

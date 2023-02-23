@@ -1,6 +1,7 @@
 package com.karpov.blog.config;
 
-import com.karpov.blog.service.JpaUserDetailsService;
+import com.karpov.blog.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,11 +14,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-	private final JpaUserDetailsService jpaUserDetailsService;
-
-	public WebSecurityConfig(JpaUserDetailsService jpaUserDetailsService) {
-		this.jpaUserDetailsService = jpaUserDetailsService;
-	}
+	@Autowired
+	private UserService userService;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -25,14 +23,15 @@ public class WebSecurityConfig {
 				.authorizeHttpRequests((requests) -> requests
 						.requestMatchers("/", "/news", "/about", "/register").permitAll()
 						.anyRequest().authenticated()
-				).userDetailsService(jpaUserDetailsService)
+				).userDetailsService(userService)
 				.formLogin((form) -> form
 						.loginPage("/login")
 						.permitAll()
+
 				)
 				.logout((logout) -> logout.permitAll());
 
-		return http.build();
+		return http.csrf().disable().build();
 	}
 
 	@Bean
