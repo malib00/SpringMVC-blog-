@@ -21,3 +21,5 @@ storing photos
 secure DB connection
 
 polish all pages to good-looking
+
+"are you sure?" on delete button
