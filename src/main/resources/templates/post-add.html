@@ -11,9 +11,10 @@
     <div class="py-5 text-center container mb-5">
         <h1 th:text="${title}"></h1>
         <h1>Add Post</h1>
-        <form action="/posts/add" method="post">
+        <form action="/posts/add" method="post" enctype="multipart/form-data">
             <input type="text" name="title" placeholder="Title" class="form-control"><br>
             <textarea name="fullText" placeholder="Post content" class="form-control"></textarea><br>
+            <input type="file" name="file"><br>
             <button type="submit" class="btn btn-success">Add post</button>
         </form>
 

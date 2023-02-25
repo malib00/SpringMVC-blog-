@@ -4,6 +4,7 @@ import com.karpov.blog.models.Post;
 import com.karpov.blog.models.User;
 import com.karpov.blog.repo.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,8 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/posts")
@@ -21,6 +26,9 @@ public class PostsController {
 
 	@Autowired
 	private PostRepository postRepository;
+
+	@Value("${upload.path}")
+	private String uploadPath;
 
 	@GetMapping("/add")
 	public String addPostPage(Model model) {
@@ -34,8 +42,20 @@ public class PostsController {
 	public String addPost(
 			@AuthenticationPrincipal User user,
 			@RequestParam String title,
-			@RequestParam String fullText, Model model) {
+			@RequestParam String fullText,
+			@RequestParam("file") MultipartFile file,
+			Model model) throws IOException {
 		Post post = new Post(title, fullText, user);
+		File uploadDir = new File(uploadPath);
+
+		if (!uploadDir.exists()) {
+			uploadDir.mkdir();
+		}
+
+		String uuidFile = UUID.randomUUID().toString();
+		String fileNameResult = uuidFile + "." + file.getOriginalFilename();
+		file.transferTo(new File(uploadPath + "/" + fileNameResult));
+		post.setFilename(fileNameResult);
 		postRepository.save(post);
 		return "redirect:/";
 	}
@@ -44,7 +64,7 @@ public class PostsController {
 	public String getPost(@PathVariable(value = "id") long postId, Model model) {
 		Optional<Post> post = postRepository.findById(postId);
 		if (post.isPresent()) {
-			model.addAttribute("post",post.get());
+			model.addAttribute("post", post.get());
 			return "post-details";
 		} else {
 			return "404";
@@ -55,8 +75,8 @@ public class PostsController {
 	public String editPost(@PathVariable(value = "id") long postId, Model model) {
 		Optional<Post> post = postRepository.findById(postId);
 		if (post.isPresent()) {
-			model.addAttribute("title","Post Edit");
-			model.addAttribute("post",post.get());
+			model.addAttribute("title", "Post Edit");
+			model.addAttribute("post", post.get());
 			return "post-edit";
 		} else {
 			return "404";

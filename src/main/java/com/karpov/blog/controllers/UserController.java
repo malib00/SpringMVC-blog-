@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/users")
-//@PreAuthorize("hasAuthority('ADMIN')")
+//@PreAuthorize("hasAuthority('USER')") //TODO change to ADMIN
 public class UserController {
 
 	@Autowired

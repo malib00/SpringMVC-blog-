@@ -29,6 +29,8 @@ public class Post {
 
 	private Instant timestamp;
 
+	private String filename;
+
 	public Post() {
 	}
 
@@ -78,5 +80,13 @@ public class Post {
 
 	public void setTimestamp(Instant timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public String getFilename() {
+		return filename;
+	}
+
+	public void setFilename(String filename) {
+		this.filename = filename;
 	}
 }

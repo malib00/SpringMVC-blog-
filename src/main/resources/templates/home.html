@@ -18,21 +18,24 @@
             </div>
         </div>
     </section>
-
+    <img src="file:///E:/blogSpringFiles/files/e5284927-22ad-4a30-93e9-8cd451f3d28f.100_4100.jpg" alt="Dinosaur">
     <div class="album py-5 bg-light">
         <div class="container">
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-
                 <div th:each="el : ${posts}">
                     <div class="col">
                         <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
+<!--                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
                                  xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
                                  preserveAspectRatio="xMidYMid slice" focusable="false"><title th:text="${el.title}" ></title>
                                 <rect width="100%" height="100%" fill="#55595c"></rect>
                                 <text th:text="${el.title}" x="50%" y="50%" fill="#eceeef" dy=".3em"></text>
-                            </svg>
+                            </svg>-->
+
+                            <img src="'/img/' +${el.filename}"
+                                 class="bd-placeholder-img card-img-top" width="100%" height="225">
+
                             <div class="card-body">
                                 <p th:text="${el.title}" class="card-text"></p>
                                 <div class="d-flex justify-content-between align-items-center">

@@ -2,6 +2,8 @@
 
 ###TODO:
 
+profiles (admin, user) + fix deprecated page restrictions
+
 csrf was disabled to allow POST (fix?)
 
 storing css locally
@@ -11,8 +13,6 @@ post id -> UUID
 profile table and secure password storing
 
 search field in header
-
-profiles (admin, user)
 
 news page and DB
 
