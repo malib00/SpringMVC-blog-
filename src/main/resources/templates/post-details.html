@@ -10,13 +10,18 @@
 
 <main>
     <div class="py-5 text-center container">
+        <img th:src="'img/'+${post.author.id}+'/'+${post.filename}"
+             class="bd-placeholder-img card-img-top" height="500">
         <h1 th:text="${post.title}"></h1>
         <p th:text="${post.fullText}"></p>
-        <a th:href="'/posts/' + ${post.id} + '/edit'" class="nav-link px-2 text-grey">Edit</a>
-        <form th:action="'/posts/' + ${post.id} + '/remove'" method="post">
-            <button class="btn btn-warning" type="submit">Remove</button>
-        </form>
-
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <li><a th:href="'/posts/' + ${post.id} + '/edit'" class="btn btn-warning">Edit</a></li>
+            <li>
+                <form th:action="'/posts/' + ${post.id} + '/remove'" method="post">
+                    <button class="btn btn-warning" type="submit">Remove</button>
+                </form>
+            </li>
+        </ul>
     </div>
 </main>
 
