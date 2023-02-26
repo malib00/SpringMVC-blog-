@@ -46,16 +46,16 @@ public class PostsController {
 			@RequestParam("file") MultipartFile file,
 			Model model) throws IOException {
 		Post post = new Post(title, fullText, user);
-		File uploadDir = new File(uploadPath);
 
+		String userPath = uploadPath + "/" + user.getId();
+		File uploadDir = new File(userPath);
 		if (!uploadDir.exists()) {
 			uploadDir.mkdir();
 		}
+		String fileName = UUID.randomUUID() + "." + file.getOriginalFilename();
+		file.transferTo(new File(userPath + "/" + fileName));
+		post.setFilename(fileName);
 
-		String uuidFile = UUID.randomUUID().toString();
-		String fileNameResult = uuidFile + "." + file.getOriginalFilename();
-		file.transferTo(new File(uploadPath + "/" + fileNameResult));
-		post.setFilename(fileNameResult);
 		postRepository.save(post);
 		return "redirect:/";
 	}
