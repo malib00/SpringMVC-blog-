@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class NewsController {
 	@GetMapping("/news")
 	public String news(Model model) {
-		model.addAttribute("title", "News Page");
+		model.addAttribute("title", "News");
 		return "news";
 	}
 }

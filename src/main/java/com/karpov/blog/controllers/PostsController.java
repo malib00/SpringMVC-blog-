@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -60,11 +61,14 @@ public class PostsController {
 		return "redirect:/";
 	}
 
+
 	@GetMapping("/{id}")
 	public String getPost(@PathVariable(value = "id") long postId, Model model) {
 		Optional<Post> post = postRepository.findById(postId);
 		if (post.isPresent()) {
-			model.addAttribute("post", post.get());
+			Post retrievedPost = post.get();
+			model.addAttribute("title", retrievedPost.getTitle());
+			model.addAttribute("post", retrievedPost);
 			return "post-details";
 		} else {
 			return "404";
@@ -75,8 +79,9 @@ public class PostsController {
 	public String editPost(@PathVariable(value = "id") long postId, Model model) {
 		Optional<Post> post = postRepository.findById(postId);
 		if (post.isPresent()) {
-			model.addAttribute("title", "Post Edit");
-			model.addAttribute("post", post.get());
+			Post retrievedPost = post.get();
+			model.addAttribute("title", "Post Edit: " + retrievedPost.getTitle());
+			model.addAttribute("post", retrievedPost);
 			return "post-edit";
 		} else {
 			return "404";
@@ -84,12 +89,29 @@ public class PostsController {
 	}
 
 	@PostMapping("/{id}/edit")
-	public String postUpdate(@PathVariable(value = "id") long postId, @RequestParam String title, @RequestParam String fullText, Model model) {
+	public String postUpdate(@AuthenticationPrincipal User user,
+	                         @PathVariable(value = "id") long postId,
+	                         @RequestParam String title,
+	                         @RequestParam String fullText,
+	                         @RequestParam("file") MultipartFile file,
+	                         Model model) throws IOException {
 		Optional<Post> post = postRepository.findById(postId);
 		if (post.isPresent()) {
 			Post editedPost = post.get();
 			editedPost.setTitle(title);
 			editedPost.setFullText(fullText);
+			if (!file.isEmpty()) {
+				String oldFileName = editedPost.getFilename();
+				String userPath = uploadPath + "/" + user.getId();
+				File uploadDir = new File(userPath);
+				if (!uploadDir.exists()) {
+					uploadDir.mkdir();
+				}
+				String fileName = UUID.randomUUID() + "." + file.getOriginalFilename();
+				file.transferTo(new File(userPath + "/" + fileName));
+				editedPost.setFilename(fileName);
+				Files.deleteIfExists(new File(userPath + "/" + oldFileName).toPath());
+			}
 			postRepository.save(editedPost);
 			return "redirect:/";
 		} else {
