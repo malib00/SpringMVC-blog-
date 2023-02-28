@@ -5,7 +5,7 @@ import com.karpov.blog.models.User;
 import com.karpov.blog.repo.PostRepository;
 import com.karpov.blog.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/users")
@@ -39,9 +38,11 @@ public class UserController {
 	public String getUser(@PathVariable User user, Model model) {
 		model.addAttribute("title", user.getUsername() + "'s profile");
 		model.addAttribute("user", user);
-		Iterable<Post> posts = postRepository.findByAuthor(user);
+		Iterable<Post> posts = postRepository.findByAuthor(user, Sort.by("timestamp").descending());
 		int totalPostsQTY = ((Collection<Post>) posts).size();
 		model.addAttribute("totalPostsQTY", totalPostsQTY);
+		Iterable<Post> last3Posts = postRepository.findFirst3ByAuthor(user, Sort.by("timestamp").descending());
+		model.addAttribute("last3Posts", last3Posts);
 		return "user-profile";
 	}
 
@@ -63,7 +64,7 @@ public class UserController {
 	@GetMapping("/{user}/posts")
 	public String editPost(@PathVariable User user, Model model) {
 		model.addAttribute("title", user.getUsername() + "'s posts");
-		Iterable<Post> posts = postRepository.findByAuthor(user);
+		Iterable<Post> posts = postRepository.findByAuthor(user,Sort.by("timestamp").descending());
 		model.addAttribute("posts", posts);
 		return "user-posts";
 	}
