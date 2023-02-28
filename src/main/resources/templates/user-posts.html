@@ -4,11 +4,11 @@
 <body>
 <header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
 <main>
-    <div class="py-5 text-center container bg-light">
+    <div class="py-5 text-center container">
         <h1 th:text="${title}"></h1>
     </div>
-    <div class="album py-5 bg-light">
-        <div class="container">
+    <div class="album bg-light">
+        <div class="container py-3">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div th:each="post : ${posts}">
                     <div class="col">
