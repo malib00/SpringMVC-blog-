@@ -16,8 +16,6 @@ search field in header
 
 news page and DB
 
-storing photos
-
 secure DB connection
 
 polish all pages to good-looking
