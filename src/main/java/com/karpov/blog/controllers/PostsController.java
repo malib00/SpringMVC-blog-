@@ -33,7 +33,7 @@ public class PostsController {
 
 	@GetMapping("/add")
 	public String addPostPage(Model model) {
-		model.addAttribute("title", "Add Post Page");
+		model.addAttribute("title", "Add Post");
 		return "post-add";
 	}
 
@@ -120,13 +120,10 @@ public class PostsController {
 	}
 
 	@PostMapping("/{id}/remove")
-	public String postDelete(@PathVariable(value = "id") long postId, Model model) {
-		Optional<Post> post = postRepository.findById(postId);
-		if (post.isPresent()) {
-			postRepository.deleteById(postId);
+	public String postDelete(@PathVariable(value = "id") Post post, Model model) throws IOException {
+			String userPath = uploadPath + "/" + post.getAuthor().getId();
+			Files.deleteIfExists(new File(userPath + "/" + post.getFilename()).toPath());
+			postRepository.delete(post);
 			return "redirect:/";
-		} else {
-			return "404";
-		}
 	}
 }
