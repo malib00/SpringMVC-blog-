@@ -119,6 +119,9 @@ public class PostsController {
 		}
 	}
 
+
+
+
 	@PostMapping("/{id}/remove")
 	public String postDelete(@PathVariable(value = "id") Post post, Model model) throws IOException {
 			String userPath = uploadPath + "/" + post.getAuthor().getId();
