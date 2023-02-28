@@ -1,14 +1,12 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:insert="~{blocks/head :: head}"  class="p-3 text-bg-dark">/<head>
-
+<head th:insert="~{blocks/head :: head}" class="p-3 text-bg-dark">
 <body>
 
-<header th:insert="~{blocks/header :: header}"  class="p-3 text-bg-dark"></header>
+<header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
 
 <main>
-    <div class="py-5 text-center container">
+    <div class="py-5 text-center container bg-light">
         <h1 th:text="${title}"></h1>
     </div>
 </main>

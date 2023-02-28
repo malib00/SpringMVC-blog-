@@ -20,7 +20,7 @@ public class RegisterController {
 	@GetMapping
 	public String registrationPage(Model model) {
 		model.addAttribute("title", "Registration");
-		return "register";
+		return "user-register";
 	}
 
 	@PostMapping
