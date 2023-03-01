@@ -12,9 +12,9 @@
                                class="text-muted"></small>
                     </p>
                     <div class="d-flex flex-row">
-                        <p class="mb-0 mx-1 text-muted">Author: </p>
+                        <p class="mb-0 mx-1 text-muted"><small>Author: </small></p>
                         <a th:href="'/users/' + ${post.author.id}" class="mb-0 mx-1 text-muted">
-                            <p th:text="${post.author.username}" class="mb-0 mx-1 text-muted"></p>
+                            <small th:text="${post.author.username}" class="mb-0 mx-1 text-muted"></small>
                         </a>
                     </div>
                 </div>
