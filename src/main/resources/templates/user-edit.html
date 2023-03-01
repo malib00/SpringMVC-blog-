@@ -1,26 +1,53 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:insert="~{blocks/head :: head}" class="p-3 text-bg-dark">/
-    <head>
-
+<head th:insert="~{blocks/head :: head}" class="p-3 text-bg-dark">
 <body>
-
 <header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
-
 <main>
-    <div class="py-5 text-center container mb-5">
-        <h1 th:text="${title}"></h1>
-        <form method="post">
-            <input type="text" th:value="${user.username}" name="username" placeholder="Username" class="form-control"><br>
-            <textarea th:text="${user.password}" name="password" placeholder="Password" class="form-control"/><br>
-            <button type="submit" class="btn btn-success">Submit</button>
-        </form>
-
+    <div class="container rounded bg-light mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-3 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                    <img class="rounded-circle mt-5"
+                         width="150px"
+                         src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+                         alt="Generic placeholder image">
+                    <span class="font-weight-bold" th:text="${user.fullName}"></span>
+                    <span class="text-black-50" th:text="'@'+${user.username}"></span>
+                    <span> </span>
+                </div>
+            </div>
+            <div class="col-md-5 border-right">
+                <form method="post">
+                    <div class="p-3 py-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="text-right" th:text="${user.username}+': profile edit'"></h4>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6"><label class="labels">Username</label>
+                                <input type="text" th:value="${user.username}" name="username" class="form-control"
+                                       placeholder="username" value="">
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12"><label class="labels">Full Name</label>
+                                <input th:value="${user.fullName}" name="password" type="text" class="form-control"
+                                       placeholder="full name" value="">
+                            </div>
+                            <div class="col-md-6"><label class="labels">Password</label>
+                                <input th:value="${user.password}" name="password" type="text" class="form-control"
+                                       placeholder="password" value="">
+                            </div>
+                        </div>
+                        <div class="mt-5 text-center">
+                            <button class="btn btn-primary profile-button" type="submit">Save Profile</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </main>
-
 <footer th:insert="~{blocks/footer :: footer}"></footer>
-
 </body>
 </html>
