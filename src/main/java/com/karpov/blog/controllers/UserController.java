@@ -1,6 +1,7 @@
 package com.karpov.blog.controllers;
 
 import com.karpov.blog.models.Post;
+import com.karpov.blog.models.Role;
 import com.karpov.blog.models.User;
 import com.karpov.blog.repo.PostRepository;
 import com.karpov.blog.repo.UserRepository;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Collection;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/users")
@@ -50,13 +52,15 @@ public class UserController {
 	public String editUser(@PathVariable User user, Model model) {
 		model.addAttribute("title", user.getUsername() + "'s profile edit");
 		model.addAttribute("user", user);
+		model.addAttribute("allRoles", Role.values());
 		return "user-edit";
 	}
 
 	@PostMapping("/{user}/edit")
-	public String updateUser(@PathVariable User user, @RequestParam String username, @RequestParam String password, Model model) {
+	public String updateUser(@PathVariable User user, @RequestParam String username, @RequestParam String password, @RequestParam(required = false) Set<Role> roles, Model model) {
 		user.setUsername(username);
 		user.setPassword(password);
+		user.setRoles(roles);
 		userRepository.save(user);
 		return "redirect:/users/{user}";
 	}
