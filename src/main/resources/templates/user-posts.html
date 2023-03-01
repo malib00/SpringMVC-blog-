@@ -9,10 +9,15 @@
     </div>
     <div class="album bg-light">
         <div class="container py-3">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                <div th:each="post : ${posts}">
-                    <div th:insert="~{blocks/post-preview :: post-preview}"></div>
+            <div th:unless="${#lists.isEmpty(last3Posts)}">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    <div th:each="post : ${last3Posts}">
+                        <div th:insert="~{blocks/post-preview :: post-preview}"></div>
+                    </div>
                 </div>
+            </div>
+            <div th:if="${#lists.isEmpty(last3Posts)}">
+                <h3 style="text-align: center">User has no posts yet.</h3>
             </div>
         </div>
     </div>
