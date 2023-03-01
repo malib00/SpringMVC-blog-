@@ -2,21 +2,17 @@
 
 ###TODO:
 
+size of all tables in DB
+
 profiles (admin, user) + fix deprecated page restrictions
 
 csrf was disabled to allow POST (fix?)
 
-storing css locally
+secure password storing
 
-post id -> UUID
+more navigational buttons on all pages
 
-profile table and secure password storing
-
-search field in header
-
-news page and DB
-
-secure DB connection
+news page, about page
 
 polish all pages to good-looking
 
