@@ -9,4 +9,5 @@ public interface PostRepository extends CrudRepository<Post,Long> {
 	Iterable<Post> findAll(Sort sort);
 	Iterable<Post> findByAuthor(User user, Sort timestamp);
 	Iterable<Post> findFirst3ByAuthor(User user, Sort sort);
+	Iterable<Post> findByTitleContaining(String contain,Sort sort);
 }

@@ -1,21 +1,14 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{blocks/head :: head}">
+<head th:insert="~{blocks/head :: head}" class="p-3 text-bg-dark">
 <body>
 <header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
 <main>
-
-    <section class="py-5 text-center container">
-        <div class="p-4 p-md-5 mb-4 rounded text-bg-dark">
-                <h1 class="display-4 fst-italic">Title of a longer featured blog post</h1>
-                <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and
-                    efficiently about what’s most interesting in this post’s contents.</p>
-                <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
-        </div>
-    </section>
-
-    <div class="album py-5 bg-light">
-        <div class="container">
+    <div class="py-5 text-center container">
+        <h1 th:text="${title}"></h1>
+    </div>
+    <div class="album bg-light">
+        <div class="container py-3">
             <div th:unless="${#lists.isEmpty(posts)}">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                     <div th:each="post : ${posts}">
@@ -28,7 +21,6 @@
             </div>
         </div>
     </div>
-
 </main>
 <footer th:insert="~{blocks/footer :: footer}"></footer>
 </body>
