@@ -7,6 +7,7 @@ import com.karpov.blog.repo.PostRepository;
 import com.karpov.blog.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,7 @@ import java.util.Set;
 
 @Controller
 @RequestMapping("/users")
-//@PreAuthorize("hasAuthority('USER')") //TODO change to ADMIN
+@PreAuthorize("hasAnyAuthority('MODERATOR','ADMIN')")
 public class UserController {
 
 	@Autowired
@@ -36,6 +37,8 @@ public class UserController {
 		return "users-list";
 	}
 
+
+	@PreAuthorize("permitAll")
 	@GetMapping("/{user}")
 	public String getUser(@PathVariable User user, Model model) {
 		model.addAttribute("title", user.getUsername() + "'s profile");
@@ -57,7 +60,10 @@ public class UserController {
 	}
 
 	@PostMapping("/{user}/edit")
-	public String updateUser(@PathVariable User user, @RequestParam String username, @RequestParam String password, @RequestParam(required = false) Set<Role> roles, Model model) {
+	public String updateUser(@PathVariable User user,
+	                         @RequestParam String username,
+	                         @RequestParam String password,
+	                         @RequestParam(required = false) Set<Role> roles, Model model) {
 		user.setUsername(username);
 		user.setPassword(password);
 		user.setRoles(roles);
@@ -65,6 +71,7 @@ public class UserController {
 		return "redirect:/users/{user}";
 	}
 
+	@PreAuthorize("permitAll")
 	@GetMapping("/{user}/posts")
 	public String editPost(@PathVariable User user, Model model) {
 		model.addAttribute("title", user.getUsername() + "'s posts");

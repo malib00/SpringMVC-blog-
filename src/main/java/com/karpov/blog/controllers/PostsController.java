@@ -5,6 +5,7 @@ import com.karpov.blog.models.User;
 import com.karpov.blog.repo.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,8 +38,7 @@ public class PostsController {
 		return "post-add";
 	}
 
-	//@PreAuthorize("hasRole('USER')") //TODO possible restrictions to pages
-	//@PreAuthorize("hasAuthority('USER')")
+	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/add")
 	public String addPost(
 			@AuthenticationPrincipal User user,
@@ -61,7 +61,6 @@ public class PostsController {
 		return "redirect:/";
 	}
 
-
 	@GetMapping("/{id}")
 	public String getPost(@PathVariable(value = "id") long postId, Model model) {
 		Optional<Post> post = postRepository.findById(postId);
@@ -75,29 +74,24 @@ public class PostsController {
 		}
 	}
 
-	@GetMapping("/{id}/edit")
-	public String editPost(@PathVariable(value = "id") long postId, Model model) {
-		Optional<Post> post = postRepository.findById(postId);
-		if (post.isPresent()) {
-			Post retrievedPost = post.get();
-			model.addAttribute("title", "Post Edit: " + retrievedPost.getTitle());
-			model.addAttribute("post", retrievedPost);
+	@PreAuthorize("#post.author.id == principal.id" + "|| hasAnyAuthority('MODERATOR','ADMIN')")
+	@GetMapping("/{post}/edit")
+	public String editPost(@PathVariable Post post, Model model) {
+			model.addAttribute("title", "Post Edit: " + post.getTitle());
+			model.addAttribute("post", post);
 			return "post-edit";
-		} else {
-			return "404";
-		}
+
 	}
 
-	@PostMapping("/{id}/edit")
-	public String postUpdate(@AuthenticationPrincipal User user,
-	                         @PathVariable(value = "id") long postId,
+	@PreAuthorize("#post.author.id == principal.id" + "|| hasAnyAuthority('MODERATOR','ADMIN')")
+	@PostMapping("/{post}/edit")
+	public String postUpdate(@AuthenticationPrincipal User user,  //TODO looks like bug, who is user, who is authenticated
+	                         @PathVariable(value = "post") Post post,
 	                         @RequestParam String title,
 	                         @RequestParam String fullText,
 	                         @RequestParam("file") MultipartFile file,
 	                         Model model) throws IOException {
-		Optional<Post> post = postRepository.findById(postId);
-		if (post.isPresent()) {
-			Post editedPost = post.get();
+			Post editedPost = post;
 			editedPost.setTitle(title);
 			editedPost.setFullText(fullText);
 			if (!file.isEmpty()) {
@@ -114,14 +108,10 @@ public class PostsController {
 			}
 			postRepository.save(editedPost);
 			return "redirect:/";
-		} else {
-			return "404";
-		}
+
 	}
 
-
-
-
+	@PreAuthorize("#post.author.id == principal.id" + "|| hasAnyAuthority('MODERATOR','ADMIN')")
 	@PostMapping("/{id}/remove")
 	public String postDelete(@PathVariable(value = "id") Post post, Model model) throws IOException {
 			String userPath = uploadPath + "/" + post.getAuthor().getId();
