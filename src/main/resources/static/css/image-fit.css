@@ -1,0 +1,17 @@
+.postPreviewCover {
+   object-fit: cover;
+   height: 225px;
+}
+.postFullCover {
+   object-fit: cover;
+   height: 800px;
+}
+.avatarSmallCover {
+   object-fit: cover;
+   width: 32px;
+   height: 32px;
+}
+.avatarMediumCover {
+   object-fit: cover;
+   height: 150px;
+}

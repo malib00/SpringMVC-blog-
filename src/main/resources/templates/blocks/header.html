@@ -13,7 +13,6 @@
                 <li><a href="/users" class="nav-link px-2 text-white">Users</a></li>
                 <li><a href="/posts/add" class="nav-link px-2 text-white">Add Post</a></li>
             </ul>
-
             <form method="get" action="/search" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
                 <input type="search" name="filter" class="form-control form-control-dark text-bg-dark"
                        placeholder="Search posts..."
@@ -23,13 +22,12 @@
                 <a href="/login" class="btn btn-outline-light me-2">Login</a>
                 <a href="/register" class="btn btn-warning">Register</a>
             </div>
-
             <div sec:authorize="isAuthenticated()" class="dropdown text-end ms-2">
                 <a href="#" role="button" class="d-block link-dark text-decoration-none dropdown-toggle"
                    id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                     <img id="avatarMini"
                          th:src="'img/'+${#authentication.principal.id}+'/'+${#authentication.principal.avatar}"
-                         onerror="getDefaultAvatarMini()" alt="mdo" width="32" height="32" class="rounded-circle">
+                         onerror="getDefaultAvatarMini()" alt="mdo" width="32" height="32" class="rounded-circle avatarSmallCover">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end text-small" aria-labelledby="dropdownUser1" style="">
                     <li><a href="/posts/add" class="dropdown-item">Add Post</a></li>
