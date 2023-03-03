@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-md-3 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                    <img id="avatar" th:src="${user.avatar}" onerror="getDefaultAvatar()"
+                    <img id="avatar" th:src="'img/'+${user.id}+'/'+${user.avatar}" onerror="getDefaultAvatar()"
                          alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
                          style="width: 150px; z-index: 1">
                     <span class="font-weight-bold" th:text="${user.fullName}"></span>
@@ -52,7 +52,6 @@
                                 <input th:value="${user.password}" name="password" type="text" class="form-control"
                                        placeholder="password" value="">
                             </div>
-
                         </div>
                         <div class="mt-5 text-center">
                             <button class="btn btn-primary profile-button" type="submit">Save Profile</button>
