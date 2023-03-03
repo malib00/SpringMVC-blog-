@@ -28,6 +28,7 @@ public class User implements UserDetails {
 
 	private String username;
 	private String fullName;
+	private String about;
 	private String password;
 	private boolean active;
 	private String avatar;
@@ -102,6 +103,14 @@ public class User implements UserDetails {
 
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
+	}
+
+	public String getAbout() {
+		return about;
+	}
+
+	public void setAbout(String about) {
+		this.about = about;
 	}
 
 	@Override

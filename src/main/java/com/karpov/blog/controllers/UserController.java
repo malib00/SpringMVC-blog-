@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
@@ -57,6 +59,8 @@ public class UserController {
 		File avatarFile = new File(avatarPath);
 		if (user.getAvatar() == null || user.getAvatar().trim().isEmpty() || !avatarFile.exists() || avatarFile.isDirectory()) {
 			user.setAvatar("/static/img/profile-avatar-default.jpg");
+		} else {
+			user.setAvatar("/img/"+user.getId()+"/"+user.getAvatar());
 		}
 		model.addAttribute("user", user);
 		Iterable<Post> posts = postRepository.findByAuthor(user, Sort.by("timestamp").descending());
@@ -70,6 +74,13 @@ public class UserController {
 	@GetMapping("/{user}/edit")
 	public String editUser(@PathVariable User user, Model model) {
 		model.addAttribute("title", user.getUsername() + "'s profile edit");
+		String avatarPath = uploadPath + "/" + user.getId() + "/" + user.getAvatar();
+		File avatarFile = new File(avatarPath);
+		if (user.getAvatar() == null || user.getAvatar().trim().isEmpty() || !avatarFile.exists() || avatarFile.isDirectory()) {
+			user.setAvatar("/static/img/profile-avatar-default.jpg");
+		} else {
+			user.setAvatar("/img/"+user.getId()+"/"+user.getAvatar());
+		}
 		model.addAttribute("user", user);
 		model.addAttribute("allRoles", Role.values());
 		return "user-edit";
@@ -80,11 +91,23 @@ public class UserController {
 	                         @RequestParam String username,
 	                         @RequestParam String password,
 	                         @RequestParam("file") MultipartFile file,
-	                         @RequestParam(required = false) Set<Role> roles, Model model) {
+	                         @RequestParam(required = false) Set<Role> roles, Model model) throws IOException {
 		user.setUsername(username);
 		user.setPassword(password);
 		//user.setPassword(passwordEncoder.encode(password));
 		user.setRoles(roles);
+		if (!file.isEmpty()) {
+			String oldAvatar = user.getAvatar();
+			String userPath = uploadPath + "/" + user.getId();
+			File uploadDir = new File(userPath);
+			if (!uploadDir.exists()) {
+				uploadDir.mkdir();
+			}
+			String fileName = UUID.randomUUID() + "." + file.getOriginalFilename();
+			file.transferTo(new File(userPath + "/" + fileName));
+			user.setAvatar(fileName);
+			Files.deleteIfExists(new File(userPath + "/" + oldAvatar).toPath());
+		}
 		userRepository.save(user);
 		return "redirect:/users/{user}";
 	}
