@@ -47,7 +47,6 @@ public class PostsController {
 			@RequestParam("file") MultipartFile file,
 			Model model) throws IOException {
 		Post post = new Post(title, fullText, user);
-
 		String userPath = uploadPath + "/" + user.getId();
 		File uploadDir = new File(userPath);
 		if (!uploadDir.exists()) {
@@ -56,7 +55,6 @@ public class PostsController {
 		String fileName = UUID.randomUUID() + "." + file.getOriginalFilename();
 		file.transferTo(new File(userPath + "/" + fileName));
 		post.setFilename(fileName);
-
 		postRepository.save(post);
 		return "redirect:/";
 	}
@@ -80,7 +78,6 @@ public class PostsController {
 			model.addAttribute("title", "Post Edit: " + post.getTitle());
 			model.addAttribute("post", post);
 			return "post-edit";
-
 	}
 
 	@PreAuthorize("#post.author.id == principal.id" + "|| hasAnyAuthority('MODERATOR','ADMIN')")
@@ -91,11 +88,10 @@ public class PostsController {
 	                         @RequestParam String fullText,
 	                         @RequestParam("file") MultipartFile file,
 	                         Model model) throws IOException {
-			Post editedPost = post;
-			editedPost.setTitle(title);
-			editedPost.setFullText(fullText);
+			post.setTitle(title);
+			post.setFullText(fullText);
 			if (!file.isEmpty()) {
-				String oldFileName = editedPost.getFilename();
+				String oldFileName = post.getFilename();
 				String userPath = uploadPath + "/" + user.getId();
 				File uploadDir = new File(userPath);
 				if (!uploadDir.exists()) {
@@ -103,12 +99,11 @@ public class PostsController {
 				}
 				String fileName = UUID.randomUUID() + "." + file.getOriginalFilename();
 				file.transferTo(new File(userPath + "/" + fileName));
-				editedPost.setFilename(fileName);
+				post.setFilename(fileName);
 				Files.deleteIfExists(new File(userPath + "/" + oldFileName).toPath());
 			}
-			postRepository.save(editedPost);
+			postRepository.save(post);
 			return "redirect:/";
-
 	}
 
 	@PreAuthorize("#post.author.id == principal.id" + "|| hasAnyAuthority('MODERATOR','ADMIN')")
