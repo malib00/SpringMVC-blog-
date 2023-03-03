@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-md-3 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                    <img th:src="${user.avatar}"
+                    <img id="avatar" th:src="${user.avatar}" onerror="getDefaultAvatar()"
                          alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
                          style="width: 150px; z-index: 1">
                     <span class="font-weight-bold" th:text="${user.fullName}"></span>
@@ -33,6 +33,10 @@
                                 <input th:value="${user.fullName}" name="fullname" type="text" class="form-control"
                                        placeholder="full name" value="">
                             </div>
+                            <div class="col-md-12"><label class="labels">About</label>
+                                <input th:value="${user.about}" name="about" type="text" class="form-control"
+                                       placeholder="Tell us about yourself" value="">
+                            </div>
                             <div class="col-md-12 py-3"><label class="labels">Profile Image</label>
                                 <input type="file" name="file">
                             </div>
@@ -48,6 +52,7 @@
                                 <input th:value="${user.password}" name="password" type="text" class="form-control"
                                        placeholder="password" value="">
                             </div>
+
                         </div>
                         <div class="mt-5 text-center">
                             <button class="btn btn-primary profile-button" type="submit">Save Profile</button>
@@ -61,3 +66,5 @@
 <footer th:insert="~{blocks/footer :: footer}"></footer>
 </body>
 </html>
+
+

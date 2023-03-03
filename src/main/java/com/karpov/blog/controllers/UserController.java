@@ -55,13 +55,6 @@ public class UserController {
 	@GetMapping("/{user}")
 	public String getUser(@PathVariable User user, Model model) {
 		model.addAttribute("title", user.getUsername() + "'s profile");
-		String avatarPath = uploadPath + "/" + user.getId() + "/" + user.getAvatar();
-		File avatarFile = new File(avatarPath);
-		if (user.getAvatar() == null || user.getAvatar().trim().isEmpty() || !avatarFile.exists() || avatarFile.isDirectory()) {
-			user.setAvatar("/static/img/profile-avatar-default.jpg");
-		} else {
-			user.setAvatar("/img/"+user.getId()+"/"+user.getAvatar());
-		}
 		model.addAttribute("user", user);
 		Iterable<Post> posts = postRepository.findByAuthor(user, Sort.by("timestamp").descending());
 		int totalPostsQTY = ((Collection<Post>) posts).size();
@@ -74,13 +67,6 @@ public class UserController {
 	@GetMapping("/{user}/edit")
 	public String editUser(@PathVariable User user, Model model) {
 		model.addAttribute("title", user.getUsername() + "'s profile edit");
-		String avatarPath = uploadPath + "/" + user.getId() + "/" + user.getAvatar();
-		File avatarFile = new File(avatarPath);
-		if (user.getAvatar() == null || user.getAvatar().trim().isEmpty() || !avatarFile.exists() || avatarFile.isDirectory()) {
-			user.setAvatar("/static/img/profile-avatar-default.jpg");
-		} else {
-			user.setAvatar("/img/"+user.getId()+"/"+user.getAvatar());
-		}
 		model.addAttribute("user", user);
 		model.addAttribute("allRoles", Role.values());
 		return "user-edit";
@@ -90,10 +76,12 @@ public class UserController {
 	public String updateUser(@PathVariable User user,
 	                         @RequestParam String username,
 	                         @RequestParam String password,
+	                         @RequestParam String about,
 	                         @RequestParam("file") MultipartFile file,
 	                         @RequestParam(required = false) Set<Role> roles, Model model) throws IOException {
 		user.setUsername(username);
 		user.setPassword(password);
+		user.setAbout(about);
 		//user.setPassword(passwordEncoder.encode(password));
 		user.setRoles(roles);
 		if (!file.isEmpty()) {
