@@ -30,6 +30,7 @@ public class User implements UserDetails {
 	private String fullName;
 	private String password;
 	private boolean active;
+	private String avatar;
 
 	@ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
 	@CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -43,6 +44,7 @@ public class User implements UserDetails {
 		this.username = username;
 		this.fullName = fullName;
 		this.password = password;
+		this.avatar = "/static/img/profile-avatar-default.jpg";
 		this.roles = Collections.singleton(Role.USER);
 	}
 
@@ -92,6 +94,14 @@ public class User implements UserDetails {
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 
 	@Override

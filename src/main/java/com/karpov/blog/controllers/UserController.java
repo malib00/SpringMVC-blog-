@@ -6,8 +6,10 @@ import com.karpov.blog.models.User;
 import com.karpov.blog.repo.PostRepository;
 import com.karpov.blog.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +17,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Set;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/users")
@@ -29,6 +34,12 @@ public class UserController {
 
 	@Autowired
 	private PostRepository postRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+	@Value("${upload.path}")
+	private String uploadPath;
 
 	@GetMapping
 	public String usersList(Model model) {
@@ -42,6 +53,11 @@ public class UserController {
 	@GetMapping("/{user}")
 	public String getUser(@PathVariable User user, Model model) {
 		model.addAttribute("title", user.getUsername() + "'s profile");
+		String avatarPath = uploadPath + "/" + user.getId() + "/" + user.getAvatar();
+		File avatarFile = new File(avatarPath);
+		if (user.getAvatar() == null || user.getAvatar().trim().isEmpty() || !avatarFile.exists() || avatarFile.isDirectory()) {
+			user.setAvatar("/static/img/profile-avatar-default.jpg");
+		}
 		model.addAttribute("user", user);
 		Iterable<Post> posts = postRepository.findByAuthor(user, Sort.by("timestamp").descending());
 		int totalPostsQTY = ((Collection<Post>) posts).size();
@@ -63,9 +79,11 @@ public class UserController {
 	public String updateUser(@PathVariable User user,
 	                         @RequestParam String username,
 	                         @RequestParam String password,
+	                         @RequestParam("file") MultipartFile file,
 	                         @RequestParam(required = false) Set<Role> roles, Model model) {
 		user.setUsername(username);
 		user.setPassword(password);
+		//user.setPassword(passwordEncoder.encode(password));
 		user.setRoles(roles);
 		userRepository.save(user);
 		return "redirect:/users/{user}";
@@ -75,7 +93,7 @@ public class UserController {
 	@GetMapping("/{user}/posts")
 	public String editPost(@PathVariable User user, Model model) {
 		model.addAttribute("title", user.getUsername() + "'s posts");
-		Iterable<Post> posts = postRepository.findByAuthor(user,Sort.by("timestamp").descending());
+		Iterable<Post> posts = postRepository.findByAuthor(user, Sort.by("timestamp").descending());
 		model.addAttribute("posts", posts);
 		return "user-posts";
 	}
