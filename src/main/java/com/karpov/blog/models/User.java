@@ -32,6 +32,8 @@ public class User implements UserDetails {
 	private String password;
 	private boolean active;
 	private String avatar;
+	private String email;
+	private String emailActivationCode;
 
 	@ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
 	@CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -41,11 +43,12 @@ public class User implements UserDetails {
 	public User() {
 	}
 
-	public User(String username, String fullName, String password) {
+	public User(String username, String fullName, String email, String password) {
 		this.username = username;
 		this.fullName = fullName;
+		this.email = email;
 		this.password = password;
-		this.avatar = "/static/img/profile-avatar-default.jpg";
+		this.active = false;
 		this.roles = Collections.singleton(Role.USER);
 	}
 
@@ -111,6 +114,22 @@ public class User implements UserDetails {
 
 	public void setAbout(String about) {
 		this.about = about;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getEmailActivationCode() {
+		return emailActivationCode;
+	}
+
+	public void setEmailActivationCode(String emailActivationCode) {
+		this.emailActivationCode = emailActivationCode;
 	}
 
 	@Override

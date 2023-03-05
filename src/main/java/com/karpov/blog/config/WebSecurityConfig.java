@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,13 +26,12 @@ public class WebSecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 				.authorizeHttpRequests((requests) -> requests
-						.requestMatchers("/", "/news", "/about", "/register", "/posts/img/**","/static/**", "/img/**").permitAll()
+						.requestMatchers("/", "/news", "/about", "/register", "/activate/*", "/posts/img/**", "/static/**", "/img/**").permitAll()
 						.anyRequest().authenticated()
 				).userDetailsService(userService)
 				.formLogin((form) -> form
 						.loginPage("/login")
 						.permitAll()
-
 				)
 				.logout((logout) -> logout.permitAll());
 
@@ -41,6 +41,9 @@ public class WebSecurityConfig {
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
 		return NoOpPasswordEncoder.getInstance();//TODO this is unsecure
-		//return new BCryptPasswordEncoder();
 	}
+/*	@Bean
+	public PasswordEncoder getPasswordEncoder() {
+		return new BCryptPasswordEncoder(8);
+	}*/
 }
