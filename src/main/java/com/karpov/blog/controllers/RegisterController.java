@@ -18,9 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @PreAuthorize("isAnonymous()" + "|| hasAnyAuthority('MODERATOR','ADMIN')")
 public class RegisterController {
 
-/*	@Autowired
-	private UserRepository userRepository;*/
-
 	@Autowired
 	private RegisterService registerService;
 

@@ -4,6 +4,7 @@ import com.karpov.blog.models.User;
 import com.karpov.blog.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -17,6 +18,9 @@ public class RegisterService {
 	@Autowired
 	private MailSenderService mailSender;
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	@Value("${hostname}")
 	private String hostname;
 
@@ -26,6 +30,7 @@ public class RegisterService {
 			return false;
 		}
 		user.setEmailActivationCode(UUID.randomUUID().toString());
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
 
 		String welcomeMessage = String.format(

@@ -40,10 +40,6 @@ public class WebSecurityConfig {
 
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
-		return NoOpPasswordEncoder.getInstance();//TODO this is unsecure
-	}
-/*	@Bean
-	public PasswordEncoder getPasswordEncoder() {
 		return new BCryptPasswordEncoder(8);
-	}*/
+	}
 }

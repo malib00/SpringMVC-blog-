@@ -78,6 +78,15 @@
             <artifactId>spring-boot-starter-mail</artifactId>
             <version>3.0.4</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-core -->
+<!--
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>9.15.1</version>
+        </dependency>
+-->
+
     </dependencies>
 
     <build>
