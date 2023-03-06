@@ -8,6 +8,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 
 import java.time.Instant;
 
@@ -18,12 +21,15 @@ public class Post {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@NotBlank(message = "Please fill the title")
+	@Size(min = 2, max = 100, message = "Title must be between 2 and 100 characters long")
 	private String title;
 
 	@ManyToOne (fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	private User author;
 
+	@Size(max = 10000, message = "Description must be less than 10000 characters long")
 	@Column(length = 10000)
 	private String fullText;
 

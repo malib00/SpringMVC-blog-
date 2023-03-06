@@ -11,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -26,13 +28,24 @@ public class User implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
+	@NotBlank(message = "Please write your username")
+	@Size(min = 2, max = 20, message = "Username must be between 2 and 20 characters long")
 	private String username;
+
 	private String fullName;
+
 	private String about;
+
+	@NotBlank(message = "Please write your password")
 	private String password;
+
 	private boolean active;
+
 	private String avatar;
+
+	@NotBlank(message = "Please write your e-mail")
 	private String email;
+
 	private String emailActivationCode;
 
 	@ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)

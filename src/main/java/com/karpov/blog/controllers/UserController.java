@@ -80,7 +80,7 @@ public class UserController {
 	                         @RequestParam("file") MultipartFile file,
 	                         @RequestParam(required = false) Set<Role> roles, Model model) throws IOException {
 		user.setUsername(username);
-		user.setPassword(password);
+		user.setPassword(passwordEncoder.encode(password));
 		user.setAbout(about);
 		//user.setPassword(passwordEncoder.encode(password));
 		user.setRoles(roles);
