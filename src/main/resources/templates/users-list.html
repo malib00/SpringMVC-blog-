@@ -24,7 +24,7 @@
                     <tr>
                         <th th:text="${user.id}" scope="row"></th>
                         <td th:text="${user.username}"></td>
-                        <td th:text="${user.fullName}"></td>
+                        <td th:text="${user.fullname}"></td>
                         <td th:switch="${user.active}">
                             <p th:case="true">Active Account</p>
                             <p th:case="false">Disabled Account</p>
