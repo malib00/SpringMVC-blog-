@@ -11,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,17 +34,24 @@ public class User implements UserDetails {
 	@Size(min = 2, max = 20, message = "Username must be between 2 and 20 characters long")
 	private String username;
 
-	private String fullName;
+	private String fullname;
 
 	private String about;
 
 	@NotBlank(message = "Please write your password")
+	@Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters long")
 	private String password;
+
+	@Transient
+	@Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters long")
+	@NotBlank(message = "Please confirm your password")
+	private String password2;
 
 	private boolean active;
 
 	private String avatar;
 
+	@Email(message = "Email is not correct")
 	@NotBlank(message = "Please write your e-mail")
 	private String email;
 
@@ -56,9 +65,9 @@ public class User implements UserDetails {
 	public User() {
 	}
 
-	public User(String username, String fullName, String email, String password) {
+	public User(String username, String fullname, String email, String password) {
 		this.username = username;
-		this.fullName = fullName;
+		this.fullname = fullname;
 		this.email = email;
 		this.password = password;
 		this.active = false;
@@ -81,12 +90,12 @@ public class User implements UserDetails {
 		this.username = username;
 	}
 
-	public String getFullName() {
-		return fullName;
+	public String getFullname() {
+		return fullname;
 	}
 
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
 	}
 
 	public String getPassword() {
@@ -95,6 +104,14 @@ public class User implements UserDetails {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getPassword2() {
+		return password2;
+	}
+
+	public void setPassword2(String password2) {
+		this.password2 = password2;
 	}
 
 	public boolean isActive() {
