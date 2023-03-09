@@ -52,6 +52,7 @@
     border-top-right-radius: 0;
     }
     </style>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body class="text-center">
@@ -86,10 +87,10 @@
             <input name="password2" type="password" class="form-control" id="passwordFiled2"
                    placeholder="Confirm Password">
             <label for="passwordFiled">Confirm Password</label>
-            <p th:if="${#fields.hasErrors('password2')}" th:errorclass="error" th:errors="*{password2}"/>
-            <p th:if="${passwordsEqualsError != null && #strings.isEmpty(passwordsEqualsError) == false}" class="error"
-               th:text="${passwordsEqualsError}"></p>
         </div>
+        <div class="g-recaptcha" data-sitekey="6LdKA-UkAAAAAFEpm6FZssDDfo2QDc2maE9hQeZi"></div>
+        <p th:if="${captchaError != null && #strings.isEmpty(captchaError) == false}" class="error"
+           th:text="${captchaError}"></p>
         <button class="w-100 btn btn-lg btn-warning" type="submit">Register</button>
         <p class="mt-5 mb-3 text-muted">&copy; 2023</p>
     </form>
