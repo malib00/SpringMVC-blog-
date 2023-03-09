@@ -42,11 +42,6 @@ public class User implements UserDetails {
 	@Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters long")
 	private String password;
 
-	@Transient
-	@Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters long")
-	@NotBlank(message = "Please confirm your password")
-	private String password2;
-
 	private boolean active;
 
 	private String avatar;
@@ -104,14 +99,6 @@ public class User implements UserDetails {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getPassword2() {
-		return password2;
-	}
-
-	public void setPassword2(String password2) {
-		this.password2 = password2;
 	}
 
 	public boolean isActive() {
