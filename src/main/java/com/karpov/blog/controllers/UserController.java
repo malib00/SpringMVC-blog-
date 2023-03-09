@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -46,14 +45,14 @@ public class UserController {
 	@GetMapping
 	public String usersList(Model model) {
 		model.addAttribute("title", "User List");
-		model.addAttribute("users", userRepository.findAll());
+		model.addAttribute("users", userRepository.findAll(Sort.by("id").ascending()));
 		return "users-list";
 	}
 
-
 	@PreAuthorize("permitAll")
 	@GetMapping("/{user}")
-	public String getUser(@PathVariable User user, Model model) {
+	public String getUser(@PathVariable User user,
+	                      Model model) {
 		model.addAttribute("title", user.getUsername() + "'s profile");
 		model.addAttribute("user", user);
 		Iterable<Post> posts = postRepository.findByAuthor(user, Sort.by("timestamp").descending());
@@ -65,7 +64,8 @@ public class UserController {
 	}
 
 	@GetMapping("/{user}/edit")
-	public String editUser(@PathVariable User user, Model model) {
+	public String editUser(@PathVariable User user,
+	                       Model model) {
 		model.addAttribute("title", user.getUsername() + "'s profile edit");
 		model.addAttribute("user", user);
 		model.addAttribute("allRoles", Role.values());
@@ -78,11 +78,11 @@ public class UserController {
 	                         @RequestParam String password,
 	                         @RequestParam String about,
 	                         @RequestParam("file") MultipartFile file,
-	                         @RequestParam(required = false) Set<Role> roles, Model model) throws IOException {
+	                         @RequestParam(required = false) Set<Role> roles,
+	                         Model model) throws IOException {
 		user.setUsername(username);
 		user.setPassword(passwordEncoder.encode(password));
 		user.setAbout(about);
-		//user.setPassword(passwordEncoder.encode(password));
 		user.setRoles(roles);
 		if (!file.isEmpty()) {
 			String oldAvatar = user.getAvatar();
@@ -102,7 +102,8 @@ public class UserController {
 
 	@PreAuthorize("permitAll")
 	@GetMapping("/{user}/posts")
-	public String editPost(@PathVariable User user, Model model) {
+	public String editPost(@PathVariable User user,
+	                       Model model) {
 		model.addAttribute("title", user.getUsername() + "'s posts");
 		Iterable<Post> posts = postRepository.findByAuthor(user, Sort.by("timestamp").descending());
 		model.addAttribute("posts", posts);
@@ -110,7 +111,8 @@ public class UserController {
 	}
 
 	@PostMapping("/{user}/delete")
-	public String deleteUser(@PathVariable User user, Model model) {
+	public String deleteUser(@PathVariable User user,
+	                         Model model) {
 		userRepository.delete(user);
 		return "redirect:/users";
 	}
