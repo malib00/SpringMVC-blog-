@@ -27,6 +27,8 @@
 </head>
 <main class="form-signin">
     <body class="text-center">
+    <!--    <p th:if="${activationMessage != null}" th:text="${activationMessage}"></p>
+        <p th:if="${activationMessage == null}" >activation message null</p>-->
     <a href="/" class="mb-5 btn btn-secondary">Return to Main Page</a>
     <form th:action="@{/login}" method="post">
         <img class="mb-4" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="72"
@@ -48,7 +50,7 @@
         </div>
         <div class="checkbox mb-3">
             <label>
-                <input type="checkbox" value="remember-me"> Remember me
+                <input type="checkbox" name="remember-me"> Remember me
             </label>
         </div>
         <button class="w-100 btn btn-lg btn-primary" type="submit">Log in</button>

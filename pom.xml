@@ -61,12 +61,6 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-sftp -->
-        <!--		<dependency>
-                    <groupId>org.springframework.integration</groupId>
-                    <artifactId>spring-integration-sftp</artifactId>
-                    <version>6.0.3</version>
-                </dependency>-->
         <dependency>
             <groupId>org.springframework.integration</groupId>
             <artifactId>spring-integration-ftp</artifactId>
@@ -83,15 +77,10 @@
             <artifactId>hibernate-validator</artifactId>
             <version>8.0.0.Final</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-core -->
-<!--
         <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-            <version>9.15.1</version>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-jdbc</artifactId>
         </dependency>
--->
-
     </dependencies>
 
     <build>
