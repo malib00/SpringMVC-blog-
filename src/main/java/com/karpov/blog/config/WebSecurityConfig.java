@@ -31,7 +31,7 @@ public class WebSecurityConfig {
 						channel.anyRequest().requiresSecure())
 
 				.authorizeHttpRequests((requests) -> requests
-						.requestMatchers("/", "/news", "/about", "/register", "/activate/*", "/posts/img/**", "/static/**", "/img/**").permitAll()
+						.requestMatchers("/", "/news", "/about", "/register", "/activate/*", "/posts/img/**", "/posts/**", "/static/**", "/img/**").permitAll()
 						.anyRequest().authenticated()
 				)
 				.userDetailsService(userService)
