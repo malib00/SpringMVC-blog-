@@ -25,18 +25,29 @@
                     </div>
                     <div class="p-4 text-black" style="background-color: #f8f9fa;">
                         <div class="d-flex justify-content-end text-center py-1">
+                            <div th:unless="${itsMyPage}">
+                                <div th:unless="${isFollowingThisUser}">
+                                    <a th:href="'/users/' + ${user.id} + '/follow'" class="btn btn-info mx-2 py-auto">Follow</a>
+                                </div>
+                                <div th:if="${isFollowingThisUser}">
+                                    <a th:href="'/users/' + ${user.id} + '/unfollow'"
+                                       class="btn btn-secondary active mx-2">Unfollow</a>
+                                </div>
+                            </div>
                             <div>
                                 <p class="mb-1 h5" th:text="${totalPostsQTY}"></p>
                                 <p class="small mb-0"><a th:href="'/users/' + ${user.id} + '/posts'"
                                                          class="text-muted">Posts</a></p>
                             </div>
                             <div class="px-3">
-                                <p class="mb-1 h5">1026</p>
-                                <p class="small text-muted mb-0">Followers</p>
+                                <p class="mb-1 h5" th:text="${totalFollowers}"></p>
+                                <p class="small mb-0"><a th:href="'/users/' + ${user.id} + '/followers'"
+                                                         class="text-muted">Followers</a></p>
                             </div>
                             <div>
-                                <p class="mb-1 h5">478</p>
-                                <p class="small text-muted mb-0">Following</p>
+                                <p class="mb-1 h5" th:text="${totalFollowing}"></p>
+                                <p class="small mb-0"><a th:href="'/users/' + ${user.id} + '/following'"
+                                                         class="text-muted">Following</a></p>
                             </div>
                         </div>
                     </div>

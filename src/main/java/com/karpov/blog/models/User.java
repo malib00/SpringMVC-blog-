@@ -1,5 +1,6 @@
 package com.karpov.blog.models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -10,21 +11,24 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "usr")
-public class User implements UserDetails {
+public class User implements UserDetails{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -52,6 +56,25 @@ public class User implements UserDetails {
 
 	private String emailActivationCode;
 
+	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<Post> posts;
+
+	@ManyToMany
+	@JoinTable(
+			name = "user_followers",
+			joinColumns = { @JoinColumn(name = "channel_id")},
+			inverseJoinColumns = {@JoinColumn(name = "follower")}
+	)
+	private Set<User> followers = new HashSet<>();
+
+	@ManyToMany
+	@JoinTable(
+			name = "user_followers",
+			joinColumns = { @JoinColumn(name = "follower")},
+			inverseJoinColumns = {@JoinColumn(name = "channel_id")}
+	)
+	private Set<User> following = new HashSet<>();
+
 	@ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
 	@CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
 	@Enumerated(EnumType.STRING)
@@ -67,6 +90,19 @@ public class User implements UserDetails {
 		this.password = password;
 		this.active = false;
 		this.roles = Collections.singleton(Role.USER);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null || getClass() != obj.getClass()) return false;
+		User user = (User) obj;
+		return Objects.equals(id, user.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 
 	public long getId() {
@@ -147,6 +183,30 @@ public class User implements UserDetails {
 
 	public void setEmailActivationCode(String emailActivationCode) {
 		this.emailActivationCode = emailActivationCode;
+	}
+
+	public Set<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(Set<Post> posts) {
+		this.posts = posts;
+	}
+
+	public Set<User> getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(Set<User> followers) {
+		this.followers = followers;
+	}
+
+	public Set<User> getFollowing() {
+		return following;
+	}
+
+	public void setFollowing(Set<User> following) {
+		this.following = following;
 	}
 
 	@Override

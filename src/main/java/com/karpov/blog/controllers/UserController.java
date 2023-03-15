@@ -5,10 +5,12 @@ import com.karpov.blog.models.Role;
 import com.karpov.blog.models.User;
 import com.karpov.blog.repo.PostRepository;
 import com.karpov.blog.repo.UserRepository;
+import com.karpov.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +33,9 @@ import java.util.UUID;
 public class UserController {
 
 	@Autowired
+	private UserService userService;
+
+	@Autowired
 	private UserRepository userRepository;
 
 	@Autowired
@@ -51,16 +56,58 @@ public class UserController {
 
 	@PreAuthorize("permitAll")
 	@GetMapping("/{user}")
-	public String getUser(@PathVariable User user,
+	public String getUser(@AuthenticationPrincipal User authenticatedUser,
+	                      @PathVariable User user,
 	                      Model model) {
 		model.addAttribute("title", user.getUsername() + "'s profile");
-		model.addAttribute("user", user);
+				model.addAttribute("user", user);
+		model.addAttribute("itsMyPage", authenticatedUser.equals(user));
+		model.addAttribute("isFollowingThisUser", user.getFollowers().contains(authenticatedUser));
 		Iterable<Post> posts = postRepository.findByAuthor(user, Sort.by("timestamp").descending());
-		int totalPostsQTY = ((Collection<Post>) posts).size();
-		model.addAttribute("totalPostsQTY", totalPostsQTY);
+		model.addAttribute("totalPostsQTY", ((Collection<Post>) posts).size());
+		model.addAttribute("totalFollowers", user.getFollowers().size());
+		model.addAttribute("totalFollowing", user.getFollowing().size());
 		Iterable<Post> last3Posts = postRepository.findFirst3ByAuthor(user, Sort.by("timestamp").descending());
 		model.addAttribute("last3Posts", last3Posts);
 		return "user-profile";
+	}
+
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/{user}/follow")
+	public String followUser(@AuthenticationPrincipal User authenticatedUser,
+	                         @PathVariable User user,
+	                         Model model) {
+		userService.follow(authenticatedUser,user);
+		return "redirect:/users/{user}";
+	}
+
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/{user}/unfollow")
+	public String unfollowUser(@AuthenticationPrincipal User authenticatedUser,
+	                         @PathVariable User user,
+	                         Model model) {
+		userService.unfollow(authenticatedUser,user);
+		return "redirect:/users/{user}";
+	}
+
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/{user}/{followType}")
+	public String getUserFollowList(@PathVariable User user,
+	                                @PathVariable String followType,
+	                                Model model) {
+		if (followType.equals("followers")) {
+			model.addAttribute("title", user.getUsername() + "'s followers");
+			Iterable<User> followList = user.getFollowers();
+			model.addAttribute("followList", followList);
+			return "user-follow-list";
+		} else if (followType.equals("following")) {
+			model.addAttribute("title", user.getUsername() + "'s following");
+			Iterable<User> followList = user.getFollowing();
+			model.addAttribute("followList", followList);
+			return "user-follow-list";
+		} else {
+			return "error";
+		}
 	}
 
 	@GetMapping("/{user}/edit")
@@ -117,3 +164,7 @@ public class UserController {
 		return "redirect:/users";
 	}
 }
+
+
+
+

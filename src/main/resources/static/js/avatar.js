@@ -4,3 +4,9 @@ function getDefaultAvatar() {
 function getDefaultAvatarMini() {
     document.getElementById('avatarMini').src = 'static/img/profile-avatar-default.jpg'
 }
+
+function avatarLoadError(image) {
+    image.onerror = "";
+    image.src = "/static/img/profile-avatar-default.jpg";
+    return true;
+}

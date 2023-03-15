@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{blocks/head :: head}" class="p-3 text-bg-dark"/>
+<body>
+<header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
+<main>
+    <div class="py-5 text-center container">
+        <h1 th:text="${title}"></h1>
+    </div>
+    <div class="album bg-light">
+        <div class="container py-3">
+            <div th:unless="${#lists.isEmpty(followList)}">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-6 g-3">
+                    <div th:each="user : ${followList}">
+                        <div class="col text-center">
+                            <div class="card" style="border-radius: 15px;">
+                                <div class="card-body ">
+                                    <div>
+                                        <a th:href="'/users/' + ${user.id}">
+                                            <img type="button" th:src="'/img/'+${user.id}+'/'+${user.avatar}"
+                                                 onerror="avatarLoadError(this);"
+                                                 alt="img" class="img-fluid"
+                                                 style="width: 100px; border-radius: 10px;">
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <small th:text="'@' + ${user.username}" class="mb-0 mx-1 text-muted"></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${#lists.isEmpty(followList)}">
+                <h3 style="text-align: center">Nothing to display.</h3>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:insert="~{blocks/footer :: footer}"></footer>
+</body>
+</html>
