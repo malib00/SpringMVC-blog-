@@ -4,48 +4,40 @@
 <body>
 <header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
 <main>
-    <div class="album py-5 bg-light">
-        <div class="container">
-            <table class="table table-striped table-bordered">
-                <thead>
-                <tr>
-                    <th scope="col">id</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">Full Name</th>
-                    <th scope="col">Active Account</th>
-                    <th scope="col">Roles</th>
-                    <th scope="col">Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <div th:each="user : ${users}">
-                    <tr>
-                        <th th:text="${user.id}" scope="row"></th>
-                        <td th:text="${user.username}"></td>
-                        <td th:text="${user.fullname}"></td>
-                        <td th:switch="${user.active}">
-                            <p th:case="true">Active Account</p>
-                            <p th:case="false">Disabled Account</p>
-                            <p th:case="*">Active state is not assigned</p>
-                        </td>
-                        <td th:text="${user.roles}"></td>
-                        <td width="50">
-                            <div class="btn-group">
-                                <a th:href="'/users/' + ${user.id}" class="btn btn-sm btn-outline-secondary">View</a>
-                                <a th:href="'/users/' + ${user.id} + '/edit'" class="btn btn-sm btn-outline-secondary">Edit</a>
-                                <a th:href="'/users/' + ${user.id} + '/delete'" class="btn btn-sm btn-outline-secondary"
-                                   method="post">Delete</a>
+    <div class="py-5 text-center container">
+        <h1 th:text="${title}"></h1>
+    </div>
+    <div class="album bg-light">
+        <div class="container py-3">
+            <div th:unless="${#lists.isEmpty(users)}">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-6 g-3">
+                    <div th:each="user : ${users}">
+                        <div class="col text-center">
+                            <div class="card" style="border-radius: 15px;">
+                                <div class="card-body ">
+                                    <div>
+                                        <a th:href="'/users/' + ${user.id}">
+                                            <img type="button" th:src="'/img/'+${user.id}+'/'+${user.avatar}"
+                                                 onerror="avatarLoadError(this);"
+                                                 alt="img" class="img-fluid"
+                                                 style="width: 100px; border-radius: 10px;">
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <small th:text="'@' + ${user.username}" class="mb-0 mx-1 text-muted"></small>
+                                    </div>
+                                </div>
                             </div>
-                        </td>
-                    </tr>
+                        </div>
+                    </div>
                 </div>
-                </tbody>
-            </table>
+            </div>
+            <div th:if="${#lists.isEmpty(users)}">
+                <h3 style="text-align: center">Nothing to display.</h3>
+            </div>
         </div>
     </div>
 </main>
-
 <footer th:insert="~{blocks/footer :: footer}"></footer>
-
 </body>
 </html>

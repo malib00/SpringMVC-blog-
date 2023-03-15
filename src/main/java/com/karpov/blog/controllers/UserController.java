@@ -48,10 +48,10 @@ public class UserController {
 	private String uploadPath;
 
 	@GetMapping
-	public String usersList(Model model) {
+	public String usersListForAdmins(Model model) {
 		model.addAttribute("title", "User List");
 		model.addAttribute("users", userRepository.findAll(Sort.by("id").ascending()));
-		return "users-list";
+		return "users-list-for-admins";
 	}
 
 	@PreAuthorize("permitAll")
@@ -97,14 +97,12 @@ public class UserController {
 	                                Model model) {
 		if (followType.equals("followers")) {
 			model.addAttribute("title", user.getUsername() + "'s followers");
-			Iterable<User> followList = user.getFollowers();
-			model.addAttribute("followList", followList);
-			return "user-follow-list";
+			model.addAttribute("users", user.getFollowers());
+			return "users-list";
 		} else if (followType.equals("following")) {
 			model.addAttribute("title", user.getUsername() + "'s following");
-			Iterable<User> followList = user.getFollowing();
-			model.addAttribute("followList", followList);
-			return "user-follow-list";
+			model.addAttribute("users", user.getFollowing());
+			return "users-list";
 		} else {
 			return "error";
 		}
