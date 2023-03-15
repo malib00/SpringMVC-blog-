@@ -1,6 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{blocks/head :: head}"  class="p-3 text-bg-dark"/>
+<head>
+    <div th:replace="~{blocks/head :: head}"/>
+</head>
 <body>
 <header th:insert="~{blocks/header :: header}"  class="p-3 text-bg-dark"></header>
 <main>

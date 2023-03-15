@@ -1,6 +1,9 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{blocks/head :: head}" class="p-3 text-bg-dark"/>
+<head>
+    <div th:replace="~{blocks/head :: head}"/>
+    <link rel="stylesheet" href="/static/css/user-edit.css">
+</head>
 <body>
 <header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
 <main>
@@ -9,7 +12,7 @@
             <div class="col-md-3 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                     <img id="avatar" th:src="'/img/'+${user.id}+'/'+${user.avatar}" onerror="avatarLoadError(this);"
-                         alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                         alt="Generic image" class="img-fluid img-thumbnail mt-4 mb-2"
                          style="width: 150px; z-index: 1">
                     <span class="font-weight-bold" th:text="${user.fullname}"></span>
                     <span class="text-black-50" th:text="'@'+${user.username}"></span>

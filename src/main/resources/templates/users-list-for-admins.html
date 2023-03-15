@@ -1,6 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{blocks/head :: head}" class="p-3 text-bg-dark"/>
+<head>
+    <div th:replace="~{blocks/head :: head}"/>
+</head>
 <body>
 <header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
 <main>
@@ -12,6 +14,7 @@
                     <th scope="col">id</th>
                     <th scope="col">Username</th>
                     <th scope="col">Full Name</th>
+                    <th scope="col">E-Mail</th>
                     <th scope="col">Active Account</th>
                     <th scope="col">Roles</th>
                     <th scope="col">Action</th>
@@ -23,6 +26,7 @@
                         <th th:text="${user.id}" scope="row"></th>
                         <td th:text="${user.username}"></td>
                         <td th:text="${user.fullname}"></td>
+                        <td th:text="${user.email}"></td>
                         <td th:switch="${user.active}">
                             <p th:case="true">Active Account</p>
                             <p th:case="false">Disabled Account</p>

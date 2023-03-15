@@ -1,19 +1,15 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:insert="~{blocks/head :: head}"  class="p-3 text-bg-dark">/<head>
-
+<head>
+    <div th:replace="~{blocks/head :: head}"/>
+</head>
 <body>
-
 <header th:insert="~{blocks/header :: header}"  class="p-3 text-bg-dark"></header>
-
 <main>
     <div class="py-5 text-center container">
         <h1>Page is not found</h1>
     </div>
 </main>
-
 <footer th:insert="~{blocks/footer :: footer}"></footer>
-
 </body>
 </html>
