@@ -10,3 +10,9 @@ function avatarLoadError(image) {
     image.src = "/static/img/profile-avatar-default.jpg";
     return true;
 }
+
+function avatarLoadError2(image) {
+    image.onerror = "";
+    image.src = "/static/img/profile-avatar-default.jpg";
+    return true;
+}

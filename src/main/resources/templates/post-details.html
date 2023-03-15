@@ -1,11 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{blocks/head :: head}" class="p-3 text-bg-dark">
+<head th:insert="~{blocks/head :: head}" class="p-3 text-bg-dark"/>
 <body>
 <header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
 <main>
     <div class="py-5 text-center container">
-        <img th:src="'img/'+${post.author.id}+'/'+${post.filename}"
+        <img th:src="'/img/'+${post.author.id}+'/'+${post.filename}"
              class="bd-placeholder-img card-img-top postFullCover">
         <h1 th:text="${post.title}"></h1>
         <p th:text="${post.fullText}"></p>
