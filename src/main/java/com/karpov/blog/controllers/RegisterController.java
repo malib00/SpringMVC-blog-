@@ -42,14 +42,14 @@ public class RegisterController {
 
 	@PostMapping("/register")
 	public String registerUser(@RequestParam("password2") String passwordConfirm,
-							   @RequestParam("g-recaptcha-response") String recaptchaResponse,
+	                           @RequestParam("g-recaptcha-response") String recaptchaResponse,
 	                           @Valid User user,
 	                           BindingResult bindingResult,
 	                           Model model) {
 		String url = String.format(RECAPTCHA_URL, recaptchaSecret, recaptchaResponse);
 		CaptchaResponseDto response = restTemplate.postForObject(url, Collections.emptyList(), CaptchaResponseDto.class);
 		if (!response.isSuccess()) {
-			model.addAttribute("captchaError","Please complete captcha form");
+			model.addAttribute("captchaError", "Please complete captcha form");
 		}
 
 		boolean password2Empty = StringUtils.isEmpty(passwordConfirm);

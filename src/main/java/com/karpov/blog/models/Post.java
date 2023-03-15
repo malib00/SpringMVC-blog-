@@ -11,7 +11,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-
 import java.time.Instant;
 
 @Entity
@@ -25,7 +24,7 @@ public class Post {
 	@Size(min = 2, max = 100, message = "Title must be between 2 and 100 characters long")
 	private String title;
 
-	@ManyToOne (fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	private User author;
 

@@ -20,6 +20,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -28,7 +29,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "usr")
-public class User implements UserDetails{
+public class User implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -62,7 +63,7 @@ public class User implements UserDetails{
 	@ManyToMany
 	@JoinTable(
 			name = "user_followers",
-			joinColumns = { @JoinColumn(name = "channel_id")},
+			joinColumns = {@JoinColumn(name = "channel_id")},
 			inverseJoinColumns = {@JoinColumn(name = "follower")}
 	)
 	private Set<User> followers = new HashSet<>();
@@ -70,7 +71,7 @@ public class User implements UserDetails{
 	@ManyToMany
 	@JoinTable(
 			name = "user_followers",
-			joinColumns = { @JoinColumn(name = "follower")},
+			joinColumns = {@JoinColumn(name = "follower")},
 			inverseJoinColumns = {@JoinColumn(name = "channel_id")}
 	)
 	private Set<User> following = new HashSet<>();

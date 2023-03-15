@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -60,7 +61,7 @@ public class UserController {
 	                      @PathVariable User user,
 	                      Model model) {
 		model.addAttribute("title", user.getUsername() + "'s profile");
-				model.addAttribute("user", user);
+		model.addAttribute("user", user);
 		model.addAttribute("itsMyPage", authenticatedUser.equals(user));
 		model.addAttribute("isFollowingThisUser", user.getFollowers().contains(authenticatedUser));
 		Iterable<Post> posts = postRepository.findByAuthor(user, Sort.by("timestamp").descending());
@@ -77,16 +78,16 @@ public class UserController {
 	public String followUser(@AuthenticationPrincipal User authenticatedUser,
 	                         @PathVariable User user,
 	                         Model model) {
-		userService.follow(authenticatedUser,user);
+		userService.follow(authenticatedUser, user);
 		return "redirect:/users/{user}";
 	}
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/{user}/unfollow")
 	public String unfollowUser(@AuthenticationPrincipal User authenticatedUser,
-	                         @PathVariable User user,
-	                         Model model) {
-		userService.unfollow(authenticatedUser,user);
+	                           @PathVariable User user,
+	                           Model model) {
+		userService.unfollow(authenticatedUser, user);
 		return "redirect:/users/{user}";
 	}
 

@@ -21,7 +21,7 @@ public class SearchController {
 
 	@GetMapping("/search")
 	public String search(@RequestParam String filter, Model model) {
-		model.addAttribute("title", "Search...");
+		model.addAttribute("title", "Search: "+filter);
 
 		String trimmedFilter = filter.trim();
 		Pattern userPattern = Pattern.compile("@.+");
