@@ -14,7 +14,8 @@
                     <div class="rounded-top text-white d-flex flex-row"
                          style="background-color: #000; height:200px;">
                         <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                            <img id="avatar" th:src="'/img/'+${user.id}+'/'+${user.avatar}" onerror="avatarLoadError(this);"
+                            <img id="avatar" th:src="'/img/'+${user.id}+'/'+${user.avatar}"
+                                 onerror="avatarLoadError(this);"
                                  alt="Generic placeholder image"
                                  class="img-fluid img-thumbnail mt-4 mb-2 avatarMediumCover">
                             <a th:href="'/users/' + ${user.id} + '/edit'"
@@ -44,13 +45,23 @@
                             </div>
                             <div class="px-3">
                                 <p class="mb-1 h5" th:text="${totalFollowers}"></p>
-                                <p class="small mb-0"><a th:href="'/users/' + ${user.id} + '/followers'"
-                                                         class="text-muted">Followers</a></p>
+                                <div th:if="${totalFollowers}==0">
+                                    <p class="small mb-0 text-muted"> Followers</p>
+                                </div>
+                                <div th:unless="${totalFollowers}=='0'">
+                                    <p class="small mb-0"><a th:href="'/users/' + ${user.id} + '/followers'"
+                                                             class="text-muted">Followers</a></p>
+                                </div>
                             </div>
                             <div>
                                 <p class="mb-1 h5" th:text="${totalFollowing}"></p>
-                                <p class="small mb-0"><a th:href="'/users/' + ${user.id} + '/following'"
-                                                         class="text-muted">Following</a></p>
+                                <div th:if="${totalFollowing}==0">
+                                    <p class="small mb-0 text-muted"> Following</p>
+                                </div>
+                                <div th:unless="${totalFollowing}=='0'">
+                                    <p class="small mb-0"><a th:href="'/users/' + ${user.id} + '/following'"
+                                                             class="text-muted">Following</a></p>
+                                </div>
                             </div>
                         </div>
                     </div>
