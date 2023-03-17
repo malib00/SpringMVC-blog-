@@ -6,6 +6,7 @@ import com.karpov.blog.models.User;
 import com.karpov.blog.repo.PostRepository;
 import com.karpov.blog.repo.UserRepository;
 import com.karpov.blog.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
@@ -14,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -109,6 +111,7 @@ public class UserController {
 		}
 	}
 
+	@PreAuthorize("#user.id == principal.id" + "|| hasAnyAuthority('MODERATOR','ADMIN')")
 	@GetMapping("/{user}/edit")
 	public String editUser(@PathVariable User user,
 	                       Model model) {
@@ -118,32 +121,33 @@ public class UserController {
 		return "user-edit";
 	}
 
+	@PreAuthorize("#user.id == principal.id" + "|| hasAnyAuthority('MODERATOR','ADMIN')")
 	@PostMapping("/{user}/edit")
-	public String updateUser(@PathVariable User user,
-	                         @RequestParam String username,
-	                         @RequestParam String password,
-	                         @RequestParam String about,
-	                         @RequestParam("file") MultipartFile file,
+	public String updateUser(@RequestParam("file") MultipartFile file,
 	                         @RequestParam(required = false) Set<Role> roles,
+	                         @Valid User user,
+	                         BindingResult bindingResult,
 	                         Model model) throws IOException {
-		user.setUsername(username);
-		user.setPassword(passwordEncoder.encode(password));
-		user.setAbout(about);
-		user.setRoles(roles);
-		if (!file.isEmpty()) {
-			String oldAvatar = user.getAvatar();
-			String userPath = uploadPath + "/" + user.getId();
-			File uploadDir = new File(userPath);
-			if (!uploadDir.exists()) {
-				uploadDir.mkdir();
+		if (bindingResult.hasErrors()) {
+			return "user-edit";
+		} else {
+
+			if (!file.isEmpty()) {
+				String oldAvatar = user.getAvatar();
+				String userPath = uploadPath + "/" + user.getId();
+				File uploadDir = new File(userPath);
+				if (!uploadDir.exists()) {
+					uploadDir.mkdir();
+				}
+				String fileName = UUID.randomUUID() + "." + file.getOriginalFilename();
+				file.transferTo(new File(userPath + "/" + fileName));
+				user.setAvatar(fileName);
+				Files.deleteIfExists(new File(userPath + "/" + oldAvatar).toPath());
 			}
-			String fileName = UUID.randomUUID() + "." + file.getOriginalFilename();
-			file.transferTo(new File(userPath + "/" + fileName));
-			user.setAvatar(fileName);
-			Files.deleteIfExists(new File(userPath + "/" + oldAvatar).toPath());
+
+			userRepository.save(user);
+			return "redirect:/users/{user}";
 		}
-		userRepository.save(user);
-		return "redirect:/users/{user}";
 	}
 
 	@PreAuthorize("permitAll")
@@ -163,7 +167,3 @@ public class UserController {
 		return "redirect:/users";
 	}
 }
-
-
-
-
