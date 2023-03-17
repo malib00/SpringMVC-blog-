@@ -11,6 +11,7 @@
                 <li><a href="/news" class="nav-link px-2 text-white">News</a></li>
                 <li><a href="/about" class="nav-link px-2 text-white">About</a></li>
                 <li><a href="/users" class="nav-link px-2 text-white">Users</a></li>
+                <li><a href="/myposts" class="nav-link px-2 text-white">My Posts</a></li>
                 <li><a href="/posts/add" class="nav-link px-2 text-white">Add Post</a></li>
             </ul>
             <form method="get" action="/search" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
@@ -31,6 +32,7 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end text-small" aria-labelledby="dropdownUser1" style="">
                     <li><a href="/posts/add" class="dropdown-item">Add Post</a></li>
+                    <li><a href="/myposts" class="dropdown-item">My Posts</a></li>
                     <li><a th:href="'/users/' + ${#authentication.principal.id}" class="dropdown-item">Profile</a></li>
                     <li>
                         <hr class="dropdown-divider">
