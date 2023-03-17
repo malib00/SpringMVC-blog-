@@ -20,12 +20,12 @@
         </div>
         </div>
         <div class="form-floating py-1">
-            <input name="fullname" type="text" class="form-control" id="fullnameField" placeholder="Full Name">
+            <input th:field="*{fullname}" type="text" class="form-control" id="fullnameField" placeholder="Full Name">
             <label for="fullnameField">Full Name</label>
             <p th:if="${#fields.hasErrors('fullname')}" th:errorclass="error" th:errors="*{fullname}"/>
         </div>
         <div class="form-floating py-1">
-            <input name="email" type="email" class="form-control" id="emailField" placeholder="name@example.com">
+            <input th:field="*{email}" type="email" class="form-control" id="emailField" placeholder="name@example.com">
             <label for="emailField">Email address</label>
             <p th:if="${#fields.hasErrors('email')}" th:errorclass="error" th:errors="*{email}"/>
         </div>
