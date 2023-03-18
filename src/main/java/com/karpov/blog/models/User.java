@@ -17,6 +17,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,8 +38,10 @@ public class User implements UserDetails {
 
 	@NotBlank(message = "Please write your username")
 	@Size(min = 2, max = 20, message = "Username must be between 2 and 20 characters long")
+	@Pattern(regexp = "^[A-Za-z0-9]*$", message = "Username can contain only letters (A-Z,a-z) and numbers (0-9) without spaces")
 	private String username;
 
+	@Pattern(regexp = "^[A-Za-z ]*$", message = "Full name can contain only letters (A-Z,a-z) and spaces")
 	private String fullname;
 
 	private String about;
