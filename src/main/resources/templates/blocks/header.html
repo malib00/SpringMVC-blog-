@@ -11,7 +11,10 @@
                 <li><a href="/news" class="nav-link px-2 text-white">News</a></li>
                 <li><a href="/about" class="nav-link px-2 text-white">About</a></li>
                 <li><a href="/users" class="nav-link px-2 text-white">Users</a></li>
-                <li><a href="/myposts" class="nav-link px-2 text-white">My Posts</a></li>
+                <li><a th:href="'/users/' + ${#authentication.principal.id} + '/feed'" class="nav-link px-2 text-white">My
+                    Feed</a></li>
+                <li><a th:href="'/users/' + ${#authentication.principal.id} + '/posts'"
+                       class="nav-link px-2 text-white">My Posts</a></li>
                 <li><a href="/posts/add" class="nav-link px-2 text-white">Add Post</a></li>
             </ul>
             <form method="get" action="/search" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
@@ -27,12 +30,16 @@
                 <a href="#" role="button" class="d-block link-dark text-decoration-none dropdown-toggle"
                    id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                     <img
-                         th:src="'/img/'+${#authentication.principal.id}+'/'+${#authentication.principal.avatar}"
-                         onerror="avatarLoadError(this);" alt="mdo" width="32" height="32" class="rounded-circle avatarSmallCover">
+                            th:src="'/img/'+${#authentication.principal.id}+'/'+${#authentication.principal.avatar}"
+                            onerror="avatarLoadError(this);" alt="mdo" width="32" height="32"
+                            class="rounded-circle avatarSmallCover">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end text-small" aria-labelledby="dropdownUser1" style="">
+                    <li><a th:href="'/users/' + ${#authentication.principal.id} + '/feed'" class="dropdown-item">My
+                        Feed</a></li>
+                    <li><a th:href="'/users/' + ${#authentication.principal.id} + '/posts'" class="dropdown-item">My
+                        Posts</a></li>
                     <li><a href="/posts/add" class="dropdown-item">Add Post</a></li>
-                    <li><a href="/myposts" class="dropdown-item">My Posts</a></li>
                     <li><a th:href="'/users/' + ${#authentication.principal.id}" class="dropdown-item">Profile</a></li>
                     <li>
                         <hr class="dropdown-divider">

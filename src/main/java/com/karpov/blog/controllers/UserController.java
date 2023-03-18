@@ -160,6 +160,16 @@ public class UserController {
 		return "user-posts";
 	}
 
+	@PreAuthorize("#user.id == principal.id" + "|| hasAnyAuthority('MODERATOR','ADMIN')")
+	@GetMapping("/{user}/feed")
+	public String getUserFeed(@PathVariable User user,
+	                          Model model) throws IOException {
+		model.addAttribute("title", user.getUsername() + "'s feed");
+		Iterable<Post> posts = postRepository.findByAuthorInOrderByTimestampDesc(user.getFollowing());
+		model.addAttribute("posts", posts);
+		return "user-posts";
+	}
+
 	@PostMapping("/{user}/delete")
 	public String deleteUser(@PathVariable User user,
 	                         Model model) {
