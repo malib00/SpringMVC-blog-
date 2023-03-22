@@ -91,21 +91,21 @@ public class UserController {
 	}
 
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/{user}/{followType}")
-	public String getUserFollowList(@PathVariable User user,
-	                                @PathVariable String followType,
-	                                Model model) {
-		if (followType.equals("followers")) {
-			model.addAttribute("title", user.getUsername() + "'s followers");
-			model.addAttribute("users", user.getFollowers());
-			return "users-list";
-		} else if (followType.equals("following")) {
-			model.addAttribute("title", user.getUsername() + "'s following");
-			model.addAttribute("users", user.getFollowing());
-			return "users-list";
-		} else {
-			return "error";
-		}
+	@GetMapping("/{user}/followers")
+	public String getUserFollowersList(@PathVariable User user,
+	                                   Model model) {
+		model.addAttribute("title", user.getUsername() + "'s followers");
+		model.addAttribute("users", user.getFollowers());
+		return "users-list";
+	}
+
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/{user}/following")
+	public String getUserFollowingList(@PathVariable User user,
+	                                   Model model) {
+		model.addAttribute("title", user.getUsername() + "'s following");
+		model.addAttribute("users", user.getFollowing());
+		return "users-list";
 	}
 
 	@PreAuthorize("#user.id == principal.id" + "|| hasAnyAuthority('MODERATOR','ADMIN')")
