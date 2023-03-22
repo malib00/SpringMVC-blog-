@@ -72,10 +72,12 @@ public class RegisterController {
 	public String activateUser(@PathVariable String code, Model model) {
 		boolean userIsActivated = registerService.activateUser(code);
 		if (userIsActivated) {
-			model.addAttribute("activationMessage", "Your profile is successfully activated!");
+			model.addAttribute("activationIsSuccessful", true);
+			model.addAttribute("activationStatusMessage", "Your profile is successfully activated! \n You can login now.");
 		} else {
-			model.addAttribute("activationMessage", "Activation code not found or profile is already activated");
+			model.addAttribute("activationIsSuccessful", false);
+			model.addAttribute("activationStatusMessage", "Activation code not found or profile is already activated");
 		}
-		return "redirect:/login";
+		return "login";
 	}
 }

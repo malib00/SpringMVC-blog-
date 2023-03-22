@@ -6,8 +6,12 @@
 </head>
 <main class="form-signin">
     <body class="text-center">
-        <p class="error" th:if="${activationMessage != null}" th:text="${activationMessage}"></p>
-
+    <div th:if="${activationStatusMessage != null}">
+        <div th:if="${activationIsSuccessful}" class="alert alert-success" role="alert"
+             th:text="${activationStatusMessage}"/>
+        <div th:unless="${activationIsSuccessful}" class="alert alert-danger" role="alert"
+             th:text="${activationStatusMessage}"/>
+    </div>
     <a href="/" class="mb-5 btn btn-secondary">Return to Main Page</a>
     <form th:action="@{/login}" method="post">
         <img class="mb-4" src="/static/img/logo.svg" alt="" width="50"
