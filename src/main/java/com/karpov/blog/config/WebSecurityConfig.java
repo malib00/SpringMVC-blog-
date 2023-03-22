@@ -26,12 +26,10 @@ public class WebSecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http, RememberMeServices rememberMeServices) throws Exception {
 		http
-				//redirect to HTTPS
 				.requiresChannel(channel ->
-						channel.anyRequest().requiresSecure())
-
+						channel.anyRequest().requiresSecure()) //redirect to HTTPS
 				.authorizeHttpRequests((requests) -> requests
-						.requestMatchers("/", "/news", "/about", "/register", "/activate/*", "/posts/img/**", "/posts/**", "/static/**", "/img/**").permitAll()
+						.requestMatchers("/", "/static/**", "/img/**", "/posts/**", "/register", "/activate/*", "/news", "/about").permitAll()
 						.anyRequest().authenticated()
 				)
 				.userDetailsService(userService)
