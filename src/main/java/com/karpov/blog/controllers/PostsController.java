@@ -68,8 +68,7 @@ public class PostsController {
 
 	@PreAuthorize("#post.author.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
 	@PostMapping("/{post}/edit")
-	public String postUpdate(@AuthenticationPrincipal User user,  //TODO looks like bug, who is user, who is authenticated
-	                         @PathVariable Post post,
+	public String postUpdate(@PathVariable Post post,
 	                         @RequestParam String title,
 	                         @RequestParam String fullText,
 	                         @RequestParam("file") MultipartFile file,
@@ -78,7 +77,7 @@ public class PostsController {
 		post.setFullText(fullText);
 		if (!file.isEmpty()) {
 			String oldFileName = post.getFilename();
-			String path = String.valueOf(user.getId());
+			String path = String.valueOf(post.getAuthor().getId());
 			String newFileName = imageFileServisce.replace(file, path, oldFileName);
 			post.setFilename(newFileName);
 		}
