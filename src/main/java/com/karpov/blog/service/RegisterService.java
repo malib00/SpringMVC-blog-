@@ -36,7 +36,7 @@ public class RegisterService {
 		String welcomeMessage = String.format(
 				"Hello, %s! \n" +
 						"Welcome to our PhotoBlog!\n" +
-						"Please, activate your account by following this link: http://%s/activate/%s",
+						"Please, activate your account by following this link: https://%s/activate/%s",
 				user.getUsername(),
 				hostname,
 				user.getEmailActivationCode()
