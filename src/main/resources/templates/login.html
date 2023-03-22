@@ -6,12 +6,12 @@
 </head>
 <main class="form-signin">
     <body class="text-center">
-    <!--    <p th:if="${activationMessage != null}" th:text="${activationMessage}"></p>
-        <p th:if="${activationMessage == null}" >activation message null</p>-->
+        <p class="error" th:if="${activationMessage != null}" th:text="${activationMessage}"></p>
+
     <a href="/" class="mb-5 btn btn-secondary">Return to Main Page</a>
     <form th:action="@{/login}" method="post">
-        <img class="mb-4" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="72"
-             height="57">
+        <img class="mb-4" src="/static/img/logo.svg" alt="" width="50"
+             height="50">
         <h1 class="h3 mb-3 fw-normal">Please log in</h1>
         <div class="form-floating">
             <input type="text" name="username" class="form-control" placeholder="Username">
