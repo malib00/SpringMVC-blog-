@@ -108,7 +108,7 @@ public class UserController {
 		return "users-list";
 	}
 
-	@PreAuthorize("#user.id == principal.id" + "|| hasAnyAuthority('MODERATOR','ADMIN')")
+	@PreAuthorize("#user.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
 	@GetMapping("/{user}/edit")
 	public String editUser(@PathVariable User user,
 	                       Model model) {
@@ -118,7 +118,7 @@ public class UserController {
 		return "user-edit";
 	}
 
-	@PreAuthorize("#user.id == principal.id" + "|| hasAnyAuthority('MODERATOR','ADMIN')")
+	@PreAuthorize("#user.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
 	@PostMapping("/{user}/edit")
 	public String updateUser(@RequestParam("file") MultipartFile file,
 	                         @RequestParam(required = false) Set<Role> roles,
@@ -149,7 +149,7 @@ public class UserController {
 		return "user-posts";
 	}
 
-	@PreAuthorize("#user.id == principal.id" + "|| hasAnyAuthority('MODERATOR','ADMIN')")
+	@PreAuthorize("#user.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
 	@GetMapping("/{user}/feed")
 	public String getUserFeed(@PathVariable User user,
 	                          Model model) throws IOException {

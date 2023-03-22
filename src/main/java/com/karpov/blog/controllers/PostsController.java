@@ -28,6 +28,7 @@ public class PostsController {
 	@Autowired
 	private ImageFileServisce imageFileServisce;
 
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/add")
 	public String addPostPage(Model model) {
 		model.addAttribute("title", "Add Post");
@@ -57,7 +58,7 @@ public class PostsController {
 		return "post-details";
 	}
 
-	@PreAuthorize("#post.author.id == principal.id" + "|| hasAnyAuthority('MODERATOR','ADMIN')")
+	@PreAuthorize("#post.author.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
 	@GetMapping("/{post}/edit")
 	public String editPost(@PathVariable Post post, Model model) {
 		model.addAttribute("title", "Post Edit: " + post.getTitle());
@@ -65,7 +66,7 @@ public class PostsController {
 		return "post-edit";
 	}
 
-	@PreAuthorize("#post.author.id == principal.id" + "|| hasAnyAuthority('MODERATOR','ADMIN')")
+	@PreAuthorize("#post.author.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
 	@PostMapping("/{post}/edit")
 	public String postUpdate(@AuthenticationPrincipal User user,  //TODO looks like bug, who is user, who is authenticated
 	                         @PathVariable Post post,
@@ -85,7 +86,7 @@ public class PostsController {
 		return "redirect:/";
 	}
 
-	@PreAuthorize("#post.author.id == principal.id" + "|| hasAnyAuthority('MODERATOR','ADMIN')")
+	@PreAuthorize("#post.author.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
 	@PostMapping("/{post}/remove")
 	public String postDelete(@PathVariable Post post, Model model) throws IOException {
 		String path = String.valueOf(post.getAuthor().getId());

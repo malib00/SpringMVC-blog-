@@ -20,7 +20,7 @@ import org.thymeleaf.util.StringUtils;
 import java.util.Collections;
 
 @Controller
-@PreAuthorize("isAnonymous()" + "|| hasAnyAuthority('MODERATOR','ADMIN')")
+@PreAuthorize("isAnonymous() || hasAnyAuthority('MODERATOR','ADMIN')")
 public class RegisterController {
 
 	private final static String RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s";

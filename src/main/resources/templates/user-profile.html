@@ -13,13 +13,14 @@
                 <div class="card">
                     <div class="rounded-top text-white d-flex flex-row"
                          style="background-color: #000; height:200px;">
-                        <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+                        <div class="ms-5 mt-3 d-flex flex-column" style="width: 150px;">
                             <img id="avatar" th:src="'/img/'+${user.id}+'/'+${user.avatar}"
                                  onerror="avatarLoadError(this);"
                                  alt="Generic placeholder image"
                                  class="img-fluid img-thumbnail mt-4 mb-2 avatarMediumCover">
-                            <a th:href="'/users/' + ${user.id} + '/edit'"
-                               type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark"
+                            <a th:if="${user.id} == ${#authentication.principal.id} or ${#authorization.expression('hasAnyAuthority(''MODERATOR'',''ADMIN'')')}"
+                               th:href="'/users/' + ${user.id} + '/edit'"
+                               type="button" class="btn btn-dark"
                                style="z-index: 1;">Edit profile</a>
                         </div>
                         <div class="ms-3" style="margin-top: 130px;">
@@ -69,7 +70,12 @@
                         <div class="mb-5">
                             <p class="lead fw-normal mb-1">About</p>
                             <div class="p-4" style="background-color: #f8f9fa;">
-                                <p class="font-italic mb-1" th:text="${user.about}"></p>
+                                <div th:if="${user.about != null}">
+                                    <p class="font-italic mb-1" th:text="${user.about}"></p>
+                                </div>
+                                <div th:if="${user.about == null}">
+                                    <p class="font-italic mb-1">User has not written anything about himself.</p>
+                                </div>
                             </div>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-4">
