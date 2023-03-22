@@ -5,10 +5,10 @@ import com.karpov.blog.models.Role;
 import com.karpov.blog.models.User;
 import com.karpov.blog.repo.PostRepository;
 import com.karpov.blog.repo.UserRepository;
+import com.karpov.blog.service.ImageFileServisce;
 import com.karpov.blog.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,12 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Collection;
 import java.util.Set;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/users")
@@ -39,6 +36,9 @@ public class UserController {
 	private UserService userService;
 
 	@Autowired
+	private ImageFileServisce imageFileServisce;
+
+	@Autowired
 	private UserRepository userRepository;
 
 	@Autowired
@@ -46,9 +46,6 @@ public class UserController {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
-	@Value("${upload.path}")
-	private String uploadPath;
 
 	@GetMapping
 	public String usersListForAdmins(Model model) {
@@ -131,20 +128,12 @@ public class UserController {
 		if (bindingResult.hasErrors()) {
 			return "user-edit";
 		} else {
-
 			if (!file.isEmpty()) {
-				String oldAvatar = user.getAvatar();
-				String userPath = uploadPath + "/" + user.getId();
-				File uploadDir = new File(userPath);
-				if (!uploadDir.exists()) {
-					uploadDir.mkdir();
-				}
-				String fileName = UUID.randomUUID() + "." + file.getOriginalFilename();
-				file.transferTo(new File(userPath + "/" + fileName));
-				user.setAvatar(fileName);
-				Files.deleteIfExists(new File(userPath + "/" + oldAvatar).toPath());
+				String oldFileName = user.getAvatar();
+				String path = String.valueOf(user.getId());
+				String newFileName = imageFileServisce.replace(file, path, oldFileName);
+				user.setAvatar(newFileName);
 			}
-
 			userRepository.save(user);
 			return "redirect:/users/{user}";
 		}
