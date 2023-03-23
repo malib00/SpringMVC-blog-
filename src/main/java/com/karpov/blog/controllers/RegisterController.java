@@ -37,7 +37,7 @@ public class RegisterController {
 	@GetMapping("/register")
 	public String registrationPage(User user, Model model) {
 		model.addAttribute("title", "Registration");
-		return "user-register";
+		return "register";
 	}
 
 	@PostMapping("/register")
@@ -61,7 +61,7 @@ public class RegisterController {
 			model.addAttribute("passwordsEqualsError", "Passwords are not the same.");
 		}
 		if (password2Empty || bindingResult.hasErrors() || !response.isSuccess()) {
-			return "user-register";
+			return "register";
 		} else {
 			registerService.registerUser(user);
 			return "redirect:/";

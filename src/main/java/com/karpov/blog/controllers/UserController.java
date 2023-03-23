@@ -115,7 +115,7 @@ public class UserController {
 		model.addAttribute("title", user.getUsername() + "'s profile edit");
 		model.addAttribute("user", user);
 		model.addAttribute("allRoles", Role.values());
-		return "user-edit";
+		return "user-profile-edit";
 	}
 
 	@PreAuthorize("#user.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
@@ -126,7 +126,7 @@ public class UserController {
 	                         BindingResult bindingResult,
 	                         Model model) throws IOException {
 		if (bindingResult.hasErrors()) {
-			return "user-edit";
+			return "user-profile-edit";
 		} else {
 			if (!file.isEmpty()) {
 				String oldFileName = user.getAvatar();
