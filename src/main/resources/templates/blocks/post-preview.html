@@ -3,7 +3,7 @@
         <div class="card shadow-sm">
             <a th:href="'/posts/' + ${post.id}">
                 <img type="button" th:src="'/img/'+${post.author.id}+'/'+${post.filename}"
-                     class="bd-placeholder-img card-img-top postPreviewCover"></a>
+                     class="bd-placeholder-img card-img-top postPreviewCover"/></a>
             <div class="card-body">
                 <p th:text="${post.title}" class="card-text mx-3"></p>
                 <div class="container ">

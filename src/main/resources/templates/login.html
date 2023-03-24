@@ -15,14 +15,14 @@
     <a href="/" class="mb-5 btn btn-secondary">Return to Main Page</a>
     <form th:action="@{/login}" method="post">
         <img class="mb-4" src="/static/img/logo.svg" alt="" width="50"
-             height="50">
+             height="50"/>
         <h1 class="h3 mb-3 fw-normal">Please log in</h1>
         <div class="form-floating">
-            <input type="text" name="username" class="form-control" placeholder="Username">
+            <input type="text" name="username" class="form-control" placeholder="Username"/>
             <label>Username</label>
         </div>
         <div class="form-floating">
-            <input type="password" name="password" class="form-control" placeholder="Password">
+            <input type="password" name="password" class="form-control" placeholder="Password"/>
             <label>Password</label>
         </div>
         <div th:if="${param.error}">
@@ -33,7 +33,7 @@
         </div>
         <div class="checkbox mb-3">
             <label>
-                <input type="checkbox" name="remember-me"> Remember me
+                <input type="checkbox" name="remember-me"/>Remember me
             </label>
         </div>
         <button class="w-100 btn btn-lg btn-primary" type="submit">Log in</button>
