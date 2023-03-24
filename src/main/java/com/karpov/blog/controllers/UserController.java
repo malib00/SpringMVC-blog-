@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,9 +42,6 @@ public class UserController {
 
 	@Autowired
 	private PostRepository postRepository;
-
-	@Autowired
-	private PasswordEncoder passwordEncoder;
 
 	@GetMapping
 	public String usersListForAdmins(Model model) {
@@ -113,7 +109,6 @@ public class UserController {
 	public String editUser(@PathVariable User user,
 	                       Model model) {
 		model.addAttribute("title", user.getUsername() + "'s profile edit");
-		model.addAttribute("user", user);
 		model.addAttribute("allRoles", Role.values());
 		return "user-profile-edit";
 	}
@@ -126,6 +121,8 @@ public class UserController {
 	                         BindingResult bindingResult,
 	                         Model model) throws IOException {
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("title", user.getUsername() + "'s profile edit");
+			model.addAttribute("allRoles", Role.values());
 			return "user-profile-edit";
 		} else {
 			if (!file.isEmpty()) {
