@@ -10,12 +10,17 @@
                 <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
                 <li><a href="/news" class="nav-link px-2 text-white">News</a></li>
                 <li><a href="/about" class="nav-link px-2 text-white">About</a></li>
-                <li sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')"><a href="/users" class="nav-link px-2 text-white">Users</a></li>
-                <li sec:authorize="isAuthenticated()"><a th:href="'/users/' + ${#authentication.principal.id} + '/feed'" class="nav-link px-2 text-white">My
+                <li sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')"><a href="/users"
+                                                                            class="nav-link px-2 text-white">Users</a>
+                </li>
+                <li sec:authorize="isAuthenticated()"><a th:href="'/users/' + ${#authentication.principal.id} + '/feed'"
+                                                         class="nav-link px-2 text-white">My
                     Feed</a></li>
-                <li sec:authorize="isAuthenticated()"><a th:href="'/users/' + ${#authentication.principal.id} + '/posts'"
-                       class="nav-link px-2 text-white">My Posts</a></li>
-                <li sec:authorize="isAuthenticated()"><a href="/posts/add" class="nav-link px-2 text-white">Add Post</a></li>
+                <li sec:authorize="isAuthenticated()"><a
+                        th:href="'/users/' + ${#authentication.principal.id} + '/posts'"
+                        class="nav-link px-2 text-white">My Posts</a></li>
+                <li sec:authorize="isAuthenticated()"><a href="/posts/add" class="nav-link px-2 text-white">Add Post</a>
+                </li>
             </ul>
             <form method="get" action="/search" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
                 <input type="search" name="filter" class="form-control form-control-dark text-bg-dark"
@@ -26,8 +31,10 @@
                 <a sec:authorize="isAnonymous()" href="/login" class="btn btn-outline-light me-2">Login</a>
                 <a sec:authorize="isAnonymous()" href="/register" class="btn btn-warning">Register</a>
             </div>
+            <div sec:authorize="isAuthenticated()" th:text="'@' + ${#authentication.principal.username}"/>
+
             <div sec:authorize="isAuthenticated()" class="dropdown text-end ms-2">
-                <a href="#" role="button" class="d-block link-dark text-decoration-none dropdown-toggle"
+                <a href="#" role="button" class="d-block link-light text-decoration-none dropdown-toggle"
                    id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                     <img
                             th:src="'/img/'+${#authentication.principal.id}+'/'+${#authentication.principal.avatar}"
