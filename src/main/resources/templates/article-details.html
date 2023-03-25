@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{blocks/head :: head}"/>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
+<main>
+    <div class="py-2 text-center container bg-light rounded my-2">
+        <img th:src="'/img/articles/'+${article.filename}"
+             class="bd-placeholder-img card-img-top postFullCover">
+        <h1 th:text="${article.title}"></h1>
+        <p th:text="${article.fullText}"></p>
+    </div>
+    <div sec:authorize="isAuthenticated()" th:if="${article.author.id} == ${#authentication.principal.id} or ${#authorization.expression('hasAnyAuthority(''MODERATOR'',''ADMIN'')')}"
+         class="row justify-content-md-center">
+        <div class="col-md-auto">
+            <a th:href="'/articles/' + ${article.id} + '/edit'" class="btn btn-warning">Edit</a>
+        </div>
+        <div class="col-md-auto">
+            <form th:action="'/articles/' + ${article.id} + '/remove'" method="post">
+                <button class="btn btn-danger" type="submit">Remove</button>
+            </form>
+        </div>
+    </div>
+</main>
+<footer th:insert="~{blocks/footer :: footer}"></footer>
+</body>
+</html>

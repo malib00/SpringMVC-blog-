@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{blocks/head :: head}"/>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
+<main>
+    <div class="py-5 text-center container mb-5">
+        <h1 th:text="${title}"></h1>
+        <img th:src="'/img/articles/'+${article.filename}"
+             class="bd-placeholder-img card-img-top postFullCover">
+        <form method="post" enctype="multipart/form-data">
+            <input type="text" th:value="${article.title}" name="title" placeholder="Title" class="form-control mt-3"><br>
+            <textarea th:text="${article.fullText}" name="fullText" placeholder="Article content" class="form-control"/><br>
+            <input type="file" name="file"><br>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+    </div>
+</main>
+<footer th:insert="~{blocks/footer :: footer}"></footer>
+</body>
+</html>
