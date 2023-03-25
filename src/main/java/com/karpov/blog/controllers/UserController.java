@@ -5,7 +5,7 @@ import com.karpov.blog.models.Role;
 import com.karpov.blog.models.User;
 import com.karpov.blog.repo.PostRepository;
 import com.karpov.blog.repo.UserRepository;
-import com.karpov.blog.service.ImageFileServisce;
+import com.karpov.blog.service.ImageFileService;
 import com.karpov.blog.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class UserController {
 	private UserService userService;
 
 	@Autowired
-	private ImageFileServisce imageFileServisce;
+	private ImageFileService imageFileServisce;
 
 	@Autowired
 	private UserRepository userRepository;

@@ -10,7 +10,7 @@ import java.nio.file.Files;
 import java.util.UUID;
 
 @Service
-public class ImageFileServisce {
+public class ImageFileService {
 
 	@Value("${upload.path}")
 	private String uploadPath;

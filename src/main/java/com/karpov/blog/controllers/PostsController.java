@@ -3,7 +3,7 @@ package com.karpov.blog.controllers;
 import com.karpov.blog.models.Post;
 import com.karpov.blog.models.User;
 import com.karpov.blog.repo.PostRepository;
-import com.karpov.blog.service.ImageFileServisce;
+import com.karpov.blog.service.ImageFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,7 +26,7 @@ public class PostsController {
 	private PostRepository postRepository;
 
 	@Autowired
-	private ImageFileServisce imageFileServisce;
+	private ImageFileService imageFileServisce;
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/add")

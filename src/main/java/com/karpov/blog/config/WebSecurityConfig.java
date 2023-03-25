@@ -29,7 +29,7 @@ public class WebSecurityConfig {
 				.requiresChannel(channel ->
 						channel.anyRequest().requiresSecure()) //redirect to HTTPS
 				.authorizeHttpRequests((requests) -> requests
-						.requestMatchers("/", "/static/**", "/img/**", "/posts/**", "/register", "/activate/*", "/news", "/about").permitAll()
+						.requestMatchers("/", "/static/**", "/img/**", "/posts/**", "/register", "/activate/*", "/articles", "/about").permitAll()
 						.anyRequest().authenticated()
 				)
 				.userDetailsService(userService)
