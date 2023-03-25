@@ -2,17 +2,28 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="~{blocks/head :: head}"/>
+    <style type="text/css">
+
+    </style>
 </head>
 <body>
 <header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
 <main>
 
-    <section class="py-5 text-center container">
-        <div class="p-4 p-md-5 mb-4 rounded text-bg-dark">
-                <h1 class="display-4 fst-italic">Title of a longer featured blog post</h1>
-                <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and
-                    efficiently about what’s most interesting in this post’s contents.</p>
-                <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
+    <section class="py-3 container" th:if="${recentArticle != null}">
+        <div class="container" style="position: relative; text-align: center; color: white;">
+            <img th:src="'/img/articles/'+${recentArticle.filename}" alt="Snow"
+                class="w-100 img-responsive rounded" style="object-fit: cover; height: 300px;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                <h1 class="display-4 fst-italic" th:text="'Recent Article: '+${recentArticle.title}"></h1>
+                <div th:if="${#strings.length(recentArticle.fulltext)>100}">
+                    <p class="lead my-3" th:text="${#strings.substring(recentArticle.fulltext,0,99)}+'...'"></p>
+                </div>
+                <div th:unless="${#strings.length(recentArticle.fulltext)>100}">
+                    <p class="lead my-3" th:text="${recentArticle.fulltext}"></p>
+                </div>
+                <p class="lead mb-0"><a th:href="'/articles/' + ${recentArticle.id}" class="text-white fw-bold">Read Article</a></p>
+            </div>
         </div>
     </section>
 
