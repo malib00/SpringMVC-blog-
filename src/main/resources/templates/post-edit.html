@@ -9,11 +9,11 @@
     <div class="py-5 text-center container mb-5">
         <h1 th:text="${title}"></h1>
         <img th:src="'/img/'+${post.author.id}+'/'+${post.filename}"
-             class="bd-placeholder-img card-img-top postFullCover">
+             class="bd-placeholder-img card-img-top postFullCover"/>
         <form method="post" enctype="multipart/form-data">
-            <input type="text" th:value="${post.title}" name="title" placeholder="Title" class="form-control mt-3"><br>
+            <input type="text" th:value="${post.title}" name="title" placeholder="Title" class="form-control mt-3"/><br>
             <textarea th:text="${post.fullText}" name="fullText" placeholder="Post content" class="form-control"/><br>
-            <input type="file" name="file"><br>
+            <input type="file" name="file"/><br>
             <button type="submit" class="btn btn-success">Submit</button>
         </form>
     </div>

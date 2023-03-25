@@ -17,7 +17,7 @@
                             <img id="avatar" th:src="'/img/'+${user.id}+'/'+${user.avatar}"
                                  onerror="avatarLoadError(this);"
                                  alt="Generic placeholder image"
-                                 class="img-fluid img-thumbnail mt-4 mb-2 avatarMediumCover">
+                                 class="img-fluid img-thumbnail mt-4 mb-2 avatarMediumCover"/>
                             <a th:if="${user.id} == ${#authentication.principal.id} or ${#authorization.expression('hasAnyAuthority(''MODERATOR'',''ADMIN'')')}"
                                th:href="'/users/' + ${user.id} + '/edit'"
                                type="button" class="btn btn-dark"

@@ -11,32 +11,32 @@
     <a href="/" class="mb-5 btn btn-secondary">Return to Main Page</a>
     <form action="#" th:action="@{/register}" th:object="${user}" method="post">
         <img class="mb-4" src="/static/img/logo.svg" alt="" width="50"
-             height="50">
+             height="50"/>
         <h1 class="h3 mb-3 fw-normal">Registration</h1>
         <div class="form-floating py-1">
-            <input th:field="*{username}" type="text" class="form-control" id="usernameField" placeholder="Username">
+            <input th:field="*{username}" type="text" class="form-control" id="usernameField" placeholder="Username"/>
             <label for="usernameField">Username</label>
             <p th:if="${#fields.hasErrors('username')}" th:errorclass="error" th:errors="*{username}"/>
         </div>
         </div>
         <div class="form-floating py-1">
-            <input th:field="*{fullname}" type="text" class="form-control" id="fullnameField" placeholder="Full Name">
+            <input th:field="*{fullname}" type="text" class="form-control" id="fullnameField" placeholder="Full Name"/>
             <label for="fullnameField">Full Name</label>
             <p th:if="${#fields.hasErrors('fullname')}" th:errorclass="error" th:errors="*{fullname}"/>
         </div>
         <div class="form-floating py-1">
-            <input th:field="*{email}" type="email" class="form-control" id="emailField" placeholder="name@example.com">
+            <input th:field="*{email}" type="email" class="form-control" id="emailField" placeholder="name@example.com"/>
             <label for="emailField">Email address</label>
             <p th:if="${#fields.hasErrors('email')}" th:errorclass="error" th:errors="*{email}"/>
         </div>
         <div class="form-floating py-1">
-            <input name="password" type="password" class="form-control" id="passwordFiled" placeholder="Password">
+            <input name="password" type="password" class="form-control" id="passwordFiled" placeholder="Password"/>
             <label for="passwordFiled">Password</label>
             <p th:if="${#fields.hasErrors('password')}" th:errorclass="error" th:errors="*{password}"/>
         </div>
         <div class="form-floating py-1">
             <input name="password2" type="password" class="form-control" id="passwordFiled2"
-                   placeholder="Confirm Password">
+                   placeholder="Confirm Password"/>
             <label for="passwordFiled">Confirm Password</label>
         </div>
         <div class="g-recaptcha" data-sitekey="6LdKA-UkAAAAAFEpm6FZssDDfo2QDc2maE9hQeZi"></div>
