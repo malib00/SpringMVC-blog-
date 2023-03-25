@@ -49,10 +49,10 @@ public class ArticlesController {
 	@PostMapping("/add")
 	public String addArticle(@AuthenticationPrincipal User user,
 	                      @RequestParam String title,
-	                      @RequestParam String fullText,
+	                      @RequestParam String fulltext,
 	                      @RequestParam("file") MultipartFile file,
 	                      Model model) throws IOException {
-		Article article = new Article(title, fullText, user);
+		Article article = new Article(title, fulltext, user);
 		String fileName = imageFileServisce.save(file, "articles");
 		article.setFilename(fileName);
 		articleRepository.save(article);
@@ -78,11 +78,11 @@ public class ArticlesController {
 	@PostMapping("/{article}/edit")
 	public String articleUpdate(@PathVariable Article article,
 	                         @RequestParam String title,
-	                         @RequestParam String fullText,
+	                         @RequestParam String fulltext,
 	                         @RequestParam("file") MultipartFile file,
 	                         Model model) throws IOException {
 		article.setTitle(title);
-		article.setFullText(fullText);
+		article.setFulltext(fulltext);
 		if (!file.isEmpty()) {
 			String oldFileName = article.getFilename();
 			String newFileName = imageFileServisce.replace(file, "articles", oldFileName);

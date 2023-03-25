@@ -30,7 +30,7 @@ public class Post {
 
 	@Size(max = 10000, message = "Description must be less than 10000 characters long")
 	@Column(length = 10000)
-	private String fullText;
+	private String fulltext;
 
 	private Instant timestamp;
 
@@ -39,9 +39,9 @@ public class Post {
 	public Post() {
 	}
 
-	public Post(String title, String fullText, User author) {
+	public Post(String title, String fulltext, User author) {
 		this.title = title;
-		this.fullText = fullText;
+		this.fulltext = fulltext;
 		this.author = author;
 		this.timestamp = Instant.now();
 
@@ -71,12 +71,12 @@ public class Post {
 		this.title = title;
 	}
 
-	public String getFullText() {
-		return fullText;
+	public String getFulltext() {
+		return fulltext;
 	}
 
-	public void setFullText(String fullText) {
-		this.fullText = fullText;
+	public void setFulltext(String fulltext) {
+		this.fulltext = fulltext;
 	}
 
 	public Instant getTimestamp() {

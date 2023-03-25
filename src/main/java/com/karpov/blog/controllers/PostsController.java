@@ -40,10 +40,10 @@ public class PostsController {
 	public String addPost(
 			@AuthenticationPrincipal User user,
 			@RequestParam String title,
-			@RequestParam String fullText,
+			@RequestParam String fulltext,
 			@RequestParam("file") MultipartFile file,
 			Model model) throws IOException {
-		Post post = new Post(title, fullText, user);
+		Post post = new Post(title, fulltext, user);
 		String path = String.valueOf(user.getId());
 		String fileName = imageFileServisce.save(file, path);
 		post.setFilename(fileName);
@@ -70,11 +70,11 @@ public class PostsController {
 	@PostMapping("/{post}/edit")
 	public String postUpdate(@PathVariable Post post,
 	                         @RequestParam String title,
-	                         @RequestParam String fullText,
+	                         @RequestParam String fulltext,
 	                         @RequestParam("file") MultipartFile file,
 	                         Model model) throws IOException {
 		post.setTitle(title);
-		post.setFullText(fullText);
+		post.setFulltext(fulltext);
 		if (!file.isEmpty()) {
 			String oldFileName = post.getFilename();
 			String path = String.valueOf(post.getAuthor().getId());

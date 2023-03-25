@@ -10,7 +10,7 @@
         <h1 th:text="${title}"></h1>
         <form action="/posts/add" method="post" enctype="multipart/form-data">
             <input type="text" name="title" placeholder="Title" class="form-control"/><br>
-            <textarea name="fullText" placeholder="Post content" class="form-control" rows="10"></textarea><br>
+            <textarea name="fulltext" placeholder="Post content" class="form-control" rows="10"></textarea><br>
             <input type="file" name="file"/><br>
             <button type="submit" class="btn btn-success">Add post</button>
         </form>
