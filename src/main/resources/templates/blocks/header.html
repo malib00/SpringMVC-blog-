@@ -11,7 +11,7 @@
                 <li><a href="/articles" class="nav-link px-2 text-white">Articles</a></li>
                 <li><a href="/about" class="nav-link px-2 text-white">About</a></li>
                 <li sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')"><a href="/users"
-                                                                            class="nav-link px-2 text-white">Users</a>
+                                                                            class="nav-link px-2 text-danger">Users</a>
                 </li>
                 <li sec:authorize="isAuthenticated()"><a th:href="'/users/' + ${#authentication.principal.id} + '/feed'"
                                                          class="nav-link px-2 text-white">My Feed</a></li>
@@ -20,7 +20,7 @@
                         class="nav-link px-2 text-white">My Posts</a></li>
                 <li sec:authorize="isAuthenticated()"><a href="/posts/add" class="nav-link px-2 text-white">Add Post</a></li>
                 <li sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')"><a href="/articles/add"
-                                                                            class="nav-link px-2 text-white">Add
+                                                                            class="nav-link px-2 text-danger">Add
                     Article</a>
                 </li>
             </ul>
