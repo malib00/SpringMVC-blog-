@@ -2,6 +2,10 @@
    object-fit: cover;
    height: 225px;
 }
+.articlePreviewCover {
+   object-fit: cover;
+   height: 400px;
+}
 .postFullCover {
    object-fit: cover;
    height: 800px;
