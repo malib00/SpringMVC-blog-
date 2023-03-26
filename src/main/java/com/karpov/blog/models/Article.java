@@ -28,7 +28,7 @@ public class Article {
 	@JoinColumn(name = "user_id")
 	private User author;
 
-	@Size(max = 10000, message = "Description must be less than 10000 characters long")
+	@Size(max = 10000, message = "Article text must be less than 10000 characters long")
 	@Column(length = 10000)
 	private String fulltext;
 
