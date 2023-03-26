@@ -2,13 +2,30 @@
    object-fit: cover;
    height: 225px;
 }
+.postFullCover {
+   object-fit: cover;
+   height: 800px;
+}
 .articlePreviewCover {
    object-fit: cover;
    height: 400px;
 }
-.postFullCover {
+.recentArticlePreviewCover {
    object-fit: cover;
-   height: 800px;
+   height: 300px;
+   opacity: 0.6;
+}
+.darkenImage:after {
+  background:rgba(0,0,0,0.6);
+}
+.recentArticle:after {
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  background:rgba(0,0,0,0.6);
 }
 .avatarSmallCover {
    object-fit: cover;
@@ -18,4 +35,17 @@
 .avatarMediumCover {
    object-fit: cover;
    height: 150px;
+}
+.myitem{
+Position:relative;
+}
+.myitem:after {
+  content:"";
+  display:block;
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  background:rgba(0,0,0,0.6);
 }

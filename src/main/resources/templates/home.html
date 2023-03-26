@@ -11,18 +11,18 @@
 <main>
 
     <section class="py-3 container" th:if="${recentArticle != null}">
-        <div class="container" style="position: relative; text-align: center; color: white;">
-            <img th:src="'/img/articles/'+${recentArticle.filename}" alt="Snow"
-                class="w-100 img-responsive rounded" style="object-fit: cover; height: 300px;">
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                <h1 class="display-4 fst-italic" th:text="'Recent Article: '+${recentArticle.title}"></h1>
+        <div class="card card-inverse shadow-sm" style="background: #000;">
+            <img class="card-img recentArticlePreviewCover" th:src="'/img/articles/'+${recentArticle.filename}" alt="Article image">
+            <div class="card-img-overlay">
+                <h1 class="text-white text-center py-5 fst-italic" th:text="'Recent Article: '+${recentArticle.title}"></h1>
                 <div th:if="${#strings.length(recentArticle.fulltext)>100}">
-                    <p class="lead my-3" th:text="${#strings.substring(recentArticle.fulltext,0,99)}+'...'"></p>
+                    <p class="text-white text-center"
+                       th:text="${#strings.substring(recentArticle.fulltext,0,99)}+'...'"></p>
                 </div>
                 <div th:unless="${#strings.length(recentArticle.fulltext)>100}">
-                    <p class="lead my-3" th:text="${recentArticle.fulltext}"></p>
+                    <p class="text-white text-center" th:text="${recentArticle.fulltext}"></p>
                 </div>
-                <p class="lead mb-0"><a th:href="'/articles/' + ${recentArticle.id}" class="text-white fw-bold">Read Article</a></p>
+                <p class="text-center"><a th:href="'/articles/' + ${recentArticle.id}" class="text-white fw-bold">Read Article</a></p>
             </div>
         </div>
     </section>
