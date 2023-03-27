@@ -1,5 +1,5 @@
 <div th:fragment="post-preview">
-    <div class="col">
+    <div class="col" th:data-id="${post.id}">
         <div class="card shadow-sm">
             <a th:href="'/posts/' + ${post.id}">
                 <img type="button" th:src="'/img/'+${post.author.id}+'/'+${post.filename}"

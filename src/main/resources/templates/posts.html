@@ -12,7 +12,7 @@
     <div class="album bg-light">
         <div class="container py-3">
             <div th:unless="${#lists.isEmpty(posts)}">
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="postsList">
                     <div th:each="post : ${posts}">
                         <div th:insert="~{blocks/post-preview :: post-preview}"></div>
                     </div>

@@ -8,27 +8,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestPropertySource("/application-test.properties")
+@Sql(value = {"/create-users-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = {"/create-users-after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class LoginTest {
 
 	@Autowired
 	private MockMvc mockMvc;
 
-	@Value("${testUsername}")
-	private String testUsername;
-
-	@Value("${testPassword}")
-	private String testPassword;
-
 	@Test
 	public void correctLoginTest() throws Exception {
-		this.mockMvc.perform(formLogin().user(testUsername).password(testPassword))
+		this.mockMvc.perform(formLogin().user("dante").password("11111111"))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(redirectedUrl("/"));
 	}
