@@ -1,5 +1,8 @@
 package com.karpov.blog;
 
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,7 +16,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.nio.file.Files;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -36,8 +38,21 @@ class MainControllerTests {
 	@Autowired
 	private MockMvc mockMvc;
 
+	@BeforeAll
+	static void createImageDirectory() {
+		File directory = new File("/E:/blogSpringFilesTest/data");
+		if (!directory.exists()) {
+			try {
+				directory.mkdirs();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	@Test
-	public void MainPageTest() throws Exception {
+	public void mainPageTest() throws Exception {
 		this.mockMvc.perform(get("/")).andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().string(containsString("Home Page")));
@@ -45,7 +60,7 @@ class MainControllerTests {
 
 	@WithUserDetails(value = "dante")
 	@Test
-	public void MainPageForUserTest() throws Exception {
+	public void mainPageForUserTest() throws Exception {
 		this.mockMvc.perform(get("/")).andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(authenticated())
@@ -54,7 +69,7 @@ class MainControllerTests {
 
 
 	@Test
-	public void MainPageWithContentTest() throws Exception {
+	public void mainPageWithContentTest() throws Exception {
 		this.mockMvc.perform(get("/")).andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(xpath("//div[@id='postsList']/div").nodeCount(4));
@@ -62,12 +77,50 @@ class MainControllerTests {
 
 	@WithUserDetails(value = "dante")
 	@Test
-	public void FilterTest() throws Exception {
-		this.mockMvc.perform(get("/search").param("filter","title2")).andDo(print())
+	public void filterTest() throws Exception {
+		this.mockMvc.perform(get("/search").param("filter", "title2")).andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(authenticated())
 				.andExpect(xpath("//div[@id='postsList']/div").nodeCount(2))
 				.andExpect(xpath("//div[@id='postsList']/div/div/div/div[@data-id=51]").exists())
 				.andExpect(xpath("//div[@id='postsList']/div/div/div/div[@data-id=151]").exists());
 	}
+
+	@WithUserDetails(value = "vergil")
+	@Test
+	public void addPostTest() throws Exception {
+		File postTestFile = new File("src/test/resources/postTestFile.jpg");
+		FileInputStream fileInputStream = new FileInputStream(postTestFile);
+		MockMultipartFile mockMultipartFile = new MockMultipartFile("file", postTestFile.getName(), "multipart/form-data", fileInputStream);
+
+		MockHttpServletRequestBuilder multipart = multipart("/posts/add")
+				.file(mockMultipartFile)
+				.param("title", "title5")
+				.param("fulltext", "Some full post text.")
+				/*.with(csrf())*/;
+
+		this.mockMvc.perform(multipart)
+				.andExpect(status().is3xxRedirection())
+				.andExpect(redirectedUrl("/"))
+				.andExpect(authenticated());
+
+		this.mockMvc.perform(get("/")).andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(xpath("//div[@id='postsList']/div").nodeCount(5))
+				.andExpect(xpath("//div[@id='postsList']/div/div/div/div[@data-id=951]").exists())
+				.andExpect(xpath("//div[@id='postsList']/div/div/div/div[@data-id=951]/div/div/p").string("title5"));
+	}
+
+	@AfterAll
+	static void cleanImageDirectory() {
+		File directory = new File("/E:/blogSpringFilesTest");
+		if (directory.exists()) {
+			try {
+				FileUtils.deleteDirectory(directory);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 }

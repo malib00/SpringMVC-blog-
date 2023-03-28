@@ -6,4 +6,4 @@ insert into post (id, title, user_id) values
 (101, 'title3', 101),
 (151, 'title22', 101);
 
-alter sequence post_seq restart with 301;
+alter sequence post_seq restart with 1000;
