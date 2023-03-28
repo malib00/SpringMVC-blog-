@@ -33,7 +33,7 @@ public class LoginTest {
 
 	@Test
 	public void incorrectLoginTest() throws Exception {
-		this.mockMvc.perform(formLogin().user("somewrongusername"))
+		this.mockMvc.perform(formLogin().user("SomeWrongUsername").password("AndWrongPassword"))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(redirectedUrl("/login?error"));
 	}

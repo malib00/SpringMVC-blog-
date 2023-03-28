@@ -2,9 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="~{blocks/head :: head}"/>
-    <style type="text/css">
-
-    </style>
 </head>
 <body>
 <header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
@@ -12,9 +9,11 @@
 
     <section class="py-3 container" th:if="${recentArticle != null}">
         <div class="card card-inverse shadow-sm" style="background: #000;">
-            <img class="card-img recentArticlePreviewCover" th:src="'/img/articles/'+${recentArticle.filename}" alt="Article image">
+            <img class="card-img recentArticlePreviewCover" th:src="'/img/articles/'+${recentArticle.filename}"
+                 alt="Article image"/>
             <div class="card-img-overlay">
-                <h1 class="text-white text-center py-5 fst-italic" th:text="'Recent Article: '+${recentArticle.title}"></h1>
+                <h1 class="text-white text-center py-5 fst-italic"
+                    th:text="'Recent Article: '+${recentArticle.title}"></h1>
                 <div th:if="${#strings.length(recentArticle.fulltext)>100}">
                     <p class="text-white text-center"
                        th:text="${#strings.substring(recentArticle.fulltext,0,99)}+'...'"></p>
@@ -22,7 +21,8 @@
                 <div th:unless="${#strings.length(recentArticle.fulltext)>100}">
                     <p class="text-white text-center" th:text="${recentArticle.fulltext}"></p>
                 </div>
-                <p class="text-center"><a th:href="'/articles/' + ${recentArticle.id}" class="text-white fw-bold">Read Article</a></p>
+                <p class="text-center"><a th:href="'/articles/' + ${recentArticle.id}" class="text-white fw-bold">Read
+                    Article</a></p>
             </div>
         </div>
     </section>
