@@ -1,5 +1,6 @@
 package com.karpov.blog.service;
 
+import com.karpov.blog.models.Role;
 import com.karpov.blog.models.User;
 import com.karpov.blog.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.UUID;
 
 @Service
@@ -31,6 +33,7 @@ public class RegisterService {
 		}
 		user.setEmailActivationCode(UUID.randomUUID().toString());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setRoles(Collections.singleton(Role.USER));
 		userRepository.save(user);
 
 		String welcomeMessage = String.format(
