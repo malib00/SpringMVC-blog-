@@ -1,7 +1,6 @@
 package com.karpov.blog.controllers;
 
 import com.karpov.blog.models.Article;
-import com.karpov.blog.models.Post;
 import com.karpov.blog.models.User;
 import com.karpov.blog.repo.ArticleRepository;
 import com.karpov.blog.service.ImageFileService;
