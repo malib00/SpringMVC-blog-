@@ -38,7 +38,7 @@ public class User implements UserDetails {
 
 	@NotBlank(message = "Please write your username")
 	@Size(min = 2, max = 20, message = "Username must be between 2 and 20 characters long")
-	@Pattern(regexp = "^[A-Za-z0-9]*$", message = "Username can contain only letters (A-Z,a-z) and numbers (0-9) without spaces")
+	@Pattern(regexp = "^[a-z0-9]*$", message = "Username can contain only lowercase letters (a-z) and numbers (0-9) without spaces")
 	private String username;
 
 	@Pattern(regexp = "^[A-Za-z ]*$", message = "Full name can contain only letters (A-Z,a-z) and spaces")
@@ -87,6 +87,7 @@ public class User implements UserDetails {
 	public User() {
 	}
 
+	//TODO check and delete
 	public User(String username, String fullname, String email, String password) {
 		this.username = username;
 		this.fullname = fullname;
