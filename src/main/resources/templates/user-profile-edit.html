@@ -60,8 +60,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12"><label class="labels">Password</label>
-                                <input th:field="*{password}" name="password" type="text" class="form-control"
+                            <div th:if="${uneditedUser.id} == ${#authentication.principal.id} or ${#authorization.expression('hasAuthority(''ADMIN'')')}"
+                                 class="col-md-12"><label class="labels">Password</label>
+                                <input name="password" type="text" class="form-control"
                                        placeholder="password" value=""/>
                                 <p th:if="${#fields.hasErrors('password')}" th:errorclass="error"
                                    th:errors="*{password}"/>

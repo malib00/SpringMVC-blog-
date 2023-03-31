@@ -1,5 +1,6 @@
 package com.karpov.blog.controllers;
 
+import com.karpov.blog.models.Password;
 import com.karpov.blog.models.Post;
 import com.karpov.blog.models.Role;
 import com.karpov.blog.models.User;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,6 +33,9 @@ import java.util.Set;
 @RequestMapping("/users")
 @PreAuthorize("hasAnyAuthority('MODERATOR','ADMIN')")
 public class UserController {
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private UserService userService;
@@ -120,9 +125,16 @@ public class UserController {
 	@PostMapping("/{user}/edit")
 	public String updateUser(@PathVariable User user,
 	                         @RequestParam(value = "file") MultipartFile file,
-	                         @RequestParam Set<Role> roles,
+	                         @RequestParam(required = false) Set<Role> roles,
+	                         @ModelAttribute(name = "password") @Valid Password password, BindingResult passwordBindingResult,
 	                         @ModelAttribute(name = "editedUser") @Valid User editedUser, BindingResult bindingResult,
 	                         Model model) throws IOException {
+		if (editedUser.getPassword().isBlank()) {
+			editedUser.setPassword(user.getPassword());
+		} else if (passwordBindingResult.hasErrors()) {
+			passwordBindingResult.getAllErrors().stream().forEach(x -> bindingResult.addError(x));
+		}
+
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("title", user.getUsername() + "'s profile edit");
 			model.addAttribute("allRoles", Role.values());
@@ -130,16 +142,15 @@ public class UserController {
 			model.addAttribute("editedUser", editedUser);
 			return "user-profile-edit";
 		} else {
-			user.setUsername(editedUser.getUsername());
-			user.setFullname(editedUser.getFullname());
-			user.setAbout(editedUser.getAbout());
+			editedUser.setId(user.getId());
+			editedUser.setPassword(passwordEncoder.encode(password.getPassword()));
 			if (!file.isEmpty()) {
-				String oldFileName = user.getAvatar();
-				String path = String.valueOf(user.getId());
+				String oldFileName = editedUser.getAvatar();
+				String path = String.valueOf(editedUser.getId());
 				String newFileName = imageFileServisce.replace(file, path, oldFileName);
-				user.setAvatar(newFileName);
+				editedUser.setAvatar(newFileName);
 			}
-			userRepository.save(user);
+			userRepository.save(editedUser);
 			return "redirect:/users/{user}";
 		}
 	}

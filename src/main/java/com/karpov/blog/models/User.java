@@ -46,8 +46,6 @@ public class User implements UserDetails {
 
 	private String about;
 
-	@NotBlank(message = "Please write your password")
-	@Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters long")
 	private String password;
 
 	private boolean active;
