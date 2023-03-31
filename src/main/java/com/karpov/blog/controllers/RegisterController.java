@@ -1,6 +1,7 @@
 package com.karpov.blog.controllers;
 
 import com.karpov.blog.dto.CaptchaResponseDto;
+import com.karpov.blog.models.Password;
 import com.karpov.blog.models.User;
 import com.karpov.blog.service.RegisterService;
 import jakarta.validation.Valid;
@@ -10,7 +11,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,7 +44,8 @@ public class RegisterController {
 	}
 
 	@PostMapping("/register")
-	public String registerUser(@RequestParam("password2") String passwordConfirm,
+	public String registerUser(@ModelAttribute(name = "password") @Valid Password password, BindingResult passwordBindingResult,
+	                           @RequestParam("password2") String passwordConfirm,
 	                           @RequestParam("g-recaptcha-response") String recaptchaResponse,
 	                           @Valid User user,
 	                           BindingResult bindingResult,
@@ -51,16 +55,22 @@ public class RegisterController {
 		if (!response.isSuccess()) {
 			model.addAttribute("captchaError", "Please complete captcha form");
 		}
+		if (password.getPassword().isBlank()) {
+			bindingResult.addError(new FieldError("user", "password", "Password should not be empty!"));
+		}
+		if (passwordBindingResult.hasErrors()) {
+			passwordBindingResult.getAllErrors().stream().forEach(x -> bindingResult.addError(x));
+		}
 
-		boolean password2Empty = StringUtils.isEmpty(passwordConfirm);
-		if (password2Empty) {
+		if (passwordConfirm.isBlank()) {
 			model.addAttribute("password2error", "Password conformation should NOT be empty");
 		}
 
-		if (!user.getPassword().equals(passwordConfirm)) {
+		if (!password.getPassword().equals(passwordConfirm)) {
 			model.addAttribute("passwordsEqualsError", "Passwords are not the same.");
 		}
-		if (password2Empty || bindingResult.hasErrors() || !response.isSuccess()) {
+		if (passwordConfirm.isBlank() || bindingResult.hasErrors() || !response.isSuccess()) {
+			model.addAttribute("title", "Registration");
 			return "register";
 		} else {
 			registerService.registerUser(user);
