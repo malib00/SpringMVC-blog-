@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -110,21 +111,28 @@ public class UserController {
 	                       Model model) {
 		model.addAttribute("title", user.getUsername() + "'s profile edit");
 		model.addAttribute("allRoles", Role.values());
+		model.addAttribute("uneditedUser", user);
+		model.addAttribute("editedUser", user);
 		return "user-profile-edit";
 	}
 
 	@PreAuthorize("#user.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
 	@PostMapping("/{user}/edit")
-	public String updateUser(@RequestParam("file") MultipartFile file,
-	                         @RequestParam(required = false) Set<Role> roles,
-	                         @Valid User user,
-	                         BindingResult bindingResult,
+	public String updateUser(@PathVariable User user,
+	                         @RequestParam(value = "file") MultipartFile file,
+	                         @RequestParam Set<Role> roles,
+	                         @ModelAttribute(name = "editedUser") @Valid User editedUser, BindingResult bindingResult,
 	                         Model model) throws IOException {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("title", user.getUsername() + "'s profile edit");
 			model.addAttribute("allRoles", Role.values());
+			model.addAttribute("uneditedUser", user);
+			model.addAttribute("editedUser", editedUser);
 			return "user-profile-edit";
 		} else {
+			user.setUsername(editedUser.getUsername());
+			user.setFullname(editedUser.getFullname());
+			user.setAbout(editedUser.getAbout());
 			if (!file.isEmpty()) {
 				String oldFileName = user.getAvatar();
 				String path = String.valueOf(user.getId());

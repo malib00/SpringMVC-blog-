@@ -11,19 +11,19 @@
         <div class="row">
             <div class="col-md-3 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                    <img id="avatar" th:src="'/img/'+${user.id}+'/'+${user.avatar}" onerror="avatarLoadError(this);"
+                    <img id="avatar" th:src="'/img/'+${uneditedUser.id}+'/'+${uneditedUser.avatar}" onerror="avatarLoadError(this);"
                          alt="Generic image" class="img-fluid img-thumbnail mt-4 mb-2"
                          style="width: 150px; z-index: 1"/>
-                    <span class="font-weight-bold" th:text="${user.fullname}"></span>
-                    <span class="text-black-50" th:text="'@'+${user.username}"></span>
+                    <span class="font-weight-bold" th:text="${uneditedUser.fullname}"></span>
+                    <span class="text-black-50" th:text="'@'+${uneditedUser.username}"></span>
                 </div>
             </div>
             <div class="col-md-5 border-right">
-                <form action="#" th:action="@{'/users/'+${user.id}+'/edit'}" method="post" th:object="${user}"
+                <form action="#" th:action="@{'/users/'+${uneditedUser.id}+'/edit'}" method="post" th:object="${editedUser}"
                       enctype="multipart/form-data">
                     <div class="p-3 py-5">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="text-right" th:text="${user.username}+': profile edit'"></h4>
+                            <h4 class="text-right" th:text="${uneditedUser.username} + ': profile edit'"></h4>
                         </div>
                         <div class="row mt-2">
                             <div class="col-md-6"><label class="labels">Username</label>
@@ -59,6 +59,12 @@
                                         <label class="form-check-label" th:text="${role}"> </label>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-md-12"><label class="labels">Password</label>
+                                <input th:field="*{password}" name="password" type="text" class="form-control"
+                                       placeholder="password" value=""/>
+                                <p th:if="${#fields.hasErrors('password')}" th:errorclass="error"
+                                   th:errors="*{password}"/>
                             </div>
                         </div>
                         <div class="mt-5 text-center">
