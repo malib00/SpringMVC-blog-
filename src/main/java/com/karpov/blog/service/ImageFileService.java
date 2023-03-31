@@ -1,5 +1,6 @@
 package com.karpov.blog.service;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,4 +43,16 @@ public class ImageFileService {
 		String fullPath = uploadPath + "/" + path;
 		Files.deleteIfExists(new File(fullPath + "/" + oldFileName).toPath());
 	}
+
+	public void deleteUserImages(String path) {
+			String fullPath = uploadPath + "/" + path;
+			File directory = new File(fullPath);
+			if (directory.exists()) {
+				try {
+					FileUtils.deleteDirectory(directory);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 }
