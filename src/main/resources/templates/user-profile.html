@@ -70,10 +70,10 @@
                         <div class="mb-5">
                             <p class="lead fw-normal mb-1">About</p>
                             <div class="p-4" style="background-color: #f8f9fa;">
-                                <div th:if="${user.about != null}">
+                                <div th:unless="${user.about == null || #strings.isEmpty(user.about) == true}">
                                     <p class="font-italic mb-1" th:text="${user.about}"></p>
                                 </div>
-                                <div th:if="${user.about == null}">
+                                <div th:if="${user.about == null || #strings.isEmpty(user.about) == true}">
                                     <p class="font-italic mb-1">User has not written anything about himself.</p>
                                 </div>
                             </div>
@@ -92,7 +92,7 @@
                                 </div>
                             </div>
                             <div th:if="${#lists.isEmpty(last3Posts)}">
-                                <h3 style="text-align: center">User has no posts yet.</h3>
+                                <h3 style="text-align: center">No posts yet.</h3>
                             </div>
                         </div>
                     </div>

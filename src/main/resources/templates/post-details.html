@@ -8,6 +8,7 @@
 <main>
     <div class="py-2 text-center container bg-light rounded my-2">
         <img th:src="'/img/'+${post.author.id}+'/'+${post.filename}"
+             onerror="postImageLoadError(this);"
              class="bd-placeholder-img card-img-top postFullCover"/>
         <h1 th:text="${post.title}"></h1>
         <p th:text="${post.fulltext}"></p>
