@@ -32,4 +32,13 @@ public class UserService implements UserDetailsService {
 		user.getFollowers().remove(authenticatedUser);
 		userRepository.save(user);
 	}
+
+	public boolean sameUsernameFound(String username) {
+		User userWithSameUsername = userRepository.findByUsername(username);
+		if (userWithSameUsername != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

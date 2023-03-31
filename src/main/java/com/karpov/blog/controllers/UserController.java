@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +42,7 @@ public class UserController {
 	private UserService userService;
 
 	@Autowired
-	private ImageFileService imageFileServisce;
+	private ImageFileService imageFileService;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -129,10 +130,14 @@ public class UserController {
 	                         @ModelAttribute(name = "password") @Valid Password password, BindingResult passwordBindingResult,
 	                         @ModelAttribute(name = "editedUser") @Valid User editedUser, BindingResult bindingResult,
 	                         Model model) throws IOException {
-		if (editedUser.getPassword().isBlank()) {
+		if (password.getPassword().isBlank()) {
 			editedUser.setPassword(user.getPassword());
 		} else if (passwordBindingResult.hasErrors()) {
 			passwordBindingResult.getAllErrors().stream().forEach(x -> bindingResult.addError(x));
+		}
+		User userWithSameUsername = userRepository.findByUsername(editedUser.getUsername());
+		if (userWithSameUsername != null && userWithSameUsername.getId() != user.getId()) {
+			bindingResult.addError(new FieldError("user", "username", "Username is already in use. Please choose another one."));
 		}
 
 		if (bindingResult.hasErrors()) {
@@ -143,11 +148,13 @@ public class UserController {
 			return "user-profile-edit";
 		} else {
 			editedUser.setId(user.getId());
-			editedUser.setPassword(passwordEncoder.encode(password.getPassword()));
+			if (!password.getPassword().isBlank()) {
+				editedUser.setPassword(passwordEncoder.encode(password.getPassword()));
+			}
 			if (!file.isEmpty()) {
 				String oldFileName = editedUser.getAvatar();
 				String path = String.valueOf(editedUser.getId());
-				String newFileName = imageFileServisce.replace(file, path, oldFileName);
+				String newFileName = imageFileService.replace(file, path, oldFileName);
 				editedUser.setAvatar(newFileName);
 			}
 			userRepository.save(editedUser);
@@ -175,10 +182,13 @@ public class UserController {
 		return "user-posts";
 	}
 
-	@PostMapping("/{user}/delete")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	@GetMapping("/{user}/delete")
 	public String deleteUser(@PathVariable User user,
 	                         Model model) {
+		imageFileService.deleteUserImages(String.valueOf(user.getId()));
 		userRepository.delete(user);
 		return "redirect:/users";
+
 	}
 }
