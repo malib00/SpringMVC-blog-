@@ -36,7 +36,7 @@
             <p th:if="${#fields.hasErrors('password')}" th:errorclass="error" th:errors="*{password}"/>
         </div>
         <div class="form-floating">
-            <input name="password2" type="password2" class="form-control" id="passwordField2"
+            <input name="password2" type="password" class="form-control" id="passwordField2"
                    placeholder="Confirm Password"/>
             <label for="passwordField">Confirm Password</label>
             <p th:if="${password2error != null && #strings.isEmpty(password2error) == false}" class="error"

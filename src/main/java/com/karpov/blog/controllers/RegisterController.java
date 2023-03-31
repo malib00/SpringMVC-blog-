@@ -58,6 +58,9 @@ public class RegisterController {
 		if (password.getPassword().isBlank()) {
 			bindingResult.addError(new FieldError("user", "password", "Password should not be empty!"));
 		}
+		if (registerService.sameUsernameFound(user.getUsername())) {
+			bindingResult.addError(new FieldError("user", "username", "Username is already in use. Please choose another one."));
+		}
 		if (passwordBindingResult.hasErrors()) {
 			passwordBindingResult.getAllErrors().stream().forEach(x -> bindingResult.addError(x));
 		}

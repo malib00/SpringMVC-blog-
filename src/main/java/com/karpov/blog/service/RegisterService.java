@@ -60,4 +60,13 @@ public class RegisterService {
 			return false;
 		}
 	}
+
+	public boolean sameUsernameFound(String username) {
+		User userWithSameUsername = userRepository.findByUsername(username);
+		if (userWithSameUsername != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
