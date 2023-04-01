@@ -13,15 +13,22 @@
         <img class="mb-1" src="/static/img/logo.svg" alt="" width="50"
              height="50"/>
         <h1 class="h3 mb-1 fw-normal">Registration</h1>
-        <div class="form-floating py-1">
+        <div class="form-floating py-0">
             <input th:field="*{username}" type="text" class="form-control" id="usernameField" placeholder="Username"/>
             <label for="usernameField">Username</label>
+            <small th:unless="${#fields.hasErrors('username')}" class="row fw-light text-muted text-start mb-0 ms-4">
+                •Username must be between 2 and 20 characters long.</small>
+            <small th:unless="${#fields.hasErrors('username')}" class="row fw-light text-muted text-start mb-0 ms-4">
+                •Username can contain only lowercase letters (a-z) and numbers (0-9) without spaces.</small>
             <p th:if="${#fields.hasErrors('username')}" th:errorclass="error" th:errors="*{username}"/>
         </div>
+
         </div>
-        <div class="form-floating py-1">
+        <div class="form-floating py-0">
             <input th:field="*{fullname}" type="text" class="form-control" id="fullnameField" placeholder="Full Name"/>
             <label for="fullnameField">Full Name</label>
+            <small th:unless="${#fields.hasErrors('fullname')}" class="row fw-light text-muted text-start mb-0 ms-4">
+                •Full name can contain only letters (A-Z,a-z) and spaces.</small>
             <p th:if="${#fields.hasErrors('fullname')}" th:errorclass="error" th:errors="*{fullname}"/>
         </div>
         <div class="form-floating py-1">
@@ -33,6 +40,8 @@
         <div class="form-floating py-1">
             <input name="password" type="password" class="form-control" id="passwordField" placeholder="Password"/>
             <label for="passwordField">Password</label>
+            <small th:unless="${#fields.hasErrors('password')}" class="row fw-light text-muted text-start mb-0 ms-4">
+                •Password must be between 8 and 100 characters long.</small>
             <p th:if="${#fields.hasErrors('password')}" th:errorclass="error" th:errors="*{password}"/>
         </div>
         <div class="form-floating">

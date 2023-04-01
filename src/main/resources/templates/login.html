@@ -26,7 +26,11 @@
             <label>Password</label>
         </div>
         <div th:if="${param.error}">
-            <p class="error">Invalid username or password.</p>
+            <p class="error">Login failed. Possible reasons:</p>
+            <ul>
+                <li class="error">Invalid username or password.</li>
+                <li class="error">Account is not activated via e-mail.</li>
+            </ul>
         </div>
         <div th:if="${param.logout}">
             You have been logged out.
