@@ -38,7 +38,7 @@
                                 <a th:href="'/users/' + ${user.id}" class="btn btn-sm btn-outline-secondary">View</a>
                                 <a th:href="'/users/' + ${user.id} + '/edit'" class="btn btn-sm btn-outline-secondary">Edit</a>
                                 <a th:href="'/users/' + ${user.id} + '/delete'" class="btn btn-sm btn-outline-secondary"
-                                   method="post">Delete</a>
+                                   method="post" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
                             </div>
                         </td>
                     </tr>
