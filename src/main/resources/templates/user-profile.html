@@ -8,44 +8,47 @@
 <header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
 <main>
     <div class="gradient-custom-1">
-        <div class="row d-flex justify-content-center align-items-center py-3">
-            <div class="col col-lg-9 col-xl-7">
-                <div class="card">
-                    <div class="rounded-top text-white d-flex flex-row"
-                         style="background-color: #000; height:200px;">
-                        <div class="ms-5 mt-3 d-flex flex-column" style="width: 150px;">
-                            <img id="avatar" th:src="'/img/'+${user.id}+'/'+${user.avatar}"
-                                 onerror="avatarLoadError(this);"
-                                 alt="Generic placeholder image"
-                                 class="img-fluid img-thumbnail mt-4 mb-2 avatarMediumCover"/>
+        <div class="container py-3">
+            <div class="card">
+                <div class="rounded-top text-white d-flex flex-row"
+                     style="background-color: #000; height:200px;">
+                    <div class="ms-5 mt-3 d-flex flex-column" style="width: 150px;">
+                        <img id="avatar" th:src="'/img/'+${user.id}+'/'+${user.avatar}"
+                             onerror="avatarLoadError(this);"
+                             alt="Generic placeholder image"
+                             class="img-fluid img-thumbnail mt-4 mb-2 avatarMediumCover"/>
+                    </div>
+                    <div class="ms-3" style="margin-top: 130px;">
+                        <h5 th:text="${user.fullname}"></h5>
+                        <p th:text="'@' + ${user.username}"></p>
+                    </div>
+                </div>
+                <div class="p-3 text-black container" style="background-color: #f8f9fa;">
+                    <div class="d-flex">
+                        <div class="ms-5" style="width: 150px;">
                             <a th:if="${user.id} == ${#authentication.principal.id} or ${#authorization.expression('hasAnyAuthority(''MODERATOR'',''ADMIN'')')}"
                                th:href="'/users/' + ${user.id} + '/edit'"
                                type="button" class="btn btn-dark"
-                               style="z-index: 1;">Edit profile</a>
+                            >Edit profile</a>
                         </div>
-                        <div class="ms-3" style="margin-top: 130px;">
-                            <h5 th:text="${user.fullname}"></h5>
-                            <p th:text="'@' + ${user.username}"></p>
-                        </div>
-                    </div>
-                    <div class="p-4 text-black" style="background-color: #f8f9fa;">
-                        <div class="d-flex justify-content-end text-center py-1">
+                        <div class="container d-flex justify-content-end text-center">
                             <div th:unless="${itsMyPage}">
                                 <div th:unless="${isFollowingThisUser}">
-                                    <a th:href="'/users/' + ${user.id} + '/follow'" class="btn btn-info mx-2 py-auto">Follow</a>
+                                    <a th:href="'/users/' + ${user.id} + '/follow'"
+                                       class="btn btn-info mx-3">Follow</a>
                                 </div>
                                 <div th:if="${isFollowingThisUser}">
                                     <a th:href="'/users/' + ${user.id} + '/unfollow'"
-                                       class="btn btn-secondary active mx-2">Unfollow</a>
+                                       class="btn btn-secondary active mx-3">Unfollow</a>
                                 </div>
                             </div>
                             <div>
-                                <p class="mb-1 h5" th:text="${totalPostsQTY}"></p>
+                                <p class="mb-0 h5" th:text="${totalPostsQTY}"></p>
                                 <p class="small mb-0"><a th:href="'/users/' + ${user.id} + '/posts'"
                                                          class="text-muted">Posts</a></p>
                             </div>
                             <div class="px-3">
-                                <p class="mb-1 h5" th:text="${totalFollowers}"></p>
+                                <p class="mb-0 h5" th:text="${totalFollowers}"></p>
                                 <div th:if="${totalFollowers}==0">
                                     <p class="small mb-0 text-muted"> Followers</p>
                                 </div>
@@ -55,7 +58,7 @@
                                 </div>
                             </div>
                             <div>
-                                <p class="mb-1 h5" th:text="${totalFollowing}"></p>
+                                <p class="mb-0 h5" th:text="${totalFollowing}"></p>
                                 <div th:if="${totalFollowing}==0">
                                     <p class="small mb-0 text-muted"> Following</p>
                                 </div>
@@ -66,34 +69,34 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body p-4 text-black">
-                        <div class="mb-5">
-                            <p class="lead fw-normal mb-1">About</p>
-                            <div class="p-4" style="background-color: #f8f9fa;">
-                                <div th:unless="${user.about == null || #strings.isEmpty(user.about) == true}">
-                                    <p class="font-italic mb-1" th:text="${user.about}"></p>
-                                </div>
-                                <div th:if="${user.about == null || #strings.isEmpty(user.about) == true}">
-                                    <p class="font-italic mb-1">User has not written anything about himself.</p>
+                </div>
+                <div class="card-body p-4 text-black">
+                    <div class="mb-5">
+                        <p class="lead fw-normal mb-1">About</p>
+                        <div class="p-4" style="background-color: #f8f9fa;">
+                            <div th:unless="${user.about == null || #strings.isEmpty(user.about) == true}">
+                                <p class="font-italic mb-1" th:text="${user.about}"></p>
+                            </div>
+                            <div th:if="${user.about == null || #strings.isEmpty(user.about) == true}">
+                                <p class="font-italic mb-1">User has not written anything about himself.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <p class="lead fw-normal mb-0">Recent posts</p>
+                        <p class="mb-0"><a th:href="'/users/' + ${user.id} + '/posts'" class="text-muted">Show
+                            all</a></p>
+                    </div>
+                    <div class="container">
+                        <div th:unless="${#lists.isEmpty(last3Posts)}">
+                            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                                <div th:each="post : ${last3Posts}">
+                                    <div th:insert="~{blocks/post-preview :: post-preview}"></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <p class="lead fw-normal mb-0">Recent posts</p>
-                            <p class="mb-0"><a th:href="'/users/' + ${user.id} + '/posts'" class="text-muted">Show
-                                all</a></p>
-                        </div>
-                        <div class="container">
-                            <div th:unless="${#lists.isEmpty(last3Posts)}">
-                                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                                    <div th:each="post : ${last3Posts}">
-                                        <div th:insert="~{blocks/post-preview :: post-preview}"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div th:if="${#lists.isEmpty(last3Posts)}">
-                                <h3 style="text-align: center">No posts yet.</h3>
-                            </div>
+                        <div th:if="${#lists.isEmpty(last3Posts)}">
+                            <h3 style="text-align: center">No posts yet.</h3>
                         </div>
                     </div>
                 </div>
