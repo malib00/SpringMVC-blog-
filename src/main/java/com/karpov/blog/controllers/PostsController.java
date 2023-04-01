@@ -4,11 +4,14 @@ import com.karpov.blog.models.Post;
 import com.karpov.blog.models.User;
 import com.karpov.blog.repo.PostRepository;
 import com.karpov.blog.service.ImageFileService;
+import com.karpov.blog.service.PostService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,14 +26,17 @@ import java.io.IOException;
 public class PostsController {
 
 	@Autowired
+	private PostService postService;
+
+	@Autowired
 	private PostRepository postRepository;
 
 	@Autowired
-	private ImageFileService imageFileServisce;
+	private ImageFileService imageFileService;
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/add")
-	public String addPostPage(Model model) {
+	public String addPostPage(Post post, Model model) {
 		model.addAttribute("title", "Add Post");
 		return "post-add";
 	}
@@ -39,16 +45,20 @@ public class PostsController {
 	@PostMapping("/add")
 	public String addPost(
 			@AuthenticationPrincipal User user,
-			@RequestParam String title,
-			@RequestParam String fulltext,
+			@Valid Post post, BindingResult bindingResult,
 			@RequestParam("file") MultipartFile file,
 			Model model) throws IOException {
-		Post post = new Post(title, fulltext, user);
-		String path = String.valueOf(user.getId());
-		String fileName = imageFileServisce.save(file, path);
-		post.setFilename(fileName);
-		postRepository.save(post);
-		return "redirect:/";
+		if (file.isEmpty()) {
+			model.addAttribute("fileError", "Please upload an image");
+		}
+
+		if (file.isEmpty() || bindingResult.hasErrors()) {
+			model.addAttribute("title", "Add Post");
+			return "post-add";
+		} else {
+			postService.addPost(post, file, user);
+			return "redirect:/";
+		}
 	}
 
 	@GetMapping("/{post}")
@@ -78,7 +88,7 @@ public class PostsController {
 		if (!file.isEmpty()) {
 			String oldFileName = post.getFilename();
 			String path = String.valueOf(post.getAuthor().getId());
-			String newFileName = imageFileServisce.replace(file, path, oldFileName);
+			String newFileName = imageFileService.replace(file, path, oldFileName);
 			post.setFilename(newFileName);
 		}
 		postRepository.save(post);
@@ -90,7 +100,7 @@ public class PostsController {
 	public String postDelete(@PathVariable Post post, Model model) throws IOException {
 		String path = String.valueOf(post.getAuthor().getId());
 		String fileName = post.getFilename();
-		imageFileServisce.delete(path, fileName);
+		imageFileService.delete(path, fileName);
 		postRepository.delete(post);
 		return "redirect:/";
 	}
