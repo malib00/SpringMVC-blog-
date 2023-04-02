@@ -30,10 +30,10 @@ public class SearchController {
 		if (userPattern.matcher(trimmedFilter).find()) {
 			String userFilter = trimmedFilter.substring(1);
 			model.addAttribute("users", userRepository.findByUsernameContainingIgnoreCaseOrderByIdDesc(userFilter));
-			return "users-list";
+			return "user/users-list";
 		} else if (postPattern.matcher(trimmedFilter).find()) {
 			model.addAttribute("posts", postRepository.findByTitleContainingIgnoreCaseOrderByTimestampDesc(trimmedFilter));
 		}
-		return "posts";
+		return "post/posts";
 	}
 }

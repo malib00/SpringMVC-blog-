@@ -54,7 +54,7 @@ public class UserController {
 	public String usersListForAdmins(Model model) {
 		model.addAttribute("title", "User List");
 		model.addAttribute("users", userRepository.findAll(Sort.by("id").ascending()));
-		return "users-list-for-admins";
+		return "user/users-list-for-admins";
 	}
 
 	@PreAuthorize("permitAll")
@@ -72,7 +72,7 @@ public class UserController {
 		model.addAttribute("totalFollowing", user.getFollowing().size());
 		Iterable<Post> last3Posts = postRepository.findFirst3ByAuthor(user, Sort.by("timestamp").descending());
 		model.addAttribute("last3Posts", last3Posts);
-		return "user-profile";
+		return "user/user-profile";
 	}
 
 	@PreAuthorize("isAuthenticated()")
@@ -99,7 +99,7 @@ public class UserController {
 	                                   Model model) {
 		model.addAttribute("title", user.getUsername() + "'s followers");
 		model.addAttribute("users", user.getFollowers());
-		return "users-list";
+		return "user/users-list";
 	}
 
 	@PreAuthorize("isAuthenticated()")
@@ -108,7 +108,7 @@ public class UserController {
 	                                   Model model) {
 		model.addAttribute("title", user.getUsername() + "'s following");
 		model.addAttribute("users", user.getFollowing());
-		return "users-list";
+		return "user/users-list";
 	}
 
 	@PreAuthorize("#user.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
@@ -119,7 +119,7 @@ public class UserController {
 		model.addAttribute("allRoles", Role.values());
 		model.addAttribute("uneditedUser", user);
 		model.addAttribute("editedUser", user);
-		return "user-profile-edit";
+		return "user/user-profile-edit";
 	}
 
 	@PreAuthorize("#user.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
@@ -145,7 +145,7 @@ public class UserController {
 			model.addAttribute("allRoles", Role.values());
 			model.addAttribute("uneditedUser", user);
 			model.addAttribute("editedUser", editedUser);
-			return "user-profile-edit";
+			return "user/user-profile-edit";
 		} else {
 			editedUser.setId(user.getId());
 			if (!password.getPassword().isBlank()) {
@@ -169,7 +169,7 @@ public class UserController {
 		model.addAttribute("title", user.getUsername() + "'s posts");
 		Iterable<Post> posts = postRepository.findByAuthor(user, Sort.by("timestamp").descending());
 		model.addAttribute("posts", posts);
-		return "user-posts";
+		return "user/user-posts";
 	}
 
 	@PreAuthorize("#user.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
@@ -179,7 +179,7 @@ public class UserController {
 		model.addAttribute("title", user.getUsername() + "'s feed");
 		Iterable<Post> posts = postRepository.findByAuthorInOrderByTimestampDesc(user.getFollowing());
 		model.addAttribute("posts", posts);
-		return "user-posts";
+		return "user/user-posts";
 	}
 
 	@PreAuthorize("hasAuthority('ADMIN')")

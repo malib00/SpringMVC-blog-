@@ -38,7 +38,7 @@ public class PostsController {
 	@GetMapping("/add")
 	public String addPostPage(Post post, Model model) {
 		model.addAttribute("title", "Add Post");
-		return "post-add";
+		return "post/post-add";
 	}
 
 	@PreAuthorize("isAuthenticated()")
@@ -54,7 +54,7 @@ public class PostsController {
 
 		if (file.isEmpty() || bindingResult.hasErrors()) {
 			model.addAttribute("title", "Add Post");
-			return "post-add";
+			return "post/post-add";
 		} else {
 			postService.addPost(post, file, user);
 			return "redirect:/";
@@ -65,7 +65,7 @@ public class PostsController {
 	public String getPost(@PathVariable Post post, Model model) {
 		model.addAttribute("title", post.getTitle());
 		model.addAttribute("post", post);
-		return "post-details";
+		return "post/post-details";
 	}
 
 	@PreAuthorize("#post.author.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
@@ -73,7 +73,7 @@ public class PostsController {
 	public String editPost(@PathVariable Post post, Model model) {
 		model.addAttribute("title", "Post Edit: " + post.getTitle());
 		model.addAttribute("post", post);
-		return "post-edit";
+		return "post/post-edit";
 	}
 
 	@PreAuthorize("#post.author.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")

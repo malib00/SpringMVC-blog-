@@ -34,14 +34,14 @@ public class ArticlesController {
 		model.addAttribute("title", "Articles");
 		Iterable<Article> articles = articleRepository.findAll(Sort.by("timestamp").descending());
 		model.addAttribute("articles", articles);
-		return "articles";
+		return "article/articles";
 	}
 
 	@PreAuthorize("hasAnyAuthority('MODERATOR','ADMIN')")
 	@GetMapping("/add")
 	public String addArticle(Model model) {
 		model.addAttribute("title", "Add Article");
-		return "article-add";
+		return "article/article-add";
 	}
 
 	@PreAuthorize("hasAnyAuthority('MODERATOR','ADMIN')")
@@ -62,7 +62,7 @@ public class ArticlesController {
 	public String getArticle(@PathVariable Article article, Model model) {
 		model.addAttribute("title", article.getTitle());
 		model.addAttribute("article", article);
-		return "article-details";
+		return "article/article-details";
 	}
 
 	@PreAuthorize("hasAnyAuthority('MODERATOR','ADMIN')")
@@ -70,7 +70,7 @@ public class ArticlesController {
 	public String editArticle(@PathVariable Article article, Model model) {
 		model.addAttribute("title", "Article Edit: " + article.getTitle());
 		model.addAttribute("article", article);
-		return "article-edit";
+		return "article/article-edit";
 	}
 
 	@PreAuthorize("hasAnyAuthority('MODERATOR','ADMIN')")
