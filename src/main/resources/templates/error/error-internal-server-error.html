@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{blocks/head :: head}"/>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
+<main>
+    <div class="py-5 text-center container">
+        <h1>Page is not found.</h1>
+    </div>
+    <div class="album py-5 bg-light">
+        <div class="container d-flex justify-content-center">
+            <img src="/static/img/error-pictures/internal-server-error.gif" alt="42"/>
+        </div>
+    </div>
+</main>
+<footer th:insert="~{blocks/footer :: footer}"></footer>
+</body>
+</html>
