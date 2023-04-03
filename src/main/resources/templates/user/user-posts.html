@@ -10,7 +10,7 @@
         <h1 th:text="${title}"></h1>
     </div>
     <div class="album bg-light">
-        <div class="container py-3">
+        <div class="container py-5">
             <div th:unless="${#lists.isEmpty(posts)}">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                     <div th:each="post : ${posts}">
