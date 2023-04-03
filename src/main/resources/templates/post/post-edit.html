@@ -10,10 +10,24 @@
         <h1 th:text="${title}"></h1>
         <img th:src="'/img/'+${post.author.id}+'/'+${post.filename}"
              class="bd-placeholder-img card-img-top postFullCover"/>
-        <form method="post" enctype="multipart/form-data">
-            <input type="text" th:value="${post.title}" name="title" placeholder="Title" class="form-control mt-3"/><br>
-            <textarea th:text="${post.fulltext}" name="fulltext" placeholder="Post content" class="form-control"/><br>
-            <input type="file" name="file"/><br>
+        <form action="#" th:action="@{'/posts/'+${post.id}+'/edit'}"
+
+              method="post"
+              th:object="${editedPost}" enctype="multipart/form-data">
+            <label class="labels">Title</label>
+            <input th:field="*{title}" name="title" type="text" class="form-control"
+                   placeholder="Title"/>
+            <p th:if="${#fields.hasErrors('title')}" th:errorclass="error"
+               th:errors="*{title}"/>
+            <br>
+            <label class="labels">Full text / Description</label>
+            <textarea th:field="*{fulltext}" name="fulltext" type="text" class="form-control"
+                      placeholder="Full text / Description"/>
+            <p th:if="${#fields.hasErrors('fulltext')}" th:errorclass="error"
+               th:errors="*{fulltext}"/>
+            <br>
+            <input type="file" name="file"/>
+            <br>
             <button type="submit" class="btn btn-success">Submit</button>
         </form>
     </div>
