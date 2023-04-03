@@ -9,6 +9,7 @@ import com.karpov.blog.repo.UserRepository;
 import com.karpov.blog.service.ImageFileService;
 import com.karpov.blog.service.UserService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,6 +31,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Set;
 
+@Slf4j
 @Controller
 @RequestMapping("/users")
 @PreAuthorize("hasAnyAuthority('MODERATOR','ADMIN')")
@@ -124,7 +126,8 @@ public class UserController {
 
 	@PreAuthorize("#user.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
 	@PostMapping("/{user}/edit")
-	public String updateUser(@PathVariable User user,
+	public String updateUser(@AuthenticationPrincipal User authenticatedUser,
+	                         @PathVariable User user,
 	                         @RequestParam(value = "file") MultipartFile file,
 	                         @RequestParam(required = false) Set<Role> roles,
 	                         @ModelAttribute(name = "password") @Valid Password password, BindingResult passwordBindingResult,
@@ -158,6 +161,9 @@ public class UserController {
 				editedUser.setAvatar(newFileName);
 			}
 			userRepository.save(editedUser);
+			log.info("User (id: {}, username: {}) was edited by user id: {}, username: {}.",
+					user.getId(), user.getUsername(),
+					authenticatedUser.getId(), authenticatedUser.getUsername());
 			return "redirect:/users/{user}";
 		}
 	}
@@ -184,11 +190,15 @@ public class UserController {
 
 	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/{user}/delete")
-	public String deleteUser(@PathVariable User user,
+	public String deleteUser(@AuthenticationPrincipal User authenticatedUser,
+	                         @PathVariable User user,
 	                         Model model) {
 		imageFileService.deleteUserImages(String.valueOf(user.getId()));
 		userRepository.delete(user);
+		log.info("User (old id: {}, username: {}) was deleted by user id: {}, username: {}.",
+				user.getId(), user.getUsername(),
+				authenticatedUser.getId(), authenticatedUser.getUsername());
+		model.addAttribute("title", "User List");
 		return "redirect:/users";
-
 	}
 }

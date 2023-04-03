@@ -4,6 +4,8 @@ import com.karpov.blog.models.Article;
 import com.karpov.blog.models.User;
 import com.karpov.blog.repo.ArticleRepository;
 import com.karpov.blog.service.ImageFileService;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+@Slf4j
 @Controller
 @RequestMapping("/articles")
 public class ArticlesController {
@@ -47,14 +50,16 @@ public class ArticlesController {
 	@PreAuthorize("hasAnyAuthority('MODERATOR','ADMIN')")
 	@PostMapping("/add")
 	public String addArticle(@AuthenticationPrincipal User user,
-	                      @RequestParam String title,
-	                      @RequestParam String fulltext,
-	                      @RequestParam("file") MultipartFile file,
-	                      Model model) throws IOException {
+	                         @RequestParam String title,
+	                         @RequestParam String fulltext,
+	                         @RequestParam("file") MultipartFile file,
+	                         Model model) throws IOException {
 		Article article = new Article(title, fulltext, user);
 		String fileName = imageFileServisce.save(file, "articles");
 		article.setFilename(fileName);
 		articleRepository.save(article);
+		log.info("Article is created (id: {}, author id: {}, author username: {})",
+				article.getId(), article.getAuthor().getId(), article.getAuthor().getUsername());
 		return "redirect:/articles";
 	}
 
@@ -75,11 +80,12 @@ public class ArticlesController {
 
 	@PreAuthorize("hasAnyAuthority('MODERATOR','ADMIN')")
 	@PostMapping("/{article}/edit")
-	public String articleUpdate(@PathVariable Article article,
-	                         @RequestParam String title,
-	                         @RequestParam String fulltext,
-	                         @RequestParam("file") MultipartFile file,
-	                         Model model) throws IOException {
+	public String articleUpdate(@AuthenticationPrincipal User authenticatedUser,
+	                            @PathVariable Article article,
+	                            @RequestParam String title,
+	                            @RequestParam String fulltext,
+	                            @RequestParam("file") MultipartFile file,
+	                            Model model) throws IOException {
 		article.setTitle(title);
 		article.setFulltext(fulltext);
 		if (!file.isEmpty()) {
@@ -88,15 +94,23 @@ public class ArticlesController {
 			article.setFilename(newFileName);
 		}
 		articleRepository.save(article);
+		log.info("Article (id: {}, author id: {}, author username: {}) was edited by user id: {}, username: {}.",
+				article.getId(), article.getAuthor().getId(), article.getAuthor().getUsername(),
+				authenticatedUser.getId(), authenticatedUser.getUsername());
 		return "redirect:/";
 	}
 
 	@PreAuthorize("hasAnyAuthority('MODERATOR','ADMIN')")
 	@PostMapping("/{article}/remove")
-	public String postDelete(@PathVariable Article article, Model model) throws IOException {
+	public String postDelete(@AuthenticationPrincipal User authenticatedUser,
+	                         @PathVariable Article article,
+	                         Model model) throws IOException {
 		String fileName = article.getFilename();
 		imageFileServisce.delete("articles", fileName);
 		articleRepository.delete(article);
+		log.info("Article (old id: {}, author id: {}, author username: {}) was deleted by user id: {}, username: {}.",
+				article.getId(), article.getAuthor().getId(), article.getAuthor().getUsername(),
+				authenticatedUser.getId(), authenticatedUser.getUsername());
 		return "redirect:/";
 	}
 }

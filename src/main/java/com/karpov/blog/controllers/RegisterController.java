@@ -5,6 +5,7 @@ import com.karpov.blog.models.Password;
 import com.karpov.blog.models.User;
 import com.karpov.blog.service.RegisterService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 
+@Slf4j
 @Controller
 @PreAuthorize("isAnonymous() || hasAnyAuthority('MODERATOR','ADMIN')")
 public class RegisterController {
@@ -53,6 +55,7 @@ public class RegisterController {
 		CaptchaResponseDto response = restTemplate.postForObject(url, Collections.emptyList(), CaptchaResponseDto.class);
 		if (!response.isSuccess()) {
 			model.addAttribute("captchaError", "Please complete captcha form");
+			log.info("Captcha error");
 		}
 		if (password.getPassword() == null) {
 			bindingResult.addError(new FieldError("user", "password", "Password should not be empty!"));
@@ -76,6 +79,7 @@ public class RegisterController {
 			return "register";
 		} else {
 			registerService.registerUser(user);
+			log.info("User created. (id: {}, username: {})", user.getId(), user.getUsername());
 			return "redirect:/";
 		}
 	}
@@ -86,9 +90,11 @@ public class RegisterController {
 		if (userIsActivated) {
 			model.addAttribute("activationIsSuccessful", true);
 			model.addAttribute("activationStatusMessage", "Your profile is successfully activated! \n You can login now.");
+			log.info("User activation. (code: {}", code);
 		} else {
 			model.addAttribute("activationIsSuccessful", false);
 			model.addAttribute("activationStatusMessage", "Activation code not found or profile is already activated");
+			log.warn("Unsuccessful user activation. (code: {}", code);
 		}
 		return "login";
 	}
