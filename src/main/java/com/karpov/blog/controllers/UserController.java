@@ -130,7 +130,7 @@ public class UserController {
 	                         @ModelAttribute(name = "password") @Valid Password password, BindingResult passwordBindingResult,
 	                         @ModelAttribute(name = "editedUser") @Valid User editedUser, BindingResult bindingResult,
 	                         Model model) throws IOException {
-		if (password.getPassword().isBlank()) {
+		if (password.getPassword() == null) {
 			editedUser.setPassword(user.getPassword());
 		} else if (passwordBindingResult.hasErrors()) {
 			passwordBindingResult.getAllErrors().stream().forEach(x -> bindingResult.addError(x));
@@ -148,7 +148,7 @@ public class UserController {
 			return "user/user-profile-edit";
 		} else {
 			editedUser.setId(user.getId());
-			if (!password.getPassword().isBlank()) {
+			if (password.getPassword() != null) {
 				editedUser.setPassword(passwordEncoder.encode(password.getPassword()));
 			}
 			if (!file.isEmpty()) {

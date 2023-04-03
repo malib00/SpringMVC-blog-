@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
-import org.thymeleaf.util.StringUtils;
 
 import java.util.Collections;
 
@@ -55,7 +54,7 @@ public class RegisterController {
 		if (!response.isSuccess()) {
 			model.addAttribute("captchaError", "Please complete captcha form");
 		}
-		if (password.getPassword().isBlank()) {
+		if (password.getPassword() == null) {
 			bindingResult.addError(new FieldError("user", "password", "Password should not be empty!"));
 		}
 		if (registerService.sameUsernameFound(user.getUsername())) {
@@ -65,14 +64,14 @@ public class RegisterController {
 			passwordBindingResult.getAllErrors().stream().forEach(x -> bindingResult.addError(x));
 		}
 
-		if (passwordConfirm.isBlank()) {
+		if (passwordConfirm == null) {
 			model.addAttribute("password2error", "Password conformation should NOT be empty");
 		}
 
 		if (!password.getPassword().equals(passwordConfirm)) {
 			model.addAttribute("passwordsEqualsError", "Passwords are not the same.");
 		}
-		if (passwordConfirm.isBlank() || bindingResult.hasErrors() || !response.isSuccess()) {
+		if (passwordConfirm == null || bindingResult.hasErrors() || !response.isSuccess()) {
 			model.addAttribute("title", "Registration");
 			return "register";
 		} else {
