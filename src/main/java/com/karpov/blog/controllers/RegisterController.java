@@ -79,6 +79,7 @@ public class RegisterController {
 			return "register";
 		} else {
 			registerService.registerUser(user);
+			model.addAttribute("infoMessage", "Registration successful. Please follow the link with activation code, that we sent to your e-mail. After that you can login.");
 			log.info("User created. (id: {}, username: {})", user.getId(), user.getUsername());
 			return "redirect:/";
 		}

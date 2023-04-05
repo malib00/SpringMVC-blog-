@@ -7,6 +7,14 @@
 <header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
 <main>
 
+    <div th:if="${infoMessage != null}">
+    <div class="album py-1 bg-light">
+        <div class="container">
+            <p class="alert alert-primary" th:text="${infoMessage}"></p>
+        </div>
+    </div>
+    </div>
+
     <section class="py-5 container" th:if="${recentArticle != null}">
         <div class="card card-inverse shadow-sm" style="background: #000;">
             <img class="card-img recentArticlePreviewCover" th:src="'/img/articles/'+${recentArticle.filename}"
