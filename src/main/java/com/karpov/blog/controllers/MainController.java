@@ -5,8 +5,10 @@ import com.karpov.blog.models.Post;
 import com.karpov.blog.repo.ArticleRepository;
 import com.karpov.blog.repo.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +23,12 @@ public class MainController {
 	private ArticleRepository articleRepository;
 
 	@GetMapping("/")
-	public String home(Model model) {
+	public String home(Model model,
+	                   @PageableDefault(sort = {"id"}, size = 9, direction = Sort.Direction.DESC) Pageable pageable) {
 		model.addAttribute("title", "Home Page");
-		Iterable<Post> posts = postRepository.findAll(Sort.by("timestamp").descending());
-		model.addAttribute("posts", posts);
+		Page<Post> page = postRepository.findAll(pageable.previousOrFirst());
+		model.addAttribute("page", page);
+		model.addAttribute("url", "/");
 		Article recentArticle = articleRepository.findTopByOrderByTimestampDesc();
 		model.addAttribute("recentArticle", recentArticle);
 		return "home";

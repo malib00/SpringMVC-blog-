@@ -8,11 +8,11 @@
 <main>
 
     <div th:if="${infoMessage != null}">
-    <div class="album py-1 bg-light">
-        <div class="container">
-            <p class="alert alert-primary" th:text="${infoMessage}"></p>
+        <div class="album py-1 bg-light">
+            <div class="container">
+                <p class="alert alert-primary" th:text="${infoMessage}"></p>
+            </div>
         </div>
-    </div>
     </div>
 
     <section class="py-5 container" th:if="${recentArticle != null}">
@@ -35,16 +35,20 @@
         </div>
     </section>
 
-    <div class="album py-5 bg-light">
+    <div class="album py-3 bg-light">
         <div class="container">
-            <div th:unless="${#lists.isEmpty(posts)}">
+            <div th:insert="~{blocks/pager :: pager}"></div>
+        </div>
+
+        <div class="container">
+            <div th:unless="${#lists.isEmpty(page.content)}">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="postsList">
-                    <div th:each="post : ${posts}">
+                    <div th:each="post : ${page.content}">
                         <div th:insert="~{blocks/post-preview :: post-preview}"></div>
                     </div>
                 </div>
             </div>
-            <div th:if="${#lists.isEmpty(posts)}">
+            <div th:if="${#lists.isEmpty(page)}">
                 <h1 style="text-align: center">Posts not found</h1>
             </div>
         </div>

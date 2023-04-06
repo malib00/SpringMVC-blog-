@@ -1,0 +1,43 @@
+<div th:fragment="pager">
+    <nav aria-label="Navigation">
+        <ul class="pagination pagination-sm justify-content-center">
+
+            <li th:if="${page.isFirst}" class="page-item disabled">
+                <a class="page-link" href="#">First</a>
+            </li>
+            <li th:unless="${page.isFirst}" class="page-item">
+                <a class="page-link" th:href="${url}">First</a>
+            </li>
+
+
+            <li th:unless="${page.hasPrevious}" class="page-item disabled">
+                <a class="page-link" href="#">«</a>
+            </li>
+            <li th:if="${page.hasPrevious}" class="page-item">
+                <a class="page-link" th:href="${url} + '?page=' + ${page.number}">«</a>
+            </li>
+
+
+            <li class="page-item  active">
+                <a class="page-link" href="#" th:text="${page.number + 1}"></a>
+            </li>
+
+
+            <li th:if="${page.hasNext}" class="page-item">
+                <a class="page-link" th:href="${url} + '?page=' + ${page.number + 2}">»</a>
+            </li>
+            <li th:unless="${page.hasNext}" class="page-item disabled">
+                <a class="page-link" href="#">»</a>
+            </li>
+
+
+            <li th:if="${page.isLast}" class="page-item disabled">
+                <a class="page-link" href="#">Last</a>
+            </li>
+            <li th:unless="${page.isLast}" class="page-item">
+                <a class="page-link" th:href="${url} + '?page=' + ${page.totalPages}">Last</a>
+            </li>
+
+        </ul>
+    </nav>
+</div>
