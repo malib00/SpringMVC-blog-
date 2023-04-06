@@ -11,7 +11,10 @@ import com.karpov.blog.service.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -68,8 +71,7 @@ public class UserController {
 		model.addAttribute("user", user);
 		model.addAttribute("itsMyPage", authenticatedUser.equals(user));
 		model.addAttribute("isFollowingThisUser", user.getFollowers().contains(authenticatedUser));
-		Iterable<Post> posts = postRepository.findByAuthor(user, Sort.by("timestamp").descending());
-		model.addAttribute("totalPostsQTY", ((Collection<Post>) posts).size());
+		model.addAttribute("totalPostsQTY", user.getPosts().size());
 		model.addAttribute("totalFollowers", user.getFollowers().size());
 		model.addAttribute("totalFollowing", user.getFollowing().size());
 		Iterable<Post> last3Posts = postRepository.findFirst3ByAuthor(user, Sort.by("timestamp").descending());
@@ -171,10 +173,11 @@ public class UserController {
 	@PreAuthorize("permitAll")
 	@GetMapping("/{user}/posts")
 	public String editPost(@PathVariable User user,
+	                       @PageableDefault(sort = {"timestamp"}, size = 3, direction = Sort.Direction.DESC) Pageable pageable,
 	                       Model model) {
 		model.addAttribute("title", user.getUsername() + "'s posts");
-		Iterable<Post> posts = postRepository.findByAuthor(user, Sort.by("timestamp").descending());
-		model.addAttribute("posts", posts);
+		Page<Post> page = postRepository.findByAuthor(user, pageable.previousOrFirst());
+		model.addAttribute("page", page);
 		return "user/user-posts";
 	}
 

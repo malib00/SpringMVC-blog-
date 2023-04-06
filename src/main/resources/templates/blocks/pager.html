@@ -6,7 +6,7 @@
                 <a class="page-link" href="#">First</a>
             </li>
             <li th:unless="${page.isFirst}" class="page-item">
-                <a class="page-link" th:href="${url}">First</a>
+                <a class="page-link" th:href="'?page=1'">First</a>
             </li>
 
 
@@ -14,7 +14,7 @@
                 <a class="page-link" href="#">«</a>
             </li>
             <li th:if="${page.hasPrevious}" class="page-item">
-                <a class="page-link" th:href="${url} + '?page=' + ${page.number}">«</a>
+                <a class="page-link" th:href="'?page=' + ${page.number}">«</a>
             </li>
 
 
@@ -24,7 +24,7 @@
 
 
             <li th:if="${page.hasNext}" class="page-item">
-                <a class="page-link" th:href="${url} + '?page=' + ${page.number + 2}">»</a>
+                <a class="page-link" th:href="'?page=' + ${page.number + 2}">»</a>
             </li>
             <li th:unless="${page.hasNext}" class="page-item disabled">
                 <a class="page-link" href="#">»</a>
@@ -35,7 +35,7 @@
                 <a class="page-link" href="#">Last</a>
             </li>
             <li th:unless="${page.isLast}" class="page-item">
-                <a class="page-link" th:href="${url} + '?page=' + ${page.totalPages}">Last</a>
+                <a class="page-link" th:href="'?page=' + ${page.totalPages}">Last</a>
             </li>
 
         </ul>

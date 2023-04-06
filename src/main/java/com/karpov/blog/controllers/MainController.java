@@ -24,11 +24,10 @@ public class MainController {
 
 	@GetMapping("/")
 	public String home(Model model,
-	                   @PageableDefault(sort = {"id"}, size = 9, direction = Sort.Direction.DESC) Pageable pageable) {
+	                   @PageableDefault(sort = {"timestamp"}, size = 3, direction = Sort.Direction.DESC) Pageable pageable) {
 		model.addAttribute("title", "Home Page");
 		Page<Post> page = postRepository.findAll(pageable.previousOrFirst());
 		model.addAttribute("page", page);
-		model.addAttribute("url", "/");
 		Article recentArticle = articleRepository.findTopByOrderByTimestampDesc();
 		model.addAttribute("recentArticle", recentArticle);
 		return "home";
