@@ -22,6 +22,7 @@ import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -51,6 +52,8 @@ public class User implements UserDetails {
 	private boolean active;
 
 	private String avatar;
+
+	private Instant timestamp;
 
 	@Email(message = "Email is not correct")
 	@NotBlank(message = "Please write your e-mail")
@@ -210,6 +213,14 @@ public class User implements UserDetails {
 
 	public void setFollowing(Set<User> following) {
 		this.following = following;
+	}
+
+	public Instant getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Instant timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	@Override

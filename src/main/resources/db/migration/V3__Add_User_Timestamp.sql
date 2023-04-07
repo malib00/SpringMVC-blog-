@@ -1,0 +1,1 @@
+ALTER TABLE usr ADD COLUMN timestamp timestamp(6) with time zone;
