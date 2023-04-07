@@ -9,17 +9,22 @@
     <div class="py-5 text-center container">
         <h1 th:text="${title}"></h1>
     </div>
-    <div class="album bg-light">
-        <div class="container py-3">
-            <div th:unless="${#lists.isEmpty(posts)}">
+
+    <div class="album py-3 bg-light">
+        <div class="container">
+            <div th:insert="~{blocks/pager :: pager}"></div>
+        </div>
+
+        <div class="container">
+            <div th:unless="${#lists.isEmpty(page.content)}">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="postsList">
-                    <div th:each="post : ${posts}">
+                    <div th:each="post : ${page}">
                         <div th:insert="~{blocks/post-preview :: post-preview}"></div>
                     </div>
                 </div>
             </div>
-            <div th:if="${#lists.isEmpty(posts)}">
-                <h1 style="text-align: center">Posts not found</h1>
+            <div th:if="${#lists.isEmpty(page.content)}">
+                <h1 style="text-align: center">Posts not found.</h1>
             </div>
         </div>
     </div>

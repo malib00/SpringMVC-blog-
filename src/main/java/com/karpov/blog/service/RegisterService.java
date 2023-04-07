@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -34,6 +35,7 @@ public class RegisterService {
 		user.setEmailActivationCode(UUID.randomUUID().toString());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setRoles(Collections.singleton(Role.USER));
+		user.setTimestamp(Instant.now());
 		userRepository.save(user);
 
 		String welcomeMessage = String.format(

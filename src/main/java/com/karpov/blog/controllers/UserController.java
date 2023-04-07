@@ -173,7 +173,7 @@ public class UserController {
 	@PreAuthorize("permitAll")
 	@GetMapping("/{user}/posts")
 	public String editPost(@PathVariable User user,
-	                       @PageableDefault(sort = {"timestamp"}, size = 3, direction = Sort.Direction.DESC) Pageable pageable,
+	                       @PageableDefault(sort = {"timestamp"}, size = 9, direction = Sort.Direction.DESC) Pageable pageable,
 	                       Model model) {
 		model.addAttribute("title", user.getUsername() + "'s posts");
 		Page<Post> page = postRepository.findByAuthor(user, pageable.previousOrFirst());
@@ -184,10 +184,11 @@ public class UserController {
 	@PreAuthorize("#user.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
 	@GetMapping("/{user}/feed")
 	public String getUserFeed(@PathVariable User user,
+	                          @PageableDefault(sort = {"timestamp"}, size = 9, direction = Sort.Direction.DESC) Pageable pageable,
 	                          Model model) throws IOException {
 		model.addAttribute("title", user.getUsername() + "'s feed");
-		Iterable<Post> posts = postRepository.findByAuthorInOrderByTimestampDesc(user.getFollowing());
-		model.addAttribute("posts", posts);
+		Page<Post> page = postRepository.findByAuthorIn(user.getFollowing(), pageable.previousOrFirst());
+		model.addAttribute("page", page);
 		return "user/user-posts";
 	}
 

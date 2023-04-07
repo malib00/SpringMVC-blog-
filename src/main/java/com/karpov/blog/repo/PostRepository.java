@@ -11,9 +11,10 @@ import org.springframework.data.repository.CrudRepository;
 public interface PostRepository extends CrudRepository<Post,Long> {
 	Page<Post> findAll(Pageable pageable);
 	Page<Post> findByAuthor(User user, Pageable pageable);
-	Iterable<Post> findByAuthorInOrderByTimestampDesc(Iterable<User> users);
+	Page<Post> findByAuthorIn(Iterable<User> users, Pageable pageable);
 	Iterable<Post> findFirst3ByAuthor(User user, Sort sort);
-	Iterable<Post> findByTitleContainingIgnoreCaseOrderByTimestampDesc(String contain);
+
+	Page<Post> findByTitleContainingIgnoreCase(String contain, Pageable pageable);
 
 	@Query(value = "SELECT count(*) FROM post WHERE user_id =:userId", nativeQuery = true)
 	int postsTotal(Long userId);
