@@ -153,14 +153,17 @@ public class UserController {
 			return "user/user-profile-edit";
 		} else {
 			editedUser.setId(user.getId());
+			editedUser.setActive(true);
 			if (password.getPassword() != null) {
 				editedUser.setPassword(passwordEncoder.encode(password.getPassword()));
 			}
 			if (!file.isEmpty()) {
-				String oldFileName = editedUser.getAvatar();
-				String path = String.valueOf(editedUser.getId());
+				String oldFileName = user.getAvatar();
+				String path = String.valueOf(user.getId());
 				String newFileName = imageFileService.replace(file, path, oldFileName);
 				editedUser.setAvatar(newFileName);
+			} else {
+				editedUser.setAvatar(user.getAvatar());
 			}
 			userRepository.save(editedUser);
 			log.info("User (id: {}, username: {}) was edited by user id: {}, username: {}.",
