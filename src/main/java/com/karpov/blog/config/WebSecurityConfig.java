@@ -36,6 +36,7 @@ public class WebSecurityConfig {
 				.formLogin((form) -> form
 						.loginPage("/login")
 						.permitAll()
+						.defaultSuccessUrl("/", true)
 				)
 				.rememberMe((remember) -> remember
 						.rememberMeServices(rememberMeServices)
