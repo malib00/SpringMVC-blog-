@@ -35,7 +35,7 @@ public class RegisterController {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	@Value("${recaptcha.secret}")
+	@Value("${google.recaptcha.secret}")
 	private String recaptchaSecret;
 
 	@GetMapping("/register")

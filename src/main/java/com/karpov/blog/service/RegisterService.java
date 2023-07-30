@@ -24,7 +24,7 @@ public class RegisterService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@Value("${hostname}")
+	@Value("${server.hostname}")
 	private String hostname;
 
 	public boolean registerUser(User user) {
@@ -40,8 +40,8 @@ public class RegisterService {
 
 		String welcomeMessage = String.format(
 				"Hello, %s! \n" +
-						"Welcome to our PhotoBlog!\n" +
-						"Please, activate your account by following this link: https://%s/activate/%s",
+				"Welcome to our PhotoBlog!\n" +
+				"Please, activate your account by following this link: https://%s/activate/%s",
 				user.getUsername(),
 				hostname,
 				user.getEmailActivationCode()
@@ -65,10 +65,6 @@ public class RegisterService {
 
 	public boolean sameUsernameFound(String username) {
 		User userWithSameUsername = userRepository.findByUsername(username);
-		if (userWithSameUsername != null) {
-			return true;
-		} else {
-			return false;
-		}
+		return userWithSameUsername != null;
 	}
 }
