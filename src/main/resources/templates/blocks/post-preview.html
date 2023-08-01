@@ -2,7 +2,7 @@
     <div class="col" th:data-id="${post.id}">
         <div class="card shadow-sm">
             <a th:href="'/posts/' + ${post.id}">
-                <img type="button" th:src="'/img/'+${post.author.id}+'/'+${post.filename}"
+                <img type="button" th:src="${post.filename}"
                      onerror="postImageLoadError(this);"
                      class="bd-placeholder-img card-img-top postPreviewCover"/></a>
             <div class="card-body p-3">

@@ -25,8 +25,7 @@
             <p th:if="${#fields.hasErrors('fulltext')}" th:errorclass="error" th:errors="*{fulltext}"/>
             <br>
             <input class="mb-3" type="file" name="file"/>
-            <p th:if="${fileError != null && #strings.isEmpty(fileError) == false}" class="error"
-               th:text="${fileError}"></p>
+            <p th:if="${#fields.hasErrors('filename')}" th:errorclass="error" th:errors="*{filename}"/>
             <br>
             <button type="submit" class="btn btn-success">Add post</button>
         </form>

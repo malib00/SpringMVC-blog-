@@ -5,6 +5,7 @@ import com.karpov.blog.models.User;
 import com.karpov.blog.repo.PostRepository;
 import com.karpov.blog.service.ImageFileService;
 import com.karpov.blog.service.PostService;
+import com.uploadcare.upload.UploadFailureException;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,19 +51,27 @@ public class PostsController {
 	public String addPost(
 			@AuthenticationPrincipal User user,
 			@Valid Post post, BindingResult bindingResult,
-			@RequestParam("file") MultipartFile file,
-			Model model) throws IOException {
-		if (file.isEmpty()) {
-			model.addAttribute("fileError", "Please upload an image");
+			@RequestParam("file") MultipartFile multipartFile,
+			Model model) {
+		if (multipartFile.isEmpty()) {
+			bindingResult.addError(new FieldError("post", "filename", "File is empty"));
 		}
-
-		if (file.isEmpty() || bindingResult.hasErrors()) {
+		if (bindingResult.hasErrors()) {
 			model.addAttribute("title", "Add Post");
 			return "post/post-add";
 		} else {
-			postService.addPost(post, file, user);
-			log.info("Post is created. (id: {}, author id: {}, author username: {})",
-					post.getId(), post.getAuthor().getId(), post.getAuthor().getUsername());
+			try {
+				postService.addPost(post, multipartFile, user);
+				log.info("Post is created. (id: {}, author id: {}, author username: {})",
+						post.getId(), post.getAuthor().getId(), post.getAuthor().getUsername());
+			} catch (IOException e) {
+				bindingResult.addError(new FieldError("post", "filename", "File upload error"));
+				return "post/post-add";
+			} catch (UploadFailureException e) {
+				log.error("Error in uploading image to UploadCare service");
+				bindingResult.addError(new FieldError("post", "filename", "File upload service error"));
+				return "post/post-add";
+			}
 			return "redirect:/";
 		}
 	}
@@ -87,7 +97,7 @@ public class PostsController {
 	public String postUpdate(@AuthenticationPrincipal User authenticatedUser,
 	                         @PathVariable Post post,
 	                         @ModelAttribute(name = "editedPost") @Valid Post editedPost, BindingResult bindingResult,
-	                         @RequestParam("file") MultipartFile file,
+	                         @RequestParam("file") MultipartFile multipartFile,
 	                         Model model) throws IOException {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("title", "Post Edit: " + post.getTitle());
@@ -95,10 +105,10 @@ public class PostsController {
 			model.addAttribute("editedPost", editedPost);
 			return "post/post-edit";
 		} else {
-			if (!file.isEmpty()) {
+			if (!multipartFile.isEmpty()) {
 				String oldFileName = post.getFilename();
 				String path = String.valueOf(post.getAuthor().getId());
-				String newFileName = imageFileService.replace(file, path, oldFileName);
+				String newFileName = imageFileService.replace(multipartFile, path, oldFileName);
 				post.setFilename(newFileName);
 			}
 			post.setTitle(editedPost.getTitle());

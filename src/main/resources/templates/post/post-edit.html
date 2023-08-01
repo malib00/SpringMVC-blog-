@@ -8,7 +8,7 @@
 <main>
     <div class="py-5 text-center container mb-5">
         <h1 th:text="${title}"></h1>
-        <img th:src="'/img/'+${post.author.id}+'/'+${post.filename}"
+        <img th:src="${post.filename}"
              class="bd-placeholder-img card-img-top postFullCover"/>
         <form action="#" th:action="@{'/posts/'+${post.id}+'/edit'}"
 
