@@ -1,5 +1,6 @@
 package com.karpov.blog.service;
 
+import com.karpov.blog.models.ImageFile;
 import com.karpov.blog.models.Post;
 import com.karpov.blog.models.User;
 import com.karpov.blog.repo.PostRepository;
@@ -15,17 +16,16 @@ import java.time.Instant;
 public class PostService {
 
 	@Autowired
-	private FileStoreService fileStoreService;
+	private ImageFileService imageFileService;
 
 	@Autowired
 	private PostRepository postRepository;
 
-	public void addPost(Post post, MultipartFile file, User user) throws IOException, UploadFailureException {
+	public void addPost(Post post, MultipartFile multipartFile, User user) throws IOException, UploadFailureException {
 		post.setAuthor(user);
 		post.setTimestamp(Instant.now());
-		String path = String.valueOf(user.getId());
-		String fileName = fileStoreService.save(file);
-		post.setFilename(fileName);
+		ImageFile imageFile = imageFileService.save(post, multipartFile);
+		post.setImageFile(imageFile);
 		postRepository.save(post);
 	}
 }

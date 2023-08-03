@@ -12,20 +12,18 @@
         <form action="#" th:action="@{/posts/add}" method="post" enctype="multipart/form-data" th:object="${post}" >
             <label for="title">Title</label>
             <input th:field="*{title}" type="text" class="form-control" id="title" placeholder="Title"/>
-
             <small th:unless="${#fields.hasErrors('title')}" class="row fw-light text-muted text-start mb-0 ms-4">
                 •Title must be between 2 and 100 characters long.</small>
             <p th:if="${#fields.hasErrors('title')}" th:errorclass="error" th:errors="*{title}"/>
             <br>
             <label for="fulltext">Full text / description</label>
             <textarea th:field="*{fulltext}" type="text" class="form-control" id="fulltext" placeholder="Full text / Description" rows="10"/>
-
             <small th:unless="${#fields.hasErrors('fulltext')}" class="row fw-light text-muted text-start mb-0 ms-4">
                 •Full text / Description must be less than 10000 characters long.</small>
             <p th:if="${#fields.hasErrors('fulltext')}" th:errorclass="error" th:errors="*{fulltext}"/>
             <br>
             <input class="mb-3" type="file" name="file"/>
-            <p th:if="${#fields.hasErrors('filename')}" th:errorclass="error" th:errors="*{filename}"/>
+            <p th:if="${#fields.hasErrors('imageFile')}" th:errorclass="error" th:errors="*{imageFile}"/>
             <br>
             <button type="submit" class="btn btn-success">Add post</button>
         </form>

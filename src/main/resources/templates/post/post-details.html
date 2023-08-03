@@ -7,7 +7,7 @@
 <header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
 <main>
     <div class="py-2 text-center container bg-light rounded my-2">
-        <img th:src="${post.filename}"
+        <img th:src="${post.imageFile.URL}"
              onerror="postImageLoadError(this);"
              class="bd-placeholder-img card-img-top postFullCover"/>
         <h1 th:text="${post.title}"></h1>
