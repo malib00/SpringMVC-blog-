@@ -7,13 +7,21 @@
 <header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
 <main>
     <div class="py-5 text-center container mb-5">
-        <h1 th:text="${title}"></h1>
-        <img th:src="'/img/articles/'+${article.filename}"
-             class="bd-placeholder-img card-img-top postFullCover">
-        <form method="post" enctype="multipart/form-data">
-            <input type="text" th:value="${article.title}" name="title" placeholder="Title" class="form-control mt-3"><br>
-            <textarea th:text="${article.fulltext}" name="fulltext" placeholder="Article content" class="form-control"/><br>
-            <input type="file" name="file"><br>
+        <h1 th:text="${pageTitle}"></h1>
+        <img th:src="${article.imageFile.URL}"
+             class="bd-placeholder-img card-img-top postFullCover"/>
+        <form action="#" th:action="@{'/articles/'+${article.id}+'/edit'}" method="post" th:object="${editedArticle}" enctype="multipart/form-data">
+            <label class="labels">Title</label>
+            <input th:field="*{title}" name="title" type="text" class="form-control" placeholder="Title"/>
+            <p th:if="${#fields.hasErrors('title')}" th:errorclass="error" th:errors="*{title}"/>
+            <br>
+            <label class="labels">Full text / Description</label>
+            <textarea th:field="*{fulltext}" name="fulltext" type="text" class="form-control" placeholder="Full text / Description"/>
+            <p th:if="${#fields.hasErrors('fulltext')}" th:errorclass="error" th:errors="*{fulltext}"/>
+            <br>
+            <input type="file" name="file"/>
+            <p th:if="${#fields.hasErrors('imageFile')}" th:errorclass="error" th:errors="*{imageFile}"/>
+            <br>
             <button type="submit" class="btn btn-success">Submit</button>
         </form>
     </div>

@@ -4,12 +4,10 @@
     <div th:replace="~{blocks/head :: head}"/>
 </head>
 <body>
-
 <header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
-
 <main>
     <div class="py-5 text-center container">
-        <h1 th:text="${title}"></h1>
+        <h1 th:text="${pageTitle}"></h1>
     </div>
     <div class="album bg-light">
         <div class="container py-3">
@@ -19,7 +17,7 @@
                         <div class="col py-1">
                             <div class="card shadow-sm">
                                 <a th:href="'/articles/' + ${article.id}">
-                                    <img type="button" th:src="'/img/articles/'+${article.filename}"
+                                    <img type="button" th:src="${article.imageFile.URL}"
                                          class="bd-placeholder-img card-img-top articlePreviewCover"></a>
                                 <div class="card-body">
                                     <p th:text="${article.title}" class="card-text mx-3"></p>
@@ -47,8 +45,6 @@
         </div>
     </div>
 </main>
-
 <footer th:insert="~{blocks/footer :: footer}"></footer>
-
 </body>
 </html>

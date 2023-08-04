@@ -44,13 +44,6 @@ public class Post {
 
 	private Instant timestamp;
 
-	@OneToOne(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
 	private ImageFile imageFile;
-
-	public Post(String title, String fulltext, User author) {
-		this.title = title;
-		this.fulltext = fulltext;
-		this.author = author;
-		this.timestamp = Instant.now();
-	}
 }

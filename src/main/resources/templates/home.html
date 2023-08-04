@@ -6,7 +6,6 @@
 <body>
 <header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
 <main>
-
     <div th:if="${infoMessage != null}">
         <div class="album py-1 bg-light">
             <div class="container">
@@ -14,32 +13,27 @@
             </div>
         </div>
     </div>
-
     <section class="py-5 container" th:if="${recentArticle != null}">
         <div class="card card-inverse shadow-sm" style="background: #000;">
-            <img class="card-img recentArticlePreviewCover" th:src="'/img/articles/'+${recentArticle.filename}"
-                 alt="Article image"/>
+            <img class="card-img recentArticlePreviewCover" th:src="${recentArticle.imageFile.URL}" alt="Article image"/>
             <div class="card-img-overlay">
-                <h1 class="text-white text-center py-5 fst-italic"
-                    th:text="'Recent Article: '+${recentArticle.title}"></h1>
-                <div th:if="${#strings.length(recentArticle.fulltext)>100}">
-                    <p class="text-white text-center"
-                       th:text="${#strings.substring(recentArticle.fulltext,0,99)}+'...'"></p>
+                <h1 class="text-white text-center py-5 fst-italic" th:text="'Recent Article: '+${recentArticle.title}"></h1>
+                <div th:if="${recentArticle.fulltext != null}">
+                    <div th:if="${#strings.length(recentArticle.fulltext)>100}">
+                        <p class="text-white text-center" th:text="${#strings.substring(recentArticle.fulltext,0,99)}+'...'"></p>
+                    </div>
+                    <div th:unless="${#strings.length(recentArticle.fulltext)>100}">
+                        <p class="text-white text-center" th:text="${recentArticle.fulltext}"></p>
+                    </div>
                 </div>
-                <div th:unless="${#strings.length(recentArticle.fulltext)>100}">
-                    <p class="text-white text-center" th:text="${recentArticle.fulltext}"></p>
-                </div>
-                <p class="text-center"><a th:href="'/articles/' + ${recentArticle.id}" class="text-white fw-bold">Read
-                    Article</a></p>
+                <p class="text-center"><a th:href="'/articles/' + ${recentArticle.id}" class="text-white fw-bold">Read Article</a></p>
             </div>
         </div>
     </section>
-
     <div class="album py-3 bg-light">
         <div class="container">
             <div th:insert="~{blocks/pager :: pager}"></div>
         </div>
-
         <div class="container">
             <div th:unless="${#lists.isEmpty(page.content)}">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="postsList">
@@ -53,7 +47,6 @@
             </div>
         </div>
     </div>
-
 </main>
 <footer th:insert="~{blocks/footer :: footer}"></footer>
 </body>

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.thymeleaf.exceptions.TemplateProcessingException;
 
 import java.io.IOException;
 
@@ -35,7 +33,7 @@ public class PostsController {
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/add")
-	public String addPostPage(Post post, Model model) {
+	public String addPostBlankPage(Post post, Model model) {
 		model.addAttribute("title", "Add Post");
 		return "post/post-add";
 	}
@@ -85,7 +83,6 @@ public class PostsController {
 		return "post/post-edit";
 	}
 
-	@ExceptionHandler(TemplateProcessingException.class)
 	@PreAuthorize("#post.author.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
 	@PostMapping("/{post}/edit")
 	public String postUpdate(@AuthenticationPrincipal User authenticatedUser,
@@ -99,8 +96,8 @@ public class PostsController {
 		} else {
 			try {
 				postService.updatePost(post, editedPost, multipartFile);
-				log.info("Post (id={}) is edited by (id={}, username={}).",
-						editedPost.getId(), authenticatedUser.getId(), authenticatedUser.getUsername());
+				log.info("Post (id={}) was edited by (id={}, username={}).",
+						post.getId(), authenticatedUser.getId(), authenticatedUser.getUsername());
 			} catch (IOException e) {
 				bindingResult.addError(new FieldError("post", "imageFile", "File upload error"));
 				log.error("Error while uploading image to post");

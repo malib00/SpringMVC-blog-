@@ -18,13 +18,7 @@ import lombok.Setter;
 public class ImageFile {
 
 	@Id
-	private Long id;
-
-	@OneToOne(fetch = FetchType.LAZY)
-	@MapsId
-	private Post post;
-
 	private String UUID;
-	private String URL;
 
+	private String URL;
 }

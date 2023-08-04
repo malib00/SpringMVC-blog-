@@ -1,5 +1,6 @@
 package com.karpov.blog.models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,12 +9,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Instant;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Article {
 
 	@Id
@@ -34,64 +44,6 @@ public class Article {
 
 	private Instant timestamp;
 
-	private String filename;
-
-	public Article() {
-	}
-
-	public Article(String title, String fulltext, User author) {
-		this.title = title;
-		this.fulltext = fulltext;
-		this.author = author;
-		this.timestamp = Instant.now();
-
-	}
-
-	public User getAuthor() {
-		return author;
-	}
-
-	public void setAuthor(User author) {
-		this.author = author;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getFulltext() {
-		return fulltext;
-	}
-
-	public void setFulltext(String fulltext) {
-		this.fulltext = fulltext;
-	}
-
-	public Instant getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(Instant timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	public String getFilename() {
-		return filename;
-	}
-
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
+	private ImageFile imageFile;
 }

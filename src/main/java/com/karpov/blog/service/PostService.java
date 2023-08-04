@@ -4,9 +4,10 @@ import com.karpov.blog.models.ImageFile;
 import com.karpov.blog.models.Post;
 import com.karpov.blog.models.User;
 import com.karpov.blog.repo.PostRepository;
-import com.uploadcare.api.File;
 import com.uploadcare.upload.UploadFailureException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,13 +24,8 @@ public class PostService {
 	private PostRepository postRepository;
 
 	public void addNewPost(Post post, MultipartFile multipartFile, User user) throws UploadFailureException, IOException {
-		File uploadedImageFile = imageFileService.uploadImageFile(multipartFile);
-		ImageFile imageFile = new ImageFile();
-		imageFile.setPost(post);
-		imageFile.setUUID(uploadedImageFile.getFileId());
-		imageFile.setURL(uploadedImageFile.getOriginalFileUrl().toString());
-
-		post.setImageFile(imageFile);
+		ImageFile uploadedImageFile = imageFileService.uploadImageFile(multipartFile);
+		post.setImageFile(uploadedImageFile);
 		post.setAuthor(user);
 		post.setTimestamp(Instant.now());
 		postRepository.save(post);
@@ -41,22 +37,22 @@ public class PostService {
 		if (multipartFile.isEmpty()) {
 			postRepository.save(post);
 		} else {
-			File uploadedImageFile = imageFileService.uploadImageFile(multipartFile);
-			String oldImageFileUUID = post.getImageFile().getUUID();
-			ImageFile imageFile = new ImageFile();
-			imageFile.setId(post.getId());
-			imageFile.setPost(post);
-			imageFile.setUUID(uploadedImageFile.getFileId());
-			imageFile.setURL(uploadedImageFile.getOriginalFileUrl().toString());
-			post.setImageFile(imageFile);
+			ImageFile uploadedImageFile = imageFileService.uploadImageFile(multipartFile);
+			ImageFile oldImageFile = post.getImageFile();
+			post.setImageFile(uploadedImageFile);
 			postRepository.save(post);
-			imageFileService.deleteImageFile(oldImageFileUUID);
+			imageFileService.deleteImageFile(oldImageFile);
 		}
 	}
 
 	public void deletePost(Post post)  {
-		String oldImageFileUUID = post.getImageFile().getUUID();
+		ImageFile oldImageFile = post.getImageFile();
 		postRepository.delete(post);
-		imageFileService.deleteImageFile(oldImageFileUUID);
+		imageFileService.deleteImageFile(oldImageFile);
+	}
+
+	public Page<Post> getAllPostsPageable(Pageable pageable) {
+		Page<Post> page = postRepository.findAll(pageable.previousOrFirst());
+		return page;
 	}
 }

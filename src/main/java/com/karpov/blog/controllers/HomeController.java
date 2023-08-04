@@ -1,9 +1,8 @@
 package com.karpov.blog.controllers;
 
 import com.karpov.blog.models.Article;
-import com.karpov.blog.models.Post;
-import com.karpov.blog.repo.ArticleRepository;
-import com.karpov.blog.repo.PostRepository;
+import com.karpov.blog.service.ArticleService;
+import com.karpov.blog.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,21 +13,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class MainController {
+public class HomeController {
 
 	@Autowired
-	private PostRepository postRepository;
+	private PostService postService;
 
 	@Autowired
-	private ArticleRepository articleRepository;
+	private ArticleService articleService;
 
 	@GetMapping("/")
 	public String home(Model model,
 	                   @PageableDefault(sort = {"timestamp"}, size = 9, direction = Sort.Direction.DESC) Pageable pageable) {
-		model.addAttribute("title", "Home Page");
-		Page<Post> page = postRepository.findAll(pageable.previousOrFirst());
+		model.addAttribute("pageTitle", "Home Page");
+		Page page = postService.getAllPostsPageable(pageable);
 		model.addAttribute("page", page);
-		Article recentArticle = articleRepository.findTopByOrderByTimestampDesc();
+		Article recentArticle = articleService.getRecentArticle();
 		model.addAttribute("recentArticle", recentArticle);
 		return "home";
 	}

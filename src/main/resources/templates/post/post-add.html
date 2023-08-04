@@ -8,7 +8,7 @@
 <main>
     <div class="album bg-light">
     <div class="py-5 text-center container mb-5">
-        <h1 th:text="${title}"></h1>
+        <h1 th:text="${pageTitle}"></h1>
         <form action="#" th:action="@{/posts/add}" method="post" enctype="multipart/form-data" th:object="${post}" >
             <label for="title">Title</label>
             <input th:field="*{title}" type="text" class="form-control" id="title" placeholder="Title"/>

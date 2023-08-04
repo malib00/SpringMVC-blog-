@@ -4,16 +4,30 @@
     <div th:replace="~{blocks/head :: head}"/>
 </head>
 <body>
-<header th:insert="~{blocks/header :: header}"  class="p-3 text-bg-dark"></header>
+<header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
 <main>
-    <div class="py-5 text-center container mb-5">
-        <h1 th:text="${title}"></h1>
-        <form action="/articles/add" method="post" enctype="multipart/form-data">
-            <input type="text" name="title" placeholder="Title" class="form-control"><br>
-            <textarea name="fulltext" placeholder="Post content" class="form-control" rows="10"></textarea><br>
-            <input type="file" name="file"><br>
-            <button type="submit" class="btn btn-success">Add Article</button>
-        </form>
+    <div class="album bg-light">
+        <div class="py-5 text-center container mb-5">
+            <h1 th:text="${pageTitle}"></h1>
+            <form action="#" th:action="@{/articles/add}" method="post" enctype="multipart/form-data" th:object="${article}" >
+                <label for="title">Title</label>
+                <input th:field="*{title}" type="text" class="form-control" id="title" placeholder="Title"/>
+                <small th:unless="${#fields.hasErrors('title')}" class="row fw-light text-muted text-start mb-0 ms-4">
+                    •Title must be between 2 and 100 characters long.</small>
+                <p th:if="${#fields.hasErrors('title')}" th:errorclass="error" th:errors="*{title}"/>
+                <br>
+                <label for="fulltext">Full text / description</label>
+                <textarea th:field="*{fulltext}" type="text" class="form-control" id="fulltext" placeholder="Full text / Description" rows="10"/>
+                <small th:unless="${#fields.hasErrors('fulltext')}" class="row fw-light text-muted text-start mb-0 ms-4">
+                    •Full text / Description must be less than 10000 characters long.</small>
+                <p th:if="${#fields.hasErrors('fulltext')}" th:errorclass="error" th:errors="*{fulltext}"/>
+                <br>
+                <input class="mb-3" type="file" name="file"/>
+                <p th:if="${#fields.hasErrors('imageFile')}" th:errorclass="error" th:errors="*{imageFile}"/>
+                <br>
+                <button type="submit" class="btn btn-success">Add Article</button>
+            </form>
+        </div>
     </div>
 </main>
 <footer th:insert="~{blocks/footer :: footer}"></footer>

@@ -7,26 +7,20 @@
 <header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
 <main>
     <div class="py-5 text-center container mb-5">
-        <h1 th:text="${title}"></h1>
-        <img th:src="${post.filename}"
+        <h1 th:text="${pageTitle}"></h1>
+        <img th:src="${post.imageFile.URL}"
              class="bd-placeholder-img card-img-top postFullCover"/>
-        <form action="#" th:action="@{'/posts/'+${post.id}+'/edit'}"
-
-              method="post"
-              th:object="${editedPost}" enctype="multipart/form-data">
+        <form action="#" th:action="@{'/posts/'+${post.id}+'/edit'}" method="post" th:object="${editedPost}" enctype="multipart/form-data">
             <label class="labels">Title</label>
-            <input th:field="*{title}" name="title" type="text" class="form-control"
-                   placeholder="Title"/>
-            <p th:if="${#fields.hasErrors('title')}" th:errorclass="error"
-               th:errors="*{title}"/>
+            <input th:field="*{title}" name="title" type="text" class="form-control" placeholder="Title"/>
+            <p th:if="${#fields.hasErrors('title')}" th:errorclass="error" th:errors="*{title}"/>
             <br>
             <label class="labels">Full text / Description</label>
-            <textarea th:field="*{fulltext}" name="fulltext" type="text" class="form-control"
-                      placeholder="Full text / Description"/>
-            <p th:if="${#fields.hasErrors('fulltext')}" th:errorclass="error"
-               th:errors="*{fulltext}"/>
+            <textarea th:field="*{fulltext}" name="fulltext" type="text" class="form-control" placeholder="Full text / Description"/>
+            <p th:if="${#fields.hasErrors('fulltext')}" th:errorclass="error" th:errors="*{fulltext}"/>
             <br>
             <input type="file" name="file"/>
+            <p th:if="${#fields.hasErrors('imageFile')}" th:errorclass="error" th:errors="*{imageFile}"/>
             <br>
             <button type="submit" class="btn btn-success">Submit</button>
         </form>
