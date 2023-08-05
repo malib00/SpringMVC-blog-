@@ -15,10 +15,10 @@ import java.io.IOException;
 public class ImageFileService {
 
 	@Autowired
-	private Client client;
+	private Client uploadCareClient;
 
 	public ImageFile uploadImageFile(MultipartFile multipartFile) throws IOException, UploadFailureException {
-		FileUploader uploader = new FileUploader(client, multipartFile.getInputStream(), multipartFile.getOriginalFilename());
+		FileUploader uploader = new FileUploader(uploadCareClient, multipartFile.getInputStream(), multipartFile.getOriginalFilename());
 		File uploadedImageFile = uploader.upload().save();
 		ImageFile imageFile = new ImageFile();
 		imageFile.setUUID(uploadedImageFile.getFileId());
@@ -27,6 +27,6 @@ public class ImageFileService {
 	}
 
 	public void deleteImageFile(ImageFile imageFile) {
-		client.deleteFile(imageFile.getUUID());
+		uploadCareClient.deleteFile(imageFile.getUUID());
 	}
 }
