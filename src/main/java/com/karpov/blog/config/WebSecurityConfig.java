@@ -1,6 +1,6 @@
 package com.karpov.blog.config;
 
-import com.karpov.blog.service.UserService;
+import com.karpov.blog.service.UserServiceSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.rememberme.TokenBasedReme
 public class WebSecurityConfig {
 
 	@Autowired
-	private UserService userService;
+	private UserServiceSecurity userServiceSecurity;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http, RememberMeServices rememberMeServices) throws Exception {
@@ -32,7 +32,7 @@ public class WebSecurityConfig {
 						.requestMatchers("/", "/static/**", "/img/**", "/posts/**", "/register", "/activate/*", "/articles", "/about").permitAll()
 						.anyRequest().authenticated()
 				)
-				.userDetailsService(userService)
+				.userDetailsService(userServiceSecurity)
 				.formLogin((form) -> form
 						.loginPage("/login")
 						.permitAll()

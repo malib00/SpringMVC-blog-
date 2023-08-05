@@ -1,6 +1,5 @@
 package com.karpov.blog.controllers;
 
-import com.karpov.blog.models.Password;
 import com.karpov.blog.models.Post;
 import com.karpov.blog.models.Role;
 import com.karpov.blog.models.User;
@@ -8,6 +7,7 @@ import com.karpov.blog.repo.PostRepository;
 import com.karpov.blog.repo.UserRepository;
 import com.karpov.blog.service.ImageFileService;
 import com.karpov.blog.service.UserService;
+import com.uploadcare.upload.UploadFailureException;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Set;
 
 @Slf4j
@@ -46,7 +45,6 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@Autowired
 	private ImageFileService imageFileService;
 
 	@Autowired
@@ -57,8 +55,8 @@ public class UserController {
 
 	@GetMapping
 	public String usersListForAdmins(Model model) {
-		model.addAttribute("title", "User List");
-		model.addAttribute("users", userRepository.findAll(Sort.by("id").ascending()));
+		model.addAttribute("pageTitle", "User List");
+		model.addAttribute("users", userService.getAllUsers());
 		return "user/users-list-for-admins";
 	}
 
@@ -67,16 +65,64 @@ public class UserController {
 	public String getUser(@AuthenticationPrincipal User authenticatedUser,
 	                      @PathVariable User user,
 	                      Model model) {
-		model.addAttribute("title", user.getUsername() + "'s profile");
+		model.addAttribute("pageTitle", user.getUsername() + "'s profile");
 		model.addAttribute("user", user);
 		model.addAttribute("itsMyPage", authenticatedUser.equals(user));
 		model.addAttribute("isFollowingThisUser", user.getFollowers().contains(authenticatedUser));
 		model.addAttribute("totalPostsQTY", user.getPosts().size());
 		model.addAttribute("totalFollowers", user.getFollowers().size());
 		model.addAttribute("totalFollowing", user.getFollowing().size());
-		Iterable<Post> last3Posts = postRepository.findFirst3ByAuthor(user, Sort.by("timestamp").descending());
-		model.addAttribute("last3Posts", last3Posts);
+		model.addAttribute("last3Posts", userService.get3RecentPosts(user));
 		return "user/user-profile";
+	}
+
+	@PreAuthorize("#user.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
+	@GetMapping("/{user}/edit")
+	public String editUser(@PathVariable User user,
+	                       Model model) {
+		model.addAttribute("pageTitle", user.getUsername() + "'s profile edit");
+		model.addAttribute("allRoles", Role.values());
+		model.addAttribute("editedUser", user);
+		return "user/user-profile-edit";
+	}
+
+	@PreAuthorize("#user.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
+	@PostMapping("/{user}/edit")
+	public String updateUser(@AuthenticationPrincipal User authenticatedUser,
+	                         @PathVariable User user,
+	                         @RequestParam(value = "file") MultipartFile multipartFile,
+	                         @RequestParam(required = false) Set<Role> roles,
+	                         @ModelAttribute(name = "editedUser") @Valid User editedUser, BindingResult bindingResult,
+	                         Model model) {
+		if (editedUser.getPassword()!=null && !editedUser.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
+			bindingResult.addError(new FieldError("user", "password",
+					"Password must contain minimum eight characters, at least one uppercase letter, " +
+							"one lowercase letter, one number and one special character (@$!%*#?&)."));
+		}
+		if (!user.getUsername().equalsIgnoreCase(editedUser.getUsername()) && userService.sameUsernameFound(editedUser.getUsername())) {
+			bindingResult.addError(new FieldError("user", "username", "Username is already in use. Please choose another one."));
+		}
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("pageTitle", user.getUsername() + "'s profile edit");
+			model.addAttribute("allRoles", Role.values());
+			model.addAttribute("editedUser", editedUser);
+			return "user/user-profile-edit";
+		} else {
+			try {
+				userService.updateUser(user, editedUser, multipartFile);
+				log.info("User (id={}) was edited by (id={}, username={}).",
+						user.getId(), authenticatedUser.getId(), authenticatedUser.getUsername());
+			} catch (IOException e) {
+				bindingResult.addError(new FieldError("user", "avatarImage", "AvatarImage upload error"));
+				log.error("Error while uploading avatarImage to profile");
+				return "user/user-profile-edit";
+			} catch (UploadFailureException e) {
+				log.error("Error while uploading avatarImage to UploadCare service");
+				bindingResult.addError(new FieldError("user", "avatarImage", "AvatarImage upload service error"));
+				return "user/user-profile-edit";
+			}
+			return "redirect:/users/{user}";
+		}
 	}
 
 	@PreAuthorize("isAuthenticated()")
@@ -101,7 +147,7 @@ public class UserController {
 	@GetMapping("/{user}/followers")
 	public String getUserFollowersList(@PathVariable User user,
 	                                   Model model) {
-		model.addAttribute("title", user.getUsername() + "'s followers");
+		model.addAttribute("pageTitle", user.getUsername() + "'s followers");
 		model.addAttribute("users", user.getFollowers());
 		return "user/users-list";
 	}
@@ -110,67 +156,9 @@ public class UserController {
 	@GetMapping("/{user}/following")
 	public String getUserFollowingList(@PathVariable User user,
 	                                   Model model) {
-		model.addAttribute("title", user.getUsername() + "'s following");
+		model.addAttribute("pageTitle", user.getUsername() + "'s following");
 		model.addAttribute("users", user.getFollowing());
 		return "user/users-list";
-	}
-
-	@PreAuthorize("#user.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
-	@GetMapping("/{user}/edit")
-	public String editUser(@PathVariable User user,
-	                       Model model) {
-		model.addAttribute("title", user.getUsername() + "'s profile edit");
-		model.addAttribute("allRoles", Role.values());
-		model.addAttribute("uneditedUser", user);
-		model.addAttribute("editedUser", user);
-		return "user/user-profile-edit";
-	}
-
-	@PreAuthorize("#user.id == principal.id || hasAnyAuthority('MODERATOR','ADMIN')")
-	@PostMapping("/{user}/edit")
-	public String updateUser(@AuthenticationPrincipal User authenticatedUser,
-	                         @PathVariable User user,
-	                         @RequestParam(value = "file") MultipartFile file,
-	                         @RequestParam(required = false) Set<Role> roles,
-	                         @ModelAttribute(name = "password") @Valid Password password, BindingResult passwordBindingResult,
-	                         @ModelAttribute(name = "editedUser") @Valid User editedUser, BindingResult bindingResult,
-	                         Model model) throws IOException {
-		if (password.getPassword() == null) {
-			editedUser.setPassword(user.getPassword());
-		} else if (passwordBindingResult.hasErrors()) {
-			passwordBindingResult.getAllErrors().stream().forEach(x -> bindingResult.addError(x));
-		}
-		User userWithSameUsername = userRepository.findByUsername(editedUser.getUsername());
-		if (userWithSameUsername != null && userWithSameUsername.getId() != user.getId()) {
-			bindingResult.addError(new FieldError("user", "username", "Username is already in use. Please choose another one."));
-		}
-
-		if (bindingResult.hasErrors()) {
-			model.addAttribute("title", user.getUsername() + "'s profile edit");
-			model.addAttribute("allRoles", Role.values());
-			model.addAttribute("uneditedUser", user);
-			model.addAttribute("editedUser", editedUser);
-			return "user/user-profile-edit";
-		} else {
-			editedUser.setId(user.getId());
-			editedUser.setActive(true);
-			if (password.getPassword() != null) {
-				editedUser.setPassword(passwordEncoder.encode(password.getPassword()));
-			}
-			if (!file.isEmpty()) {
-				String oldFileName = user.getAvatar();
-				String path = String.valueOf(user.getId());
-				String newFileName = imageFileService.replace(file, path, oldFileName);
-				editedUser.setAvatar(newFileName);
-			} else {
-				editedUser.setAvatar(user.getAvatar());
-			}
-			userRepository.save(editedUser);
-			log.info("User (id: {}, username: {}) was edited by user id: {}, username: {}.",
-					user.getId(), user.getUsername(),
-					authenticatedUser.getId(), authenticatedUser.getUsername());
-			return "redirect:/users/{user}";
-		}
 	}
 
 	@PreAuthorize("permitAll")
@@ -178,7 +166,7 @@ public class UserController {
 	public String editPost(@PathVariable User user,
 	                       @PageableDefault(sort = {"timestamp"}, size = 9, direction = Sort.Direction.DESC) Pageable pageable,
 	                       Model model) {
-		model.addAttribute("title", user.getUsername() + "'s posts");
+		model.addAttribute("pageTitle", user.getUsername() + "'s posts");
 		Page<Post> page = postRepository.findByAuthor(user, pageable.previousOrFirst());
 		model.addAttribute("page", page);
 		return "user/user-posts";
@@ -188,8 +176,8 @@ public class UserController {
 	@GetMapping("/{user}/feed")
 	public String getUserFeed(@PathVariable User user,
 	                          @PageableDefault(sort = {"timestamp"}, size = 9, direction = Sort.Direction.DESC) Pageable pageable,
-	                          Model model) throws IOException {
-		model.addAttribute("title", user.getUsername() + "'s feed");
+	                          Model model) {
+		model.addAttribute("pageTitle", user.getUsername() + "'s feed");
 		Page<Post> page = postRepository.findByAuthorIn(user.getFollowing(), pageable.previousOrFirst());
 		model.addAttribute("page", page);
 		return "user/user-posts";
@@ -200,12 +188,11 @@ public class UserController {
 	public String deleteUser(@AuthenticationPrincipal User authenticatedUser,
 	                         @PathVariable User user,
 	                         Model model) {
-		imageFileService.deleteUserImages(String.valueOf(user.getId()));
-		userRepository.delete(user);
-		log.info("User (old id: {}, username: {}) was deleted by user id: {}, username: {}.",
+		userService.deleteUser(user);
+		log.info("User (oldId={}, username={}) was deleted by (id={}, username={}.",
 				user.getId(), user.getUsername(),
 				authenticatedUser.getId(), authenticatedUser.getUsername());
-		model.addAttribute("title", "User List");
+		model.addAttribute("pageTitle", "User List");
 		return "redirect:/users";
 	}
 }

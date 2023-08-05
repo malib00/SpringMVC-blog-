@@ -11,22 +11,19 @@
         <div class="row">
             <div class="col-md-3 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                    <img id="avatar" th:src="'/img/'+${uneditedUser.id}+'/'+${uneditedUser.avatar}"
+                    <img id="avatar" th:src="${user.avatarImage?.URL}"
                          onerror="avatarLoadError(this);"
                          alt="Generic image" class="img-fluid img-thumbnail mt-4 mb-2"
                          style="width: 150px; z-index: 1"/>
-                    <span class="font-weight-bold" th:text="${uneditedUser.fullname}"></span>
-                    <span class="text-black-50" th:text="'@'+${uneditedUser.username}"></span>
+                    <span class="font-weight-bold" th:text="${user.fullname}"></span>
+                    <span class="text-black-50" th:text="'@'+${user.username}"></span>
                 </div>
             </div>
             <div class="col-md-5 border-right">
-                <form action="#" th:action="@{'/users/'+${uneditedUser.id}+'/edit'}" method="post"
+                <form action="#" th:action="@{'/users/'+${user.id}+'/edit'}" method="post"
                       th:object="${editedUser}"
                       enctype="multipart/form-data">
                     <div class="p-3 py-5">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="text-right" th:text="${uneditedUser.username} + ': profile edit'"></h4>
-                        </div>
                         <div class="row mt-2">
                             <div class="col-md-6"><label class="labels">Username</label>
                                 <input th:field="*{username}" name="username" type="text" class="form-control"
@@ -38,7 +35,7 @@
                         <div class="row mt-3">
                             <div class="col-md-12"><label class="labels">Full Name</label>
                                 <input th:field="*{fullname}" name="fullname" type="text" class="form-control"
-                                       placeholder="full name" value=""/>
+                                       placeholder="Full Name" value=""/>
                                 <p th:if="${#fields.hasErrors('fullname')}" th:errorclass="error"
                                    th:errors="*{fullname}"/>
                             </div>
@@ -53,17 +50,18 @@
                             </div>
                             <div class="col-md-12 py-3"><label class="labels">Profile Image</label>
                                 <input type="file" name="file"/>
+                                <p th:if="${#fields.hasErrors('avatarImage')}" th:errorclass="error" th:errors="*{avatarImage}"/>
                             </div>
                             <div sec:authorize="hasAuthority('ADMIN')" class="col-md-12"><label
                                     class="labels">Roles</label>
                                 <div th:each="role : ${allRoles}">
                                     <div class="form-check">
-                                        <input type="checkbox" th:field="${user.roles}" th:value="${role}"/>
+                                        <input type="checkbox" th:field="*{roles}" th:value="${role}"/>
                                         <label class="form-check-label" th:text="${role}"> </label>
                                     </div>
                                 </div>
                             </div>
-                            <div th:if="${uneditedUser.id} == ${#authentication.principal.id} or ${#authorization.expression('hasAuthority(''ADMIN'')')}"
+                            <div th:if="${user.id} == ${#authentication.principal.id} or ${#authorization.expression('hasAuthority(''ADMIN'')')}"
                                  class="col-md-12"><label class="labels">Password</label>
                                 <input name="password" type="password" class="form-control"
                                        placeholder="password" value=""/>

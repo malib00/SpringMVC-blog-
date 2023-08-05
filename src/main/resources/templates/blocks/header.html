@@ -39,7 +39,8 @@
                 <a href="#" role="button" class="d-block link-light text-decoration-none dropdown-toggle"
                    id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                     <img
-                            th:src="'/img/'+${#authentication.principal.id}+'/'+${#authentication.principal.avatar}"
+
+                            th:src="${#authentication.principal.avatarImage?.URL}"
                             onerror="avatarLoadError(this);" alt="mdo" width="32" height="32"
                             class="rounded-circle avatarSmallCover"/>
                 </a>

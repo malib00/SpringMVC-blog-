@@ -14,11 +14,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -30,6 +35,10 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "usr")
 public class User implements UserDetails {
 
@@ -47,12 +56,12 @@ public class User implements UserDetails {
 
 	private String about;
 
-	@NotBlank(message = "Please write your password.")
 	private String password;
 
 	private boolean active;
 
-	private String avatar;
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
+	private ImageFile avatarImage;
 
 	private Instant timestamp;
 
@@ -86,19 +95,6 @@ public class User implements UserDetails {
 	@Enumerated(EnumType.STRING)
 	private Set<Role> roles;
 
-	public User() {
-	}
-
-	//TODO check and delete
-	public User(String username, String fullname, String email, String password) {
-		this.username = username;
-		this.fullname = fullname;
-		this.email = email;
-		this.password = password;
-		this.active = false;
-		this.roles = Collections.singleton(Role.USER);
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
@@ -110,118 +106,6 @@ public class User implements UserDetails {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getFullname() {
-		return fullname;
-	}
-
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
-	public Set<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-
-	public String getAvatar() {
-		return avatar;
-	}
-
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
-	}
-
-	public String getAbout() {
-		return about;
-	}
-
-	public void setAbout(String about) {
-		this.about = about;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getEmailActivationCode() {
-		return emailActivationCode;
-	}
-
-	public void setEmailActivationCode(String emailActivationCode) {
-		this.emailActivationCode = emailActivationCode;
-	}
-
-	public Set<Post> getPosts() {
-		return posts;
-	}
-
-	public void setPosts(Set<Post> posts) {
-		this.posts = posts;
-	}
-
-	public Set<User> getFollowers() {
-		return followers;
-	}
-
-	public void setFollowers(Set<User> followers) {
-		this.followers = followers;
-	}
-
-	public Set<User> getFollowing() {
-		return following;
-	}
-
-	public void setFollowing(Set<User> following) {
-		this.following = following;
-	}
-
-	public Instant getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(Instant timestamp) {
-		this.timestamp = timestamp;
 	}
 
 	@Override

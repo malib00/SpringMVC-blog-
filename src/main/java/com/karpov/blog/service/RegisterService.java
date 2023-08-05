@@ -11,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.UUID;
@@ -74,7 +73,7 @@ public class RegisterService {
 	}
 
 	public boolean usernameAlreadyTaken(String username) {
-		User userWithSameUsername = userRepository.findByUsername(username);
+		User userWithSameUsername = userRepository.findByUsernameIgnoreCase(username);
 		return userWithSameUsername != null;
 	}
 

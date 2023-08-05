@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository<User, Long> {
 	Iterable<User> findAll(Sort sort);
-	User findByUsername(String username);
+	User findByUsernameIgnoreCase(String username);
 	Page<User> findByUsernameContainingIgnoreCase(String contain, Pageable pageable);
 	User findByEmailActivationCode(String code);
 }
