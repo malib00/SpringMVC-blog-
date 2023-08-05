@@ -37,16 +37,17 @@ public class User implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	@NotBlank(message = "Please write your username")
-	@Size(min = 2, max = 20, message = "Username must be between 2 and 20 characters long")
-	@Pattern(regexp = "^[a-z0-9]*$", message = "Username can contain only lowercase letters (a-z) and numbers (0-9) without spaces")
+	@NotBlank(message = "Please write your username.")
+	@Size(min = 2, max = 20, message = "Username must be between 2 and 20 characters long.")
+	@Pattern(regexp = "^[a-z0-9]*$", message = "Username can contain only lowercase letters (a-z) and numbers (0-9) without spaces.")
 	private String username;
 
-	@Pattern(regexp = "^[A-Za-z ]*$", message = "Full name can contain only letters (A-Z,a-z) and spaces")
+	@Pattern(regexp = "^[A-Za-z ]*$", message = "Full name can contain only letters (A-Z,a-z) and spaces.")
 	private String fullname;
 
 	private String about;
 
+	@NotBlank(message = "Please write your password.")
 	private String password;
 
 	private boolean active;
@@ -55,8 +56,8 @@ public class User implements UserDetails {
 
 	private Instant timestamp;
 
-	@Email(message = "Email is not correct")
-	@NotBlank(message = "Please write your e-mail")
+	@Email(message = "Email is not correct.")
+	@NotBlank(message = "Please write your e-mail.")
 	private String email;
 
 	private String emailActivationCode;

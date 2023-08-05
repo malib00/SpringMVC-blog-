@@ -1,17 +1,22 @@
 package com.karpov.blog.service;
 
+import com.karpov.blog.dto.CaptchaResponseDto;
 import com.karpov.blog.models.Role;
 import com.karpov.blog.models.User;
 import com.karpov.blog.repo.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class RegisterService {
 
@@ -27,11 +32,16 @@ public class RegisterService {
 	@Value("${server.hostname}")
 	private String hostname;
 
+	@Autowired
+	private RestTemplate restTemplate;
+
+	@Value("${google.recaptcha.publickey}")
+	private String recaptchaPublicKey;
+	@Value("${google.recaptcha.secretkey}")
+	private String recaptchaSecretKey;
+	private final static String RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s";
+
 	public boolean registerUser(User user) {
-		User userWithSameUsername = userRepository.findByUsername(user.getUsername());
-		if (userWithSameUsername != null) {
-			return false;
-		}
 		user.setEmailActivationCode(UUID.randomUUID().toString());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setRoles(Collections.singleton(Role.USER));
@@ -63,8 +73,23 @@ public class RegisterService {
 		}
 	}
 
-	public boolean sameUsernameFound(String username) {
+	public boolean usernameAlreadyTaken(String username) {
 		User userWithSameUsername = userRepository.findByUsername(username);
 		return userWithSameUsername != null;
+	}
+
+	public boolean captchaResponseSuccessful(String recaptchaResponse) {
+		String url = String.format(RECAPTCHA_URL, recaptchaSecretKey, recaptchaResponse);
+		CaptchaResponseDto response = restTemplate.postForObject(url, Collections.emptyList(), CaptchaResponseDto.class);
+		try {
+			return response.isSuccess();
+		} catch (NullPointerException e) {
+			log.error("Google captcha service error! Response: {}", response);
+			return false;
+		}
+	}
+
+	public String getRecaptchaPublicKey() {
+		return recaptchaPublicKey;
 	}
 }

@@ -12,6 +12,7 @@
         <div th:unless="${activationIsSuccessful}" class="alert alert-danger" role="alert"
              th:text="${activationStatusMessage}"/>
     </div>
+    <div th:if="${infoMessage != null}" class="alert alert-primary my-1 text-center" th:text="${infoMessage}"></div>
     <a href="/" class="mb-5 btn btn-secondary">Return to Main Page</a>
     <form th:action="@{/login}" method="post">
         <img class="mb-4" src="/static/img/logo.svg" alt="" width="50"

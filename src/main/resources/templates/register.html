@@ -16,10 +16,12 @@
         <div class="form-floating py-0">
             <input th:field="*{username}" type="text" class="form-control" id="usernameField" placeholder="Username"/>
             <label for="usernameField">Username</label>
-            <small th:unless="${#fields.hasErrors('username')}" class="row fw-light text-muted text-start mb-0 ms-4">
-                •Username must be between 2 and 20 characters long.</small>
-            <small th:unless="${#fields.hasErrors('username')}" class="row fw-light text-muted text-start mb-0 ms-4">
-                •Username can contain only lowercase letters (a-z) and numbers (0-9) without spaces.</small>
+            <div th:unless="${#fields.hasErrors('username')}">
+                <small class="row fw-light text-muted text-start mb-0 ms-4">
+                    •Username must be between 2 and 20 characters long.</small>
+                <small class="row fw-light text-muted text-start mb-0 ms-4">
+                    •Username can contain only lowercase letters (a-z) and numbers (0-9) without spaces.</small>
+            </div>
             <p th:if="${#fields.hasErrors('username')}" th:errorclass="error" th:errors="*{username}"/>
         </div>
 
@@ -38,23 +40,21 @@
             <p th:if="${#fields.hasErrors('email')}" th:errorclass="error" th:errors="*{email}"/>
         </div>
         <div class="form-floating py-1">
-            <input name="password" type="password" class="form-control" id="passwordField" placeholder="Password"/>
+            <input th:field="*{password}" type="password" class="form-control" id="passwordField"
+                   placeholder="Password"/>
             <label for="passwordField">Password</label>
             <small th:unless="${#fields.hasErrors('password')}" class="row fw-light text-muted text-start mb-0 ms-4">
-                •Password must be between 8 and 100 characters long.</small>
+                •Password must contain minimum eight characters, at least one uppercase letter, " +
+                "one lowercase letter, one number and one special character (@$!%*#?&).</small>
             <p th:if="${#fields.hasErrors('password')}" th:errorclass="error" th:errors="*{password}"/>
         </div>
-        <div class="form-floating">
-            <input name="password2" type="password" class="form-control" id="passwordField2"
+        <div class="form-floating py-1">
+            <input name="passwordConfirmation" type="password" class="form-control" id="passwordField2"
                    placeholder="Confirm Password"/>
             <label for="passwordField">Confirm Password</label>
-            <p th:if="${password2error != null && #strings.isEmpty(password2error) == false}" class="error"
-               th:text="${password2error}"></p>
-            <p th:if="${passwordsEqualsError != null && #strings.isEmpty(passwordsEqualsError) == false}" class="error"
-               th:text="${passwordsEqualsError}"></p>
         </div>
         <div class="mx-auto py-1" style="width: 304px;">
-            <div class="g-recaptcha" data-sitekey="6LfdZoQmAAAAANxmrTCBBsfhu_XuJRldC22FntyG"></div>
+            <div class="g-recaptcha" th:data-sitekey="${googleCaptchaPublicKey}"></div>
         </div>
         <p th:if="${captchaError != null && #strings.isEmpty(captchaError) == false}" class="error"
            th:text="${captchaError}"></p>
@@ -62,8 +62,7 @@
         <div class="row justify-content-md-center">
             <p class="col-md-auto mt-4 text-muted">&copy; 2023, Oleg Karpov</p>
             <p class="col-md-auto mt-4 text-muted"><a class="nav-link" href="https://github.com/malib00/blogSpring"
-                                                      target="_blank"
-                                                      rel="noopener">
+                                                      target="_blank" rel="noopener">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="navbar-nav-svg"
                      viewBox="0 0 512 499.36" role="img"><title>GitHub</title>
                     <path fill="currentColor" fill-rule="evenodd"
