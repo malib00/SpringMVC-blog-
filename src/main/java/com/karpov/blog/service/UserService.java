@@ -75,12 +75,14 @@ public class UserService {
 			ImageFile uploadedImageFile = imageFileService.uploadImageFile(multipartFile);
 			user.setAvatarImage(uploadedImageFile);
 			userRepository.save(user);
+			//TODO update authentication principal to display new avatarImage in header.html
 		} else {
 			ImageFile uploadedImageFile = imageFileService.uploadImageFile(multipartFile);
 			ImageFile oldImageFile = user.getAvatarImage();
 			user.setAvatarImage(uploadedImageFile);
 			userRepository.save(user);
 			imageFileService.deleteImageFile(oldImageFile);
+			//TODO update authentication principal to display new avatarImage in header.html
 		}
 	}
 

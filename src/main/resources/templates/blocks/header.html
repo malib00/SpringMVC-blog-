@@ -9,8 +9,8 @@
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
                 <li><a href="/articles" class="nav-link px-2 text-white">Articles</a></li>
-                <li sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')"><a href="/users"
-                                                                            class="nav-link px-2 text-danger">Users</a>
+                <li sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
+                    <a href="/users" class="nav-link px-2 text-danger">Users</a>
                 </li>
                 <li sec:authorize="isAuthenticated()"><a th:href="'/users/' + ${#authentication.principal.id} + '/feed'"
                                                          class="nav-link px-2 text-white">My Feed</a></li>
@@ -18,15 +18,13 @@
                         th:href="'/users/' + ${#authentication.principal.id} + '/posts'"
                         class="nav-link px-2 text-white">My Posts</a></li>
                 <li sec:authorize="isAuthenticated()"><a href="/posts/add" class="nav-link px-2 text-white">Add Post</a></li>
-                <li sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')"><a href="/articles/add"
-                                                                            class="nav-link px-2 text-danger">Add
-                    Article</a>
+                <li sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
+                    <a href="/articles/add" class="nav-link px-2 text-danger">Add  Article</a>
                 </li>
             </ul>
             <form method="get" action="/search" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
                 <input type="search" name="filter" class="form-control form-control-dark text-bg-dark"
-                       placeholder="Search posts or @users..."
-                       aria-label="Search"/>
+                       placeholder="Search posts or @users..." aria-label="Search"/>
             </form>
             <div class="text-end">
                 <a sec:authorize="isAnonymous()" href="/login" class="btn btn-outline-light me-2">Login</a>
@@ -34,29 +32,23 @@
             </div>
             <div sec:authorize="isAuthenticated()" id="usernameHeader"
                  th:text="'@' + ${#authentication.principal.username}"/>
-
             <div sec:authorize="isAuthenticated()" class="dropdown text-end ms-2">
                 <a href="#" role="button" class="d-block link-light text-decoration-none dropdown-toggle"
                    id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img
-
-                            th:src="${#authentication.principal.avatarImage?.URL}"
+                    <img th:src="${#authentication.principal.avatarImage?.URL}"
                             onerror="avatarLoadError(this);" alt="mdo" width="32" height="32"
                             class="rounded-circle avatarSmallCover"/>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end text-small" aria-labelledby="dropdownUser1" style="">
-                    <li><a th:href="'/users/' + ${#authentication.principal.id}" class="dropdown-item">My Profile</a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider"/>
-                    </li>
-                    <li><a th:href="'/users/' + ${#authentication.principal.id} + '/feed'" class="dropdown-item">My
-                        Feed</a></li>
-                    <li><a th:href="'/users/' + ${#authentication.principal.id} + '/posts'" class="dropdown-item">My
-                        Posts</a></li>
+                    <li><a th:href="'/users/' + ${#authentication.principal.id}" class="dropdown-item">My Profile</a></li>
+                    <li><hr class="dropdown-divider"/></li>
+                    <li><a th:href="'/users/' + ${#authentication.principal.id} + '/feed'" class="dropdown-item">
+                        My Feed</a></li>
+                    <li><a th:href="'/users/' + ${#authentication.principal.id} + '/posts'" class="dropdown-item">
+                        My Posts</a></li>
                     <li><a href="/posts/add" class="dropdown-item">Add Post</a></li>
-                    <li sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')"><a href="/articles/add"
-                                                                                class="dropdown-item">Add Article</a>
+                    <li sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
+                        <a href="/articles/add" class="dropdown-item">Add Article</a>
                     </li>
                     <li>
                         <hr class="dropdown-divider"/>

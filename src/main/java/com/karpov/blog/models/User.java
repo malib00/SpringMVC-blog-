@@ -60,7 +60,7 @@ public class User implements UserDetails {
 
 	private boolean active;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
 	private ImageFile avatarImage;
 
 	private Instant timestamp;
