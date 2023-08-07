@@ -7,7 +7,7 @@
 <header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
 <main>
     <div class="album bg-light">
-        <div class="py-5 text-center container mb-5">
+        <div class="py-5 text-center container">
             <h1 th:text="${pageTitle}"></h1>
             <form action="#" th:action="@{/articles/add}" method="post" enctype="multipart/form-data" th:object="${article}" >
                 <label for="title">Title</label>
