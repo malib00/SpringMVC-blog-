@@ -7,6 +7,8 @@ import com.karpov.blog.repo.PostRepository;
 import com.karpov.blog.repo.UserRepository;
 import com.uploadcare.upload.UploadFailureException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -97,5 +100,17 @@ public class UserService {
 		user.getPosts().forEach(post -> imageUUIDs.add(post.getImageFile().getUUID()));
 		imageFileService.deleteImages(imageUUIDs);
 		userRepository.delete(user);
+	}
+
+	public Page<Post> getUserPostsPageable(User user, Pageable pageable) {
+		return postRepository.findByAuthor(user, pageable);
+	}
+
+	public Page<Post> getUserFeedPageable(Set<User> users, Pageable pageable) {
+		return postRepository.findByAuthorIn(users, pageable);
+	}
+
+	public Page<User> findByUsernameCaseInsensitivePageable(String username, Pageable pageable) {
+		return userRepository.findByUsernameContainingIgnoreCase(username, pageable);
 	}
 }

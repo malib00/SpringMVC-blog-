@@ -2,8 +2,8 @@ package com.karpov.blog.controllers;
 
 import com.karpov.blog.models.Post;
 import com.karpov.blog.models.User;
-import com.karpov.blog.repo.PostRepository;
-import com.karpov.blog.repo.UserRepository;
+import com.karpov.blog.service.PostService;
+import com.karpov.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,10 +20,10 @@ import java.util.regex.Pattern;
 public class SearchController {
 
 	@Autowired
-	private PostRepository postRepository;
+	private UserService userService;
 
 	@Autowired
-	private UserRepository userRepository;
+	private PostService postService;
 
 	@GetMapping("/search")
 	public String search(@RequestParam String filter,
@@ -37,13 +37,13 @@ public class SearchController {
 
 		if (userPattern.matcher(trimmedFilter).find()) {
 			String trimmedUserFilter = trimmedFilter.substring(1);
-			Page<User> page = userRepository.findByUsernameContainingIgnoreCase(trimmedUserFilter, pageable.previousOrFirst());
+			Page<User> page = userService.findByUsernameCaseInsensitivePageable(trimmedUserFilter, pageable.previousOrFirst());
 			model.addAttribute("pageTitle", "Search: " + trimmedFilter);
 			model.addAttribute("page", page);
 			model.addAttribute("filter", trimmedFilter);
 			return "user/users-list";
 		} else if (postPattern.matcher(trimmedFilter).find()) {
-			Page<Post> page = postRepository.findByTitleContainingIgnoreCase(trimmedFilter, pageable.previousOrFirst());
+			Page<Post> page = postService.findByTitleCaseInsensitivePageable(trimmedFilter, pageable.previousOrFirst());
 			model.addAttribute("pageTitle", "Search: " + trimmedFilter);
 			model.addAttribute("page", page);
 			model.addAttribute("filter", trimmedFilter);

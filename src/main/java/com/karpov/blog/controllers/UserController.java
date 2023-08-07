@@ -3,9 +3,6 @@ package com.karpov.blog.controllers;
 import com.karpov.blog.models.Post;
 import com.karpov.blog.models.Role;
 import com.karpov.blog.models.User;
-import com.karpov.blog.repo.PostRepository;
-import com.karpov.blog.repo.UserRepository;
-import com.karpov.blog.service.ImageFileService;
 import com.karpov.blog.service.UserService;
 import com.uploadcare.upload.UploadFailureException;
 import jakarta.validation.Valid;
@@ -17,7 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,18 +36,7 @@ import java.util.Set;
 public class UserController {
 
 	@Autowired
-	private PasswordEncoder passwordEncoder;
-
-	@Autowired
 	private UserService userService;
-
-	private ImageFileService imageFileService;
-
-	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired
-	private PostRepository postRepository;
 
 	@GetMapping
 	public String usersListForAdmins(Model model) {
@@ -167,7 +152,7 @@ public class UserController {
 	                       @PageableDefault(sort = {"timestamp"}, size = 9, direction = Sort.Direction.DESC) Pageable pageable,
 	                       Model model) {
 		model.addAttribute("pageTitle", user.getUsername() + "'s posts");
-		Page<Post> page = postRepository.findByAuthor(user, pageable.previousOrFirst());
+		Page<Post> page = userService.getUserPostsPageable(user, pageable.previousOrFirst());
 		model.addAttribute("page", page);
 		return "user/user-posts";
 	}
@@ -178,7 +163,7 @@ public class UserController {
 	                          @PageableDefault(sort = {"timestamp"}, size = 9, direction = Sort.Direction.DESC) Pageable pageable,
 	                          Model model) {
 		model.addAttribute("pageTitle", user.getUsername() + "'s feed");
-		Page<Post> page = postRepository.findByAuthorIn(user.getFollowing(), pageable.previousOrFirst());
+		Page<Post> page = userService.getUserFeedPageable(user.getFollowing(), pageable.previousOrFirst());
 		model.addAttribute("page", page);
 		return "user/user-posts";
 	}

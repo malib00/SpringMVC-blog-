@@ -52,7 +52,10 @@ public class PostService {
 	}
 
 	public Page<Post> getAllPostsPageable(Pageable pageable) {
-		Page<Post> page = postRepository.findAll(pageable.previousOrFirst());
-		return page;
+		return postRepository.findAll(pageable.previousOrFirst());
+	}
+
+	public Page<Post> findByTitleCaseInsensitivePageable(String title, Pageable pageable) {
+		return postRepository.findByTitleContainingIgnoreCase(title, pageable);
 	}
 }

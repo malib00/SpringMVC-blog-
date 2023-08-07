@@ -60,7 +60,7 @@ class RegisterServiceTest {
 
 		Mockito.doReturn(user)
 				.when(userRepository)
-				.findByUsername("apollon");
+				.findByUsernameIgnoreCase("apollon");
 
 		boolean isCreatedUser = registerService.registerUser(user);
 
