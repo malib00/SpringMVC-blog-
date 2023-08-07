@@ -17,7 +17,7 @@
                         <div class="col py-1">
                             <div class="card shadow-sm">
                                 <a th:href="'/articles/' + ${article.id}">
-                                    <img type="button" th:src="${article.imageFile.URL}"
+                                    <img type="button" th:src="${article.imageFile?.URL}"
                                          class="bd-placeholder-img card-img-top articlePreviewCover"></a>
                                 <div class="card-body">
                                     <p th:text="${article.title}" class="card-text mx-3"></p>

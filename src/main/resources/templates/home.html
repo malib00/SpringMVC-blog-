@@ -15,7 +15,7 @@
     </div>
     <section class="py-5 container" th:if="${recentArticle != null}">
         <div class="card card-inverse shadow-sm" style="background: #000;">
-            <img class="card-img recentArticlePreviewCover" th:src="${recentArticle.imageFile.URL}" alt="Article image"/>
+            <img class="card-img recentArticlePreviewCover" th:src="${recentArticle.imageFile?.URL}" alt="Article image"/>
             <div class="card-img-overlay">
                 <h1 class="text-white text-center py-5 fst-italic" th:text="'Recent Article: '+${recentArticle.title}"></h1>
                 <div th:if="${recentArticle.fulltext != null}">

@@ -8,7 +8,7 @@
 <main>
     <div class="py-5 text-center container mb-5">
         <h1 th:text="${pageTitle}"></h1>
-        <img th:src="${article.imageFile.URL}"
+        <img th:src="${article.imageFile?.URL}"
              class="bd-placeholder-img card-img-top postFullCover"/>
         <form action="#" th:action="@{'/articles/'+${article.id}+'/edit'}" method="post" th:object="${editedArticle}" enctype="multipart/form-data">
             <label class="labels">Title</label>
