@@ -58,7 +58,7 @@ public class UserService {
 		return userRepository.findByUsernameIgnoreCase(username);
 	}
 
-	public void updateUser(User user, User editedUser, MultipartFile multipartFile) throws UploadFailureException, IOException {
+	public void updateUser(User user, User editedUser, User authenticatedUser, MultipartFile multipartFile) throws UploadFailureException, IOException {
 
 		user.setUsername(editedUser.getUsername());
 		user.setFullname(editedUser.getFullname());
@@ -67,8 +67,10 @@ public class UserService {
 			user.setPassword(passwordEncoder.encode(editedUser.getPassword()));
 		}
 		user.setEmail(editedUser.getEmail()); //TODO new e-mail activation
-		user.setRoles(editedUser.getRoles());
-		user.setActive(editedUser.isActive());
+		if (authenticatedUser.getAuthorities().stream().anyMatch(x -> x.getAuthority().equals("ADMIN"))) {
+			user.setRoles(editedUser.getRoles());
+			user.setActive(editedUser.isActive());
+		}
 		if (multipartFile.isEmpty()) {
 			userRepository.save(user);
 		} else if (user.getAvatarImage() == null) {

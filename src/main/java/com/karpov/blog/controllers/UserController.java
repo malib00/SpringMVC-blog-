@@ -109,7 +109,7 @@ public class UserController {
 			return "user/user-profile-edit";
 		} else {
 			try {
-				userService.updateUser(user, editedUser, multipartFile);
+				userService.updateUser(user, editedUser, authenticatedUser, multipartFile);
 				log.info("User (id={}) was edited by (id={}, username={}).",
 						user.getId(), authenticatedUser.getId(), authenticatedUser.getUsername());
 			} catch (IOException e) {
