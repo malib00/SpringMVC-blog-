@@ -41,6 +41,10 @@ public class RegisterService {
 	private final static String RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s";
 
 	public boolean registerUser(User user) {
+		User userWithSameUsername = userRepository.findByUsernameIgnoreCase(user.getUsername());
+		if (userWithSameUsername != null) {
+			return false;
+		}
 		user.setEmailActivationCode(UUID.randomUUID().toString());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setRoles(Collections.singleton(Role.USER));

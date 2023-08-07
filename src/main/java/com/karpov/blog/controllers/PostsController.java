@@ -65,7 +65,7 @@ public class PostsController {
 				bindingResult.addError(new FieldError("post", "imageFile", "File upload service error"));
 				return "post/post-add";
 			}
-			return "post/post-details";
+			return "redirect:/";
 		}
 	}
 
