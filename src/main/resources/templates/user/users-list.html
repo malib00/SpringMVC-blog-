@@ -24,7 +24,7 @@
                                 <div class="card-body ">
                                     <div>
                                         <a th:href="'/users/' + ${user.id}">
-                                            <img type="button" th:src="'/img/'+${user.id}+'/'+${user.avatar}"
+                                            <img type="button" th:src="${user.avatarImage?.URL}"
                                                  onerror="avatarLoadError(this);"
                                                  alt="img" class="img-fluid"
                                                  style="width: 100px; border-radius: 10px;"/>
