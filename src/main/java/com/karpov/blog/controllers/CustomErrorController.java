@@ -16,27 +16,27 @@ public class CustomErrorController implements ErrorController {
 
 		Object statusCode = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 		if (statusCode == null) {
-			model.addAttribute("title", "Error");
+			model.addAttribute("pageTitle", "Error");
 			return "error/error-default";
 		} else {
 			if (Integer.valueOf(statusCode.toString()) == HttpStatus.NOT_FOUND.value()) {
-				model.addAttribute("title", "Page is not found.");
+				model.addAttribute("pageTitle", "Page is not found.");
 				return "error/error-not-found";
 			}
 			if (Integer.valueOf(statusCode.toString()) == HttpStatus.FORBIDDEN.value()) {
-				model.addAttribute("title", "Access denied.");
+				model.addAttribute("pageTitle", "Access denied.");
 				return "error/error-access-denied";
 			}
 			if (Integer.valueOf(statusCode.toString()) == HttpStatus.METHOD_NOT_ALLOWED.value()) {
-				model.addAttribute("title", "Access denied.");
+				model.addAttribute("pageTitle", "Access denied.");
 				return "error/error-access-denied";
 			}
 			if (Integer.valueOf(statusCode.toString()) == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-				model.addAttribute("title", "Internal Server Error.");
+				model.addAttribute("pageTitle", "Internal Server Error.");
 				return "error/error-internal-server-error";
 			}
 		}
-		model.addAttribute("title", "Error");
+		model.addAttribute("PageTitle", "Error");
 		return "error/error-default";
 	}
 }

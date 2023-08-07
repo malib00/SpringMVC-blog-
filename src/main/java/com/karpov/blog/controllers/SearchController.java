@@ -29,7 +29,7 @@ public class SearchController {
 	public String search(@RequestParam String filter,
 	                     @PageableDefault(sort = {"timestamp"}, size = 9, direction = Sort.Direction.DESC) Pageable pageable,
 	                     Model model) {
-		model.addAttribute("title", "Search: " + filter);
+		model.addAttribute("pageTitle", "Search: " + filter);
 
 		String trimmedFilter = filter.trim();
 		Pattern userPattern = Pattern.compile("@.+");
@@ -38,18 +38,18 @@ public class SearchController {
 		if (userPattern.matcher(trimmedFilter).find()) {
 			String trimmedUserFilter = trimmedFilter.substring(1);
 			Page<User> page = userRepository.findByUsernameContainingIgnoreCase(trimmedUserFilter, pageable.previousOrFirst());
-			model.addAttribute("title", "Search: " + trimmedFilter);
+			model.addAttribute("pageTitle", "Search: " + trimmedFilter);
 			model.addAttribute("page", page);
 			model.addAttribute("filter", trimmedFilter);
 			return "user/users-list";
 		} else if (postPattern.matcher(trimmedFilter).find()) {
 			Page<Post> page = postRepository.findByTitleContainingIgnoreCase(trimmedFilter, pageable.previousOrFirst());
-			model.addAttribute("title", "Search: " + trimmedFilter);
+			model.addAttribute("pageTitle", "Search: " + trimmedFilter);
 			model.addAttribute("page", page);
 			model.addAttribute("filter", trimmedFilter);
 			return "post/posts";
 		} else {
-			model.addAttribute("title", "Incorrect search input.");
+			model.addAttribute("pageTitle", "Incorrect search input.");
 			return "error/error-default";
 		}
 	}

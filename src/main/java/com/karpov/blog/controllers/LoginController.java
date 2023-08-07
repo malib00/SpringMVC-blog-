@@ -9,7 +9,7 @@ public class LoginController {
 
 	@GetMapping("/login")
 	public String loginPage(Model model) {
-		model.addAttribute("title", "Login");
+		model.addAttribute("pageTitle", "Login");
 		return "login";
 	}
 }

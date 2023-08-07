@@ -82,7 +82,7 @@ public class ArticlesController {
 
 	@GetMapping("/{article}")
 	public String getArticle(@PathVariable Article article, Model model) {
-		model.addAttribute("pageTitle", article.getTitle());
+		model.addAttribute("pageTitle", "Article: " + article.getTitle());
 		model.addAttribute("article", article);
 		return "article/article-details";
 	}
@@ -90,7 +90,7 @@ public class ArticlesController {
 	@PreAuthorize("hasAnyAuthority('MODERATOR','ADMIN')")
 	@GetMapping("/{article}/edit")
 	public String editArticle(@PathVariable Article article, Model model) {
-		model.addAttribute("pagetitle", "Article Edit: " + article.getTitle());
+		model.addAttribute("pageTitle", "Article Edit: " + article.getTitle());
 		model.addAttribute("editedArticle", article);
 		return "article/article-edit";
 	}

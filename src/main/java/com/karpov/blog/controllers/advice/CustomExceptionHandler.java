@@ -13,7 +13,7 @@ public class CustomExceptionHandler {
 	@ExceptionHandler
 	public String handleIOException(IOException e, Model model) {
 		log.error("Error while saving/deleting and image", e);
-		model.addAttribute("title", "Internal Server Error occured during saving an image.");
+		model.addAttribute("pageTitle", "Internal Server Error occured during saving an image.");
 		return "error/error-internal-server-error";
 	}
 }

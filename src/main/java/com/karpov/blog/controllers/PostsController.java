@@ -34,7 +34,7 @@ public class PostsController {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/add")
 	public String addPostBlankPage(Post post, Model model) {
-		model.addAttribute("title", "Add Post");
+		model.addAttribute("pageTitle", "Add Post");
 		return "post/post-add";
 	}
 
@@ -49,7 +49,7 @@ public class PostsController {
 			bindingResult.addError(new FieldError("post", "imageFile", "File is empty"));
 		}
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("title", "Add Post");
+			model.addAttribute("pageTitle", "Add Post");
 			return "post/post-add";
 		} else {
 			try {
@@ -71,7 +71,7 @@ public class PostsController {
 
 	@GetMapping("/{post}")
 	public String getPost(@PathVariable Post post, Model model) {
-		model.addAttribute("pageTitle", post.getTitle());
+		model.addAttribute("pageTitle", "Post: " + post.getTitle());
 		return "post/post-details";
 	}
 
