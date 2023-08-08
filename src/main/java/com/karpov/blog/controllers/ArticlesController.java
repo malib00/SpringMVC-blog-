@@ -119,6 +119,7 @@ public class ArticlesController {
 				bindingResult.addError(new FieldError("article", "imageFile", "File upload service error"));
 				return "article/article-edit";
 			}
+			model.addAttribute("pageTitle", "Article: " + article.getTitle());
 			return "article/article-details";
 		}
 	}

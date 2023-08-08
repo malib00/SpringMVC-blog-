@@ -16,7 +16,7 @@
             <p th:if="${#fields.hasErrors('title')}" th:errorclass="error" th:errors="*{title}"/>
             <br>
             <label class="labels">Full text / Description</label>
-            <textarea th:field="*{fulltext}" name="fulltext" type="text" class="form-control" placeholder="Full text / Description"/>
+            <textarea th:field="*{fulltext}" name="fulltext" type="text" class="form-control" placeholder="Full text / Description" rows="10"/>
             <p th:if="${#fields.hasErrors('fulltext')}" th:errorclass="error" th:errors="*{fulltext}"/>
             <br>
             <input type="file" name="file"/>

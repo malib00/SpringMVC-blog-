@@ -6,22 +6,23 @@
 <body>
 <header th:insert="~{blocks/header :: header}" class="p-3 text-bg-dark"></header>
 <main>
-    <div class="py-2 text-center container bg-light rounded my-2">
-        <img th:src="${post.imageFile?.URL}"
-             onerror="postImageLoadError(this);"
-             class="bd-placeholder-img card-img-top postFullCover"/>
-        <h1 th:text="${post.title}"></h1>
-        <p th:text="${post.fulltext}"></p>
-    </div>
-    <div sec:authorize="isAuthenticated()" th:if="${post.author.id} == ${#authentication.principal.id} or ${#authorization.expression('hasAnyAuthority(''MODERATOR'',''ADMIN'')')}"
-         class="row justify-content-md-center">
-        <div class="col-md-auto">
-            <a th:href="'/posts/' + ${post.id} + '/edit'" class="btn btn-warning">Edit</a>
+    <div class="album py-5 bg-light">
+        <div class="py-2 text-center container bg-white rounded">
+            <h3 th:text="${pageTitle}"></h3>
+            <img th:src="${post.imageFile?.URL}" class="bd-placeholder-img text-center  card-img-top postFullCover">
+            <h3 class="text-center pt-3" th:text="${post.title}"></h3>
+            <p class="container" style="white-space: pre-wrap;" th:text="${post.fulltext}"></p>
         </div>
-        <div class="col-md-auto">
-            <form th:action="'/posts/' + ${post.id} + '/remove'" method="post">
-                <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure you want to delete this post?');">Remove</button>
-            </form>
+        <div sec:authorize="isAuthenticated()" th:if="${post.author.id} == ${#authentication.principal.id} or ${#authorization.expression('hasAnyAuthority(''MODERATOR'',''ADMIN'')')}"
+             class="pt-2 row justify-content-md-center">
+            <div class="col-md-auto">
+                <a th:href="'/posts/' + ${post.id} + '/edit'" class="btn btn-warning">Edit</a>
+            </div>
+            <div class="col-md-auto">
+                <form th:action="'/posts/' + ${post.id} + '/remove'" method="post">
+                    <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure you want to delete this post?');">Remove</button>
+                </form>
+            </div>
         </div>
     </div>
 </main>
