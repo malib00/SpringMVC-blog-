@@ -44,8 +44,7 @@
                    placeholder="Password"/>
             <label for="passwordField">Password</label>
             <small th:unless="${#fields.hasErrors('password')}" class="row fw-light text-muted text-start mb-0 ms-4">
-                •Password must contain minimum eight characters, at least one uppercase letter, " +
-                "one lowercase letter, one number and one special character (@$!%*#?&).</small>
+                •Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character (@$!%*#?&).</small>
             <p th:if="${#fields.hasErrors('password')}" th:errorclass="error" th:errors="*{password}"/>
         </div>
         <div class="form-floating py-1">
