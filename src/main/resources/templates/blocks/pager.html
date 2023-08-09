@@ -1,6 +1,6 @@
 <div th:fragment="pager">
     <nav aria-label="Navigation">
-        <ul class="pagination pagination-sm justify-content-center"
+        <ul class="pagination pagination-sm justify-content-center m-0"
             th:with="fullFilter=((${filter} != null) ? ('&filter=' + ${filter}) : '')">
 
             <li th:if="${page.isFirst}" class="page-item disabled">
